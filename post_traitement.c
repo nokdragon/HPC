@@ -75,40 +75,30 @@ void erosion5(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl, long nch){
   	}
 }
 
-int frame;
-
 
 //ouverture de carré 3x3
 void ouverture3(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 
-	char file[255];
 
 	uint8 **tmp;
 	tmp = ui8matrix(nrl, nrh, ncl, nch);
-
-	sprintf(file,"hall_SD/ET_SD%d.pgm",frame);
-	SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
-
+	Copy(tmp,Et, nrl, nrh, ncl, nch);
 	erosion3(tmp, Et, nrl, nrh, ncl, nch);
-
-	sprintf(file,"hall_SD/ETe_SD%d.pgm",frame);
-	SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);
 
 	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	dilatation3(Et, tmp,nrl, nrh, ncl, nch);
 
-	sprintf(file,"hall_SD/ETz_SD%d.pgm",frame);
-	SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
-
 	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
-	//teqsbhdi
 }
 
 //ouverture de carré 5x5
 void ouverture5(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	uint8 **tmp;
 	tmp = ui8matrix(nrl, nrh, ncl, nch);
+	Copy(tmp,Et, nrl, nrh, ncl, nch);
 	erosion5(tmp, Et, nrl, nrh, ncl, nch);
+
+	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	dilatation5(Et, tmp,nrl, nrh, ncl, nch);
 	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
 }
@@ -117,7 +107,10 @@ void ouverture5(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 void fermeture3(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	uint8 **tmp;
 	tmp = ui8matrix(nrl, nrh, ncl, nch);
+	Copy(tmp,Et, nrl, nrh, ncl, nch);
 	dilatation3(tmp, Et,nrl, nrh, ncl, nch);
+
+	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	erosion3(Et, tmp, nrl, nrh, ncl, nch);
 	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
 }
@@ -126,7 +119,10 @@ void fermeture3(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 void fermeture5(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	uint8 **tmp;
 	tmp = ui8matrix(nrl, nrh, ncl, nch);
+	Copy(tmp,Et, nrl, nrh, ncl, nch);
 	dilatation5(tmp, Et,nrl, nrh, ncl, nch);
+
+	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	erosion5(Et, tmp, nrl, nrh, ncl, nch);
 	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
 }
@@ -135,13 +131,7 @@ void fermeture5(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 //post traitement ouverture puis fermeture
 void posTraitementOF(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 
-	char file[255];
-
-	sprintf(file,"hall_SD/ET_SD%d.pgm",frame);
-	//SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
 	ouverture3(Et,nrl, nrh, ncl, nch);
-	sprintf(file,"hall_SD/ETO_SD%d.pgm",frame);
-	//SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
 	fermeture3(Et,nrl, nrh, ncl, nch);
 
 	ouverture5(Et,nrl, nrh, ncl, nch);

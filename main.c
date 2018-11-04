@@ -11,6 +11,8 @@
 #include "main.h"
 #include "post_traitement.h"
 
+#include <unistd.h>
+
 int main(){
 	
 	//Initialisation
@@ -46,6 +48,9 @@ int main(){
 
 	char file[255];
 
+	uint8 **tmp;
+	tmp = ui8matrix(nrl, nrh, ncl, nch);
+	
 	
 	for(i=1 ; i<300 ; i++){
 
@@ -55,30 +60,32 @@ int main(){
 
 		FD(It, It_1, Ot, Et, nrl, nrh, ncl, nch);
 
-		sprintf(file,"hall_FD/OT_FD%d.pgm",i);
-		SavePGM_ui8matrix(Ot,nrl, nrh, ncl, nch,file);
-		sprintf(file,"hall_FD/ET_FD%d.pgm",i);
+		
+		Copy(tmp, Et, nrl, nrh, ncl, nch);
+
+		posTraitementOF(Et, nrl, nrh, ncl, nch);
+		sprintf(file,"hall_FD/ETOF_FD%d.pgm",i);
 		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
+
+
+
+		posTraitementFO(tmp, nrl, nrh, ncl, nch);
+		sprintf(file,"hall_FD/ETFO_FD%d.pgm",i);
+		SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);
 
 		SD(It, It_1, Ot, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
 
-		/*
-		sprintf(file,"hall_SD/OT_SD%d.pgm",i);
-		SavePGM_ui8matrix(Ot,nrl, nrh, ncl, nch, file);
-		sprintf(file,"hall_SD/ET_SD%d.pgm",i);
-		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
-		sprintf(file,"hall_SD/MT_SD%d.pgm",i);
-		SavePGM_ui8matrix(Mt,nrl, nrh, ncl, nch,file);
-		sprintf(file,"hall_SD/VT_SD%d.pgm",i);
-		SavePGM_ui8matrix(Vt,nrl, nrh, ncl, nch,file);*/
+		Copy(tmp, Et, nrl, nrh, ncl, nch);
 
 		posTraitementOF(Et, nrl, nrh, ncl, nch);
-		//sprintf(file,"hall_SD/ETOF_SD%d.pgm",i);
-		//SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
+		sprintf(file,"hall_SD/ETOF_SD%d.pgm",i);
+		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
 
-		posTraitementFO(Et, nrl, nrh, ncl, nch);
-		//sprintf(file,"hall_SD/ETFO_SD%d.pgm",i);
-		//SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
+
+
+		posTraitementFO(tmp, nrl, nrh, ncl, nch);
+		sprintf(file,"hall_SD/ETFO_SD%d.pgm",i);
+		SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);
 
 		Copy(It_1, It, nrl, nrh, ncl, nch);
 		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
@@ -86,18 +93,6 @@ int main(){
 
 
 	}
-
-	/*printf("*nrl = %ld\n", nrl);
-  	printf("*nrh = %ld\n", nrh);
-  	printf("*ncl = %ld\n", ncl);
-  	printf("*nch = %ld\n", nch);
-
-	printf("m00 = %d\n", m[0][0]);
-	printf("m01 = %d\n", m[25][351]);
-
-	display_ui8matrix(m, nrl, nrh, ncl, nch, "%d ", "Patate");
-*/
-
 }
 
 
