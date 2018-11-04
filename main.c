@@ -232,6 +232,7 @@ void ouverture3(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
 
 	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
+	//teqsbhdi
 }
 
 //ouverture de carré 5x5
