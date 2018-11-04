@@ -947,13 +947,13 @@ uint8** LoadPGM_ui8matrix(char *filename, long *nrl, long *nrh, long *ncl, long 
 {
   /* cette version ne lit plus que le type P5 */
 
-  long height, width, gris;
+  long height, width;//, gris;
   uint8 **m;
   FILE *file;
-  /*int   format;/**/
+  /*int   format;*/
 
   char *buffer;
-  /*char  c;/**/
+  /*char  c;*/
   int i;
   
   buffer = (char*) calloc(80, sizeof(char));
@@ -972,7 +972,7 @@ uint8** LoadPGM_ui8matrix(char *filename, long *nrl, long *nrh, long *ncl, long 
 
   width  = atoi(readitem(file, buffer));
   height = atoi(readitem(file, buffer));
-  gris   = atoi(readitem(file, buffer));
+  //gris   = atoi(readitem(file, buffer));
 
   *nrl = 0;
   *nrh = height - 1;
@@ -995,7 +995,7 @@ void MLoadPGM_ui8matrix(char *filename, int nrl, int nrh, int ncl, int nch, uint
 {
     /* cette version ne lit plus que le type P5 */
     
-    int height, width, gris;
+    int height, width;//, gris;
     FILE *file;
     
     char *buffer;
@@ -1017,7 +1017,7 @@ void MLoadPGM_ui8matrix(char *filename, int nrl, int nrh, int ncl, int nch, uint
     
     width  = atoi(readitem(file, buffer));
     height = atoi(readitem(file, buffer));
-    gris   = atoi(readitem(file, buffer));
+    //gris   = atoi(readitem(file, buffer));
     
     for(i=0; i<height; i++) {
         ReadPGMrow(file, width, m[i]);
@@ -1045,7 +1045,7 @@ void SavePGM_ui8matrix(uint8 **m, long nrl, long nrh, long ncl, long nch, char *
 
   /* enregistrement de l'image au format rpgm */
 
-  sprintf(buffer,"P5\n%d %d\n255\n",ncol, nrow);
+  sprintf(buffer,"P5\n%ld %ld\n255\n",ncol, nrow);
   fwrite(buffer,strlen(buffer),1,file);
   for(i=nrl; i<=nrh; i++)
     WritePGMrow(m[i], ncol, file);
@@ -1078,13 +1078,13 @@ rgb8** LoadPPM_rgb8matrix(char *filename, long *nrl, long *nrh, long *ncl, long 
 {
   /* cette version ne lit plus que le type P6 */
 
-  long height, width, gris;
+  long height, width;//, gris;
   rgb8 **m;
   FILE *file;
-  /*int   format;/**/
+  /*int   format;*/
 
   char *buffer;
-  /*char  c;/**/
+  /*char  c;*/
   int i;
   
   buffer = (char*) calloc(80, sizeof(char));
@@ -1103,7 +1103,7 @@ rgb8** LoadPPM_rgb8matrix(char *filename, long *nrl, long *nrh, long *ncl, long 
 
   width  = atoi(readitem(file, buffer));
   height = atoi(readitem(file, buffer));
-  gris   = atoi(readitem(file, buffer));
+  //gris   = atoi(readitem(file, buffer));
 
   *nrl = 0;
   *nrh = height - 1;
@@ -1139,7 +1139,7 @@ void SavePPM_rgb8matrix(rgb8 **m, long nrl, long nrh, long ncl, long nch, char *
 
   /* enregistrement de l'image au format rpgm */
 
-  sprintf(buffer,"P6\n%d %d\n255\n",ncol, nrow);
+  sprintf(buffer,"P6\n%ld %ld\n255\n",ncol, nrow);
   fwrite(buffer,strlen(buffer),1,file);
   for(i=nrl; i<=nrh; i++)
     WritePNMrow((uint8*)m[i], ncol, file);
