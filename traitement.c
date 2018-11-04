@@ -10,13 +10,13 @@
 #include "traitement.h"
 #include "main.h"
 
-#define THETA 40 //séparateur de FD
+//Paramètre de FD
+#define THETA 40 
 
+//Paramètres de SD
 #define VMIN 1
 #define VMAX 254
-
 #define N 3.5
-
 
 //fonction Frame Difference (FD) 
 /*It est la matrice de l'image courante (a l'instant t)
