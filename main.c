@@ -59,7 +59,7 @@ int main(){
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-		FD(It, It_1, Ot, Et, nrl, nrh, ncl, nch);
+		Frame_Difference_Matrix(It, It_1, Ot, Et, nrl, nrh, ncl, nch);
 
 		
 		Copy(tmp, Et, nrl, nrh, ncl, nch);

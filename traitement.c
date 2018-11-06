@@ -27,21 +27,29 @@ nrl et nrh : premiere et derniere ligne
 ncl et nch : premiere et derniere colonne
 dans notre cas on a : nrl = ncl = 0 nrh = 239 nch = 351 pour prendre toute l'image
 */
-void FD(uint8 **It, uint8 **It_1, uint8 **Ot, uint8 **Et, long nrl, long nrh, long ncl, long nch)
+void Frame_Difference_Matrix(uint8 **It, uint8 **It_1, uint8 **Ot, uint8 **Et, long nrl, long nrh, long ncl, long nch)
 {
 	long i,j;
 	for(i=nrl; i<=nrh; i++) {
 	    for(j=ncl; j<=nch; j++) {
-	    	Ot[i][j] = abs(It[i][j] - It_1[i][j]);
-	    	if(Ot[i][j] < THETA){
-	    		Et[i][j]=0;
-	    	}
-	    	else{
-	    		Et[i][j]=255;
-	    	}
+			Et[i][j] = Frame_Difference(It[i][j], It_1[i][j]);
 	    }
   	}
 }
+
+
+//cette fonction ne necessite pas de teste unitaire comme elle est suffisament simple il faut juste s'assurer que la fonction abs fait bien se que l'on attend et que ses arguments ne sont correcte
+uint8 Frame_Difference(uint8 It, uint8 It_1) {
+	uint8 Ot;
+	Ot= abs(It - It_1);//prend un int en paramètre or It-It_1 sera toujours castable en int. Cette fonction retourne bien la valeur absolue de (It - It_1) quelle que soit la valeur de It et It_1
+	if (Ot < THETA) {
+		return 0;
+	}
+	else {
+		return 255;
+	}
+}
+
 
 
 void create_FD_folder()
@@ -67,7 +75,7 @@ void create_FD_folder()
 
 		m = LoadPGM_ui8matrix(file, &nrl, &nrh, &ncl, &nch);
 
-		FD(m, m_1, Ot, Et, nrl, nrh, ncl, nch);
+		Frame_Difference_Matrix(m, m_1, Ot, Et, nrl, nrh, ncl, nch);
 
 		sprintf(file,"hall_FD/OT_FD%d.pgm",i);
 		SavePGM_ui8matrix(Ot,nrl, nrh, ncl, nch,file);
