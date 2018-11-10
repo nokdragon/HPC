@@ -931,7 +931,9 @@ void ReadPGMrow(FILE *file, long width, uint8  *line)
 /* ---------------------------------------------- */
 {
     /* Le fichier est ouvert (en lecture) et ne sera pas ferme a la fin */
-     fread(&(line[0]), sizeof(uint8), width, file);
+     long lSize = width;
+     size_t result = fread(&(line[0]), sizeof(uint8), lSize, file);
+     if (result != lSize) {fputs ("Reading error",stderr); exit (3);}
 }
 /* ----------------------------------------------- */
 void WritePGMrow(uint8 *line, long width, FILE  *file)
@@ -1062,7 +1064,9 @@ void ReadPNMrow(FILE  *file, long width, uint8  *line)
 /* ----------------------------------------------- */
 {
     /* Le fichier est ouvert (en lecture) et ne sera pas ferme a la fin */
-     fread(&(line[0]), sizeof(uint8), 3*sizeof(uint8)*width, file);
+     long lSize = 3*sizeof(uint8)*width;
+     size_t result = fread(&(line[0]), sizeof(uint8),lSize, file);
+     if (result != lSize) {fputs ("Reading error",stderr); exit (3);}
 }
 /* ------------------------------------------------ */
 void WritePNMrow(uint8  *line, long width, FILE  *file)

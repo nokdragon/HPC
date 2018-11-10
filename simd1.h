@@ -10,4 +10,5 @@
 
 #include "mutil.h"
 
-void if_lt(vfloat32 a, vfloat32 b, vfloat32 k1, vfloat32 k2);
+//void if_lt(vfloat32 a, vfloat32 b, vfloat32 k1, vfloat32 k2);
+void if_lt();
