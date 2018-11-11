@@ -12,12 +12,14 @@
 #include "vnrdef.h"
 #include "vnrutil.h"
 
+#define MAX_32B 0xffffffff //2 pow 32 - 1
+
 
 
 /*
-void if_lt(vuint32 a, vuint32 b, vuint32 k1, vuint32 k2){
+void if_lt(vsint32 a, vsint32 b, vsint32 k1, vsint32 k2){
 
-    vuint32  k, c, d;
+    vsint32  k, c, d;
 
     d = _mm_set_epi32
 
@@ -31,22 +33,39 @@ void if_lt(vuint32 a, vuint32 b, vuint32 k1, vuint32 k2){
     k = _mm_or_si128(_mm_and_si128(c,k2), _mm_andnot_si128(c,k1));
     d = _mm_add_si128(d,k);
 
-    display_vuint32(a, "%4.0d", "a"); puts("\n");
-    display_vuint32(b, "%4.0d", "b"); puts("\n");
-    display_vuint32(k1, "%4.0d", "k1"); puts("\n");
-    display_vuint32(k2, "%4.0d", "k2"); puts("\n");
-    display_vuint32(c, "%4.0d", "c"); puts("\n");
-    display_vuint32(k, "%4.0d", "k"); puts("\n");
-    display_vuint32(d, "%4.0d", "d"); puts("\n");
+    display_vsint32(a, "%4.0d", "a"); puts("\n");
+    display_vsint32(b, "%4.0d", "b"); puts("\n");
+    display_vsint32(k1, "%4.0d", "k1"); puts("\n");
+    display_vsint32(k2, "%4.0d", "k2"); puts("\n");
+    display_vsint32(c, "%4.0d", "c"); puts("\n");
+    display_vsint32(k, "%4.0d", "k"); puts("\n");
+    display_vsint32(d, "%4.0d", "d"); puts("\n");
     
 }
 */
 
 //if a >= b return x, else return y
-vuint32 if_else(vuint32 a, vuint32 b, vuint32 x, vuint32 y){
+vsint32 if_else(vsint32 a, vsint32 b, vsint32 x, vsint32 y)
+{
 
-    vuint32 c, z;
-    c = _mm_cmplt_epi32(a ,b);
-    z = _mm_or_si128(_mm_and_si128(c, y), _mm_andnot_si128(c,x));
+    vsint32 c, z;
+    c = _mm_cmplt_epi32(a ,b);//compare a and b
+    z = _mm_or_si128(_mm_and_si128(c, y), _mm_andnot_si128(c,x));//select value
     return z;    
+}
+
+//complement à deux
+vsint32 ca2(vsint32 a)
+{
+     vsint32 _a;
+     _a = _mm_xor_si128(a, init_vuint32(MAX_32B)); //_a = NOT a
+     _a = _mm_add_epi32 (_a, _mm_set_epi32(1, 1, 1, 1)); // on ajoute 1
+     return _a;
+}
+
+//aide possible at : https://stackoverflow.com/questions/32408665/fastest-way-to-compute-absolute-value-using-sse
+vsint32 abs_simd(vsint32 a)
+{   
+    //si a > 0, return a, else return son complément à deux
+    return if_else(a, _mm_setzero_si128(), a, ca2(a));
 }

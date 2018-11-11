@@ -10,5 +10,6 @@
 
 //#include "mutil.h"
 
-//void if_lt(vfloat32 a, vfloat32 b, vfloat32 k1, vfloat32 k2);
-vuint32 if_else(vuint32 a, vuint32 b, vuint32 x, vuint32 y);
+vsint32 if_else(vsint32 a, vsint32 b, vsint32 x, vsint32 y);
+
+__m128i abs_simd(__m128i v);

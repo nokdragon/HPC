@@ -21,6 +21,7 @@ int main(){
 
 	/*===================REMI===================*/
 	test_if_else();
+	test_abs_simd();
 
 
 
