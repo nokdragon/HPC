@@ -8,7 +8,7 @@
 #include "vnrdef.h"
 #include "vnrutil.h"
 
-#include "mutil.h"
+//#include "mutil.h"
 
 //void if_lt(vfloat32 a, vfloat32 b, vfloat32 k1, vfloat32 k2);
-void if_lt();
+vuint32 if_else(vuint32 a, vuint32 b, vuint32 x, vuint32 y);

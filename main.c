@@ -7,14 +7,24 @@
 
 #include "nrdef.h"
 #include "nrutil.h"
+#include "vnrdef.h"
+#include "vnrutil.h"
 #include "traitement.h"
 #include "main.h"
 #include "post_traitement.h"
+#include "simd1.h"
+#include "test_simd.h"
 
 #include <unistd.h>
 
 int main(){
-	
+
+	/*===================REMI===================*/
+	test_if_else();
+
+
+
+	/*===================CYPRIEN===================
 	//Initialisation
 	int i;
 	long nrl, nrh, ncl, nch;
@@ -100,7 +110,9 @@ int main(){
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 
 
+
 	}
+	*/
 }
 
 
