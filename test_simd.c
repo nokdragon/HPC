@@ -23,38 +23,30 @@ void test_if_else()
 	x = init_vsint32(7);
 	y = init_vsint32(8);
 
-	printf("====TEST a < b ====\n");
+	printf("On fixe :\n");
+	display_vsint32(b, "%4.0x", "b"); puts("");
+	display_vsint32(x, "%4.0x", "x"); puts("");
+	display_vsint32(y, "%4.0x", "y"); puts("");
+
+	printf("\nOn teste pour differentes valeurs de a, la fonction if_else : \"if a >= b return x, else return y\" :\n\n");
+
+	printf("Si a < b, on retourne bien y :\n");
 	a = init_vsint32(4);
-	display_vsint32(a, "%4.0x", "a"); puts("\n");
-	display_vsint32(b, "%4.0x", "b"); puts("\n");
-	display_vsint32(x, "%4.0x", "x"); puts("\n");
-	display_vsint32(y, "%4.0x", "y"); puts("\n");
-	printf("if a >= b return x, else return y\n");
+	display_vsint32(a, "%4.0x", "a\t"); puts("");
 	res = if_else(a,b,x,y);
-	display_vsint32(res, "%4.0x", "res"); puts("");
-	printf("a < b donc on retourne y\n\n");
+	display_vsint32(res, "%4.0x", "res\t"); puts("\n");
 
-	printf("====TEST a == b ====\n");
+	printf("Si a = b, on retourne bien x : \n");
 	a = init_vsint32(5);
-	display_vsint32(a, "%4.0x", "a"); puts("\n");
-	display_vsint32(b, "%4.0x", "b"); puts("\n");
-	display_vsint32(x, "%4.0x", "x"); puts("\n");
-	display_vsint32(y, "%4.0x", "y"); puts("\n");
-	printf("if a >= b return x, else return y\n");
+	display_vsint32(a, "%4.0x", "a\t"); puts("");
 	res = if_else(a,b,x,y);
-	display_vsint32(res, "%4.0x", "res"); puts("");
-	printf("a == b donc on retourne x\n\n");
+	display_vsint32(res, "%4.0x", "res\t"); puts("\n");
 
-	printf("====TEST a > b ====\n");
+	printf("Si a > b, on retourne bien x : \n");
 	a = init_vsint32(6);
-	display_vsint32(a, "%4.0x", "a"); puts("\n");
-	display_vsint32(b, "%4.0x", "b"); puts("\n");
-	display_vsint32(x, "%4.0x", "x"); puts("\n");
-	display_vsint32(y, "%4.0x", "y"); puts("\n");
-	printf("if a >= b return x, else return y\n");
+	display_vsint32(a, "%4.0x", "a\t"); puts("");
 	res = if_else(a,b,x,y);
-	display_vsint32(res, "%4.0x", "res"); puts("");
-	printf("a > b donc on retourne x\n\n");
+	display_vsint32(res, "%4.0x", "res\t"); puts("\n");
 
 	PRINT_END("test_if_else");
 }
