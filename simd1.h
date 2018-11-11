@@ -10,6 +10,6 @@
 
 //#include "mutil.h"
 
-vsint32 if_else(vsint32 a, vsint32 b, vsint32 x, vsint32 y);
+vuint8 if_else(vuint32 a, vuint32 b, vuint32 x, vuint32 y);
 
-__m128i abs_simd(__m128i v);
+vuint8 abs_simd(vsint32 v);

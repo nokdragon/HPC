@@ -10,13 +10,9 @@
 #include "traitement.h"
 #include "main.h"
 
-//Paramètre de FD
-#define THETA 40 
-
-//Paramètres de SD
-#define VMIN 1
-#define VMAX 254
-#define N 3.5
+#include "vnrdef.h"
+#include "vnrutil.h"
+#include "simd1.h"
 
 //fonction Frame Difference (FD) 
 /*It est la matrice de l'image courante (a l'instant t)
@@ -49,8 +45,6 @@ uint8 Frame_Difference(uint8 It, uint8 It_1) {
 		return 255;
 	}
 }
-
-
 
 void create_FD_folder()
 {

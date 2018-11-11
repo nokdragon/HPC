@@ -19,18 +19,25 @@
 
 int main(){
 
-	/*===================REMI===================*/
+	/*===================REMI===================
 	test_if_else();
 	test_abs_simd();
+	*/
 
 
 
-	/*===================CYPRIEN===================
+	/*===================CYPRIEN===================*/
 	//Initialisation
 	int i;
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
 	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+
+	printf("nrl = %ld\n",nrl);
+	printf("nrh = %ld\n",nrh);
+	printf("ncl = %ld\n",ncl);
+	printf("nch = %ld\n",nch);
+
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -113,7 +120,7 @@ int main(){
 
 
 	}
-	*/
+	
 }
 
 
