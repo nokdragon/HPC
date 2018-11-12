@@ -16,7 +16,67 @@
 #define PRINT_BEGIN() printf("\n\n==============================================BEGIN %s==============================================\n", __func__);
 #define PRINT_END() printf("==============================================END %s==============================================\n\n\n\n", __func__);
 
+#define MAX_UINT8 128
 
+int test_vuint8_if_else()
+{	
+
+	//PRINT_BEGIN("test_if_else");
+	PRINT_BEGIN();
+
+	uint8 * tmp;
+	vuint8 a, b, x, y, res,cmp;
+	x = init_vuint8(7);
+	y = init_vuint8(8);
+
+
+	int i,j,k;
+
+	for(i=-MAX_UINT8;i<MAX_UINT8;i++){
+		for(j=-MAX_UINT8;j<MAX_UINT8;j++){
+			a=init_vuint8(i);
+			b=init_vuint8(j);
+			res = vuint8_if_else(a,b,x,y);
+			if(i>=j){
+				for(k=0;k<16;k++){
+					cmp=_mm_cmpeq_epi8 (x,res);
+					tmp=(uint8 *)&cmp;
+					if(tmp[k]){
+					}
+					else{
+						printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res= "); puts("\n");
+						display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
+					}
+				}
+			}
+			else{
+				for(k=0;k<16;k++){
+					cmp=_mm_cmpeq_epi8 (y,res);
+					tmp=(uint8 *)&cmp;
+					if(tmp[k]){
+					}
+					else{
+						printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res= "); puts("\n");
+						display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						return 1;
+					}
+				}
+			}
+
+		}
+	}
+
+	PRINT_END();
+	return 0;
+
+	
+
+}
+/*
 void test_vuint8_if_else()
 {	
 
@@ -55,7 +115,7 @@ void test_vuint8_if_else()
 
 	PRINT_END();
 
-}
+}*/
 
 void test_vuint8_abs_simd()
 {	
