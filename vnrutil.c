@@ -538,14 +538,17 @@ vfloat32 **vf32matrix_s(int i0, int i1, int j0, int j1)
 vuint8 init_vuint8(uint8 x)
 /* --------------------- */
 {
+    
     vuint8 T[1];
+    /*
     uint8 *p = (uint8*) T;
     
     p[0]  = p[1]  = p[2]  = p[3]  = x;
     p[4]  = p[5]  = p[6]  = p[7]  = x;
     p[8]  = p[9]  = p[10] = p[11] = x;
     p[12] = p[13] = p[14] = p[15] = x;
-    
+    */
+    T[0] = _mm_set_epi8(x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x);
     
     return T[0];
 }
@@ -568,11 +571,13 @@ vuint16 init_vuint16(uint16 x)
 /* ------------------------ */
 {
     vuint16 T[1];
+    /*
     uint16 *p = (uint16*) T;
     
     p[0] = p[1] = p[2] = p[3] = x;
     p[4] = p[5] = p[6] = p[7] = x;
-    
+    */
+    T[0] = _mm_set_epi16(x,x,x,x,x,x,x,x);
     return T[0];
 }
 /* ------------------------ */
@@ -1633,7 +1638,7 @@ void display_vsint16(vsint16 x, char *format, char *name)
     for(i=0; i<8; i++)
         printf(format, p[i]);
     
-    printf("\n");
+    //printf("\n");
 }
 /* --------------------------------------------------- */
 void display_vuint32(vuint32 x, char *format, char *name)
