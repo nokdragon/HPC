@@ -17,8 +17,6 @@ uint8 dilatation3(uint8 Et1, uint8 Et2, uint8 Et3, uint8 Et4, uint8 Et5, uint8 E
 //dilatation de carré de 3x3 appliqué à une matrice
 void dilatation3_matrix(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch);
 
-//test unitaire de dilatation3
-uint8 test_dilatation3();
 
 //dilatation de carré de 5x5
 void dilatation5(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch);
@@ -28,9 +26,6 @@ uint8 erosion3(uint8 Et1, uint8 Et2, uint8 Et3, uint8 Et4, uint8 Et5, uint8 Et6,
 
 //erosion de carré de 3x3 appliqué à une matrice
 void erosion3_matrix(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch);
-
-//test unitaire de erosion3
-uint8 test_erosion3();
 
 //erosion de carré de 5x5
 void erosion5(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl, long nch);
