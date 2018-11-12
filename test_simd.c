@@ -9,6 +9,7 @@
 
 #include "simd1.h"
 #include "traitement_simd.h"
+#include "traitement.h"
 
 //#define PRINT_BEGIN(msg) printf("\n\n==============================================BEGIN %s==============================================\n", msg);
 //#define PRINT_END(msg) printf("==============================================END %s==============================================\n\n\n\n", msg);
@@ -117,23 +118,34 @@ void test_fd_simd()
 	It =  init_vuint16(40);
 	It_1 =  init_vuint16(41);
 	res = fd_simd(It, It_1);
-	display_vuint16(It, " %d\t", "It\t"); puts("");
-	display_vuint16(It_1, " %d\t", "It_1\t"); puts("");
-	display_vuint16(res, " %d\t", "res\t"); puts("\n");
+	display_vuint16(It, " \t%d\t", "It\t"); puts("");
+	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
+	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");
+	display_vsint16(vuint16_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
+	printf("La soustraction absolue des deux vecteurs est bien inférieur à theta =  %d, donc on retourne :\n",  THETA);
+	display_vuint16(res, " \t%d\t", "res\t"); puts("\n");
+	puts("\n\n");
 
 	It =  init_vuint16(40);
 	It_1 =  init_vuint16(240);
 	res = fd_simd(It, It_1);
-	display_vuint16(It, " %d\t", "It\t"); puts("");
-	display_vuint16(It_1, " %d\t", "It_1\t"); puts("");
-	display_vuint16(res, " %d\t", "res\t"); puts("\n");
+	display_vuint16(It, " \t%d\t", "It\t"); puts("");
+	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
+	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");
+	display_vsint16(vuint16_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
+	printf("La soustraction absolue des deux vecteurs est bien supérieur à theta =  %d, donc on retourne :\n",  THETA);
+	display_vuint16(res, " \t%d\t", "res\t"); puts("\n");
+	puts("\n\n");
 
 	It =  init_vuint16(40);
 	It_1 =  init_vuint16(40);
 	res = fd_simd(It, It_1);
-	display_vuint16(It, " %d\t", "It\t"); puts("");
-	display_vuint16(It_1, " %d\t", "It_1\t"); puts("");
-	display_vuint16(res, " %d\t", "res\t"); puts("\n");
+	display_vuint16(It, " \t%d\t", "It\t"); puts("");
+	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
+	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");
+	display_vsint16(vuint16_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
+	printf("La soustraction absolue des deux vecteurs est bien inférieur à theta = %d, donc on retourne :\n",  THETA);
+	display_vuint16(res, " \t%d\t", "res\t"); puts("\n");
 
 	PRINT_END();
 }

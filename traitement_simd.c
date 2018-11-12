@@ -44,8 +44,8 @@ vuint16 fd_simd(vsint16 It, vsint16 It_1) {
 	printf("pIt_1[0] - pIt[0] = %2.0d\n", pIt_1[0] - pIt[0]);
 	display_vsint16(_mm_sub_epi16(It , It_1), " %d ", "It - It_1"); puts("");
 	display_vsint16(_mm_sub_epi16(It_1 , It), " %d ", "It_1 - It"); puts("");
-	*/
 	display_vsint16(Ot, " %d", "Ot"); puts("");
+	*/
 
 	return vuint16_if_else(Ot, init_vuint16(THETA), init_vuint16(MAX_PIXEL_VALUE), _mm_setzero_si128());
 }
