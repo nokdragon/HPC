@@ -20,4 +20,11 @@ uint8 test_dilatation3();
 uint8 test_erosion3();
 
 //fonction qui calcule la matrice roc
-void calculate_ROC(uint8 ** EtRef, uint8 ** Et, long nrl, long nrh, long ncl, long nch, int *ROC);
+void calculate_ROC(uint8 ** EtRef, uint8 ** Et, long nrl, long nrh, long ncl, long nch, long *ROC);
+
+
+//fonction qui donne les performances de fd et sd avec ou sans post traitement
+void validation();
+
+//affiche la matrice ROC
+void print_ROC(long * ROC);

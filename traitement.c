@@ -23,7 +23,7 @@ nrl et nrh : premiere et derniere ligne
 ncl et nch : premiere et derniere colonne
 dans notre cas on a : nrl = ncl = 0 nrh = 239 nch = 351 pour prendre toute l'image
 */
-void Frame_Difference_Matrix(uint8 **It, uint8 **It_1, uint8 **Ot, uint8 **Et, long nrl, long nrh, long ncl, long nch)
+void Frame_Difference_Matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long nrh, long ncl, long nch)
 {
 	long i,j;
 	for(i=nrl; i<=nrh; i++) {
@@ -55,8 +55,6 @@ void create_FD_folder()
 	uint8** m_1;
 	m_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
 	
-	uint8 **Ot;
-	Ot = ui8matrix(nrl, nrh, ncl, nch);
 
 	uint8 **Et;
 	Et = ui8matrix(nrl, nrh, ncl, nch);
@@ -69,10 +67,8 @@ void create_FD_folder()
 
 		m = LoadPGM_ui8matrix(file, &nrl, &nrh, &ncl, &nch);
 
-		Frame_Difference_Matrix(m, m_1, Ot, Et, nrl, nrh, ncl, nch);
+		Frame_Difference_Matrix(m, m_1, Et, nrl, nrh, ncl, nch);
 
-		sprintf(file,"hall_FD/OT_FD%d.pgm",i);
-		SavePGM_ui8matrix(Ot,nrl, nrh, ncl, nch,file);
 		sprintf(file,"hall_FD/ET_FD%d.pgm",i);
 		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
 	}
@@ -92,9 +88,11 @@ nrl et nrh : premiere et derniere ligne
 ncl et nch : premiere et derniere colonne
 dans notre cas on a : nrl = ncl = 0 nrh = 239 nch = 351 pour prendre toute l'image
 */
-void SD(uint8 **It, uint8 **It_1, uint8 **Ot, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, long nrl, long nrh, long ncl, long nch)
+void SD(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, long nrl, long nrh, long ncl, long nch)
 {
 	long i,j;
+	uint8 Ot;
+
 	for(i=nrl; i<=nrh; i++) {
 	    for(j=ncl; j<=nch; j++) {
 
@@ -108,12 +106,12 @@ void SD(uint8 **It, uint8 **It_1, uint8 **Ot, uint8 **Et, uint8 **Vt, uint8 **Vt
 	    		Mt[i][j] = Mt_1[i][j];
 	    	}
 
-	    	Ot[i][j]=abs( Mt[i][j] - It[i][j] );
+	    	Ot=abs( Mt[i][j] - It[i][j] );
 
-	    	if(Vt_1[i][j] < N * Ot[i][j]){
+	    	if(Vt_1[i][j] < N * Ot){
 	    		Vt[i][j] = Vt_1[i][j] + 1;
 	    	}
-	    	else if(Vt_1[i][j] > N * Ot[i][j]){
+	    	else if(Vt_1[i][j] > N * Ot){
 	    		Vt[i][j] = Vt_1[i][j] - 1;
 	    	}
 	    	else{
@@ -127,7 +125,7 @@ void SD(uint8 **It, uint8 **It_1, uint8 **Ot, uint8 **Et, uint8 **Vt, uint8 **Vt
 	    		Vt[i][j]=VMAX;
 	    	}
 
-	    	if(Ot[i][j] < Vt[i][j]){
+	    	if(Ot < Vt[i][j]){
 	    		Et[i][j]=0;
 	    	}
 	    	else{

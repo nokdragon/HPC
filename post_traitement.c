@@ -179,3 +179,23 @@ void posTraitementFO(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	fermeture5(Et,nrl, nrh, ncl, nch);
 	ouverture5(Et,nrl, nrh, ncl, nch);
 }
+
+//post traitement custom
+void posTraitementC(uint8 **Et, long nrl, long nrh, long ncl, long nch){
+
+	ouverture3(Et,nrl, nrh, ncl, nch);
+	fermeture3(Et,nrl, nrh, ncl, nch);
+	
+	uint8 **tmp;
+	tmp = ui8matrix(nrl, nrh, ncl, nch);
+	Copy(tmp,Et, nrl, nrh, ncl, nch);
+	dilatation3_matrix(tmp, Et,nrl, nrh, ncl, nch);
+
+	Copy(Et,tmp,nrl, nrh, ncl, nch);
+	dilatation3_matrix(Et, tmp, nrl, nrh, ncl, nch);
+	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
+	
+	//fermeture3(Et,nrl, nrh, ncl, nch);
+
+
+}

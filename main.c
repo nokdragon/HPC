@@ -16,6 +16,7 @@
 #include "simd1.h"
 #include "test_simd.h"
 #include "traitement_simd.h"
+#include "test.h"
 
 
 
@@ -71,7 +72,12 @@ void remi()
 
 void cyprien()
 {
+
+	validation();
+
 	//Initialisation
+
+	
 	int i;
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
@@ -85,9 +91,6 @@ void cyprien()
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
-
-	uint8 **Ot;
-	Ot = ui8matrix(nrl, nrh, ncl, nch);
 
 	uint8 **Et;
 	Et = ui8matrix(nrl, nrh, ncl, nch);
@@ -121,7 +124,7 @@ void cyprien()
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-		Frame_Difference_Matrix(It, It_1, Ot, Et, nrl, nrh, ncl, nch);
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 
 		
 		Copy(tmp, Et, nrl, nrh, ncl, nch);
@@ -136,7 +139,7 @@ void cyprien()
 		//sprintf(file,"hall_FD/ETFO_FD%d.pgm",i);
 		//SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);
 
-		SD(It, It_1, Ot, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
 
 		sprintf(file,"hall_SD/ET_SD%d.pgm",i);
 		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
@@ -148,14 +151,14 @@ void cyprien()
 
 
 		posTraitementOF(Et, nrl, nrh, ncl, nch);
-		sprintf(file,"hall_SD/ETOF_SD%d.pgm",i);
+		sprintf(file,"hall_SD/ETC_SD%d.pgm",i);
 		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
 
 
-
+/*
 		posTraitementFO(tmp, nrl, nrh, ncl, nch);
 		sprintf(file,"hall_SD/ETFO_SD%d.pgm",i);
-		SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);
+		SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);*/
 
 		Copy(It_1, It, nrl, nrh, ncl, nch);
 		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
@@ -168,12 +171,13 @@ void cyprien()
 		//ou une copie faudra voir ce qui est le plus économe
 
 	}
+	
 }
 
 int main()
 {
-	remi();
-	//cyprien();
+	//remi();
+	cyprien();
 }
 
 

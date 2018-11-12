@@ -47,3 +47,6 @@ void posTraitementOF(uint8 **Et, long nrl, long nrh, long ncl, long nch);
 
 //post traitement fermeture puis ouverture
 void posTraitementFO(uint8 **Et, long nrl, long nrh, long ncl, long nch);
+
+//post traitement custom
+void posTraitementC(uint8 **Et, long nrl, long nrh, long ncl, long nch);
