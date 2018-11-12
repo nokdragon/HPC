@@ -206,7 +206,7 @@ void validation(){
 
 		if((i % 20 == 4) && (i != 4) && (i<220)){
 			nbP+=(nrh - nrl) * (nch - ncl);
-			sprintf(file,"vérité_terrain/hall%06d.pgm",i);
+			sprintf(file,"verite_terrain/hall%06d.pgm",i);
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, EtRef);
 
