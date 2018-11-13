@@ -137,7 +137,7 @@ void execution() {
 		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
 
 		sprintf(file, "hall_SD/ET_SD%d.pgm", i);
-		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
+		//SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
 
 
@@ -170,8 +170,9 @@ void execution() {
 
 void cyprien()
 {
-	validation();
+	//validation();
 	chrono();
+	//execution();
 	
 }
 

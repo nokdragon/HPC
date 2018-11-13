@@ -287,7 +287,7 @@ void validation(){
 
 
 void chrono() {
-	clock_t start_t, end_t, total_fd, total_fd_P, total_sd, total_sd_P;
+	clock_t start_t, end_t, total_vide, total_fd, total_fd_P, total_sd, total_sd_P;
 
 	total_fd = 0;
 	total_fd_P = 0;
@@ -327,8 +327,31 @@ void chrono() {
 	char file[255];
 
 
-	//######################################### parcours de toutes les photos #########################################
+	//######################################### parcours de toutes les photos sans traitement #########################################
 
+	start_t = clock();
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	end_t = clock();
+	total_vide = end_t - start_t;
+
+
+
+	//######################################### parcours de toutes les photos avec traitement FD #########################################
+
+	start_t = clock();
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -337,43 +360,9 @@ void chrono() {
 
 		//######################################### traitement fd #########################################
 
-		start_t = clock();
 
 		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 
-		end_t = clock();
-
-		total_fd += (end_t - start_t);
-
-		//######################################### post traitement #########################################
-
-		start_t = clock();
-
-		posTraitementFO(Et, nrl, nrh, ncl, nch);
-
-		end_t = clock();
-
-		total_fd_P += (end_t - start_t) + total_fd;
-
-		//######################################### traitement sd #########################################
-
-		start_t = clock();
-
-		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
-
-		end_t = clock();
-
-		total_sd += (end_t - start_t);
-
-		//######################################### post traitement #########################################
-
-		start_t = clock();
-
-		posTraitementOF(Et, nrl, nrh, ncl, nch);
-
-		end_t = clock();
-
-		total_sd_P += (end_t - start_t) + total_sd;
 
 		//######################################### Itération #########################################
 
@@ -382,10 +371,100 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
+	end_t = clock();
+	total_fd = (end_t - start_t) - total_vide;
+
+	//######################################### parcours de toutes les photos avec traitement FD avec post traitement #########################################
+
+	start_t = clock();
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement fd #########################################
+
+
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### post traitement #########################################
+
+		posTraitementFO(Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	end_t = clock();
+	total_fd_P = (end_t - start_t) - total_vide;
+
+
+	//######################################### parcours de toutes les photos avec traitement SD #########################################
+
+	start_t = clock();
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement sd #########################################
+
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	end_t = clock();
+	total_sd = (end_t - start_t) - total_vide;
+
+	//######################################### parcours de toutes les photos avec traitement SD avec post traitement #########################################
+
+	start_t = clock();
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement sd #########################################
+
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+
+		//######################################### post traitement #########################################
+
+		posTraitementOF(Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	end_t = clock();
+	total_sd_P = (end_t - start_t) - total_vide;
+
+
 	//######################################### Affichage des résultats #########################################
 
-	printf("FD : %ld cycles, %lf secondes", total_fd, (double)(total_fd / CLOCKS_PER_SEC));
-	printf("FD avec post traitemen: %ld cycles, %lf secondes", total_fd_P, (double)(total_fd_P / CLOCKS_PER_SEC));
-	printf("SD : %ld cycles, %lf secondes", total_fd, (double)(total_sd / CLOCKS_PER_SEC));
-	printf("SD avec post traitemen: %ld cycles, %lf secondes", total_sd_P, (double)(total_sd_P / CLOCKS_PER_SEC));
+	printf("FD : %ld cycles, %lf secondes\n", total_fd, (double)total_fd / CLOCKS_PER_SEC);
+	printf("FD avec post traitemen: %ld cycles, %lf secondes\n", total_fd_P, (double)total_fd_P / CLOCKS_PER_SEC);
+	printf("SD : %ld cycles, %lf secondes\n", total_fd, (double)total_sd / CLOCKS_PER_SEC);
+	printf("SD avec post traitemen: %ld cycles, %lf secondes\n", total_sd_P, (double)total_sd_P / CLOCKS_PER_SEC);
 }
