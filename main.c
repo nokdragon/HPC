@@ -71,23 +71,17 @@ void remi()
 	
 }
 
-void cyprien()
-{
 
-	validation();
-
-	//Initialisation
-
-	
+void execution() {
 	int i;
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
 	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
 
-	printf("nrl = %ld\n",nrl);
-	printf("nrh = %ld\n",nrh);
-	printf("ncl = %ld\n",ncl);
-	printf("nch = %ld\n",nch);
+	printf("nrl = %ld\n", nrl);
+	printf("nrh = %ld\n", nrh);
+	printf("ncl = %ld\n", ncl);
+	printf("nch = %ld\n", nch);
 
 
 	uint8** It;
@@ -117,22 +111,22 @@ void cyprien()
 
 	uint8 **tmp;
 	tmp = ui8matrix(nrl, nrh, ncl, nch);
-	
-	
-	for(i=1 ; i<300 ; i++){
 
-		sprintf(file,"hall/hall%06d.pgm",i);
+
+	for (i = 1; i<300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
 		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 
-		
+
 		Copy(tmp, Et, nrl, nrh, ncl, nch);
 
 		//posTraitementOF(Et, nrl, nrh, ncl, nch);
-		sprintf(file,"hall_FD/ETOF_FD%d.pgm",i);
-		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
+		sprintf(file, "hall_FD/ETOF_FD%d.pgm", i);
+		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
 
 
@@ -142,8 +136,8 @@ void cyprien()
 
 		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
 
-		sprintf(file,"hall_SD/ET_SD%d.pgm",i);
-		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
+		sprintf(file, "hall_SD/ET_SD%d.pgm", i);
+		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
 
 
@@ -152,11 +146,11 @@ void cyprien()
 
 
 		posTraitementOF(Et, nrl, nrh, ncl, nch);
-		sprintf(file,"hall_SD/ETC_SD%d.pgm",i);
-		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
+		sprintf(file, "hall_SD/ETC_SD%d.pgm", i);
+		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
 
-/*
+		/*
 		posTraitementFO(tmp, nrl, nrh, ncl, nch);
 		sprintf(file,"hall_SD/ETFO_SD%d.pgm",i);
 		SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);*/
@@ -172,13 +166,19 @@ void cyprien()
 		//ou une copie faudra voir ce qui est le plus économe
 
 	}
+}
+
+void cyprien()
+{
+	validation();
+	chrono();
 	
 }
 
 int main()
 {
-	remi();
-	//cyprien();
+	//remi();
+	cyprien();
 }
 
 
