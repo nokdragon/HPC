@@ -177,7 +177,7 @@ void test_fd_simd()
 
 	It =  init_vuint16(40);
 	It_1 =  init_vuint16(41);
-	res = fd_simd(It, It_1);
+	res = vuint16_fd_simd(It, It_1);
 	display_vuint16(It, " \t%d\t", "It\t"); puts("");
 	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
 	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");
@@ -188,7 +188,7 @@ void test_fd_simd()
 
 	It =  init_vuint16(40);
 	It_1 =  init_vuint16(240);
-	res = fd_simd(It, It_1);
+	res = vuint16_fd_simd(It, It_1);
 	display_vuint16(It, " \t%d\t", "It\t"); puts("");
 	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
 	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");
@@ -199,7 +199,7 @@ void test_fd_simd()
 
 	It =  init_vuint16(40);
 	It_1 =  init_vuint16(40);
-	res = fd_simd(It, It_1);
+	res = vuint16_fd_simd(It, It_1);
 	display_vuint16(It, " \t%d\t", "It\t"); puts("");
 	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
 	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");

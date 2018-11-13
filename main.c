@@ -67,7 +67,6 @@ void remi()
 	}
 	*/
 	
-
 }
 
 void cyprien()

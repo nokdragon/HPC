@@ -27,9 +27,9 @@ vuint8 vuint8_if_else(vuint8 a, vuint8 b, vuint8 x, vuint8 y)
     return z;    
 }
 
-vuint16 vuint16_if_else(vuint16 a, vuint16 b, vsint16 x, vsint16 y)
+vsint16 vsint16_if_else(vsint16 a, vsint16 b, vsint16 x, vsint16 y)
 {
-    vuint16 c, z;
+    vsint16 c, z;
     c = _mm_cmplt_epi16(a ,b);//compare a and b
     z = _mm_or_si128(_mm_and_si128(c, y), _mm_andnot_si128(c,x));//select value
     return z;    
@@ -63,8 +63,8 @@ vsint16 vuint16_ca2(vuint16 a)
 }
 
 //aide possible at : https://stackoverflow.com/questions/32408665/fastest-way-to-compute-absolute-value-using-sse
-vuint16 vuint16_abs_simd(vuint16 a)
+vuint16 vuint16_abs_simd(vsint16 a)
 {   
     //si a > 0, return a, else return son complément à deux
-    return vuint16_if_else(a, _mm_setzero_si128(), a, vuint16_ca2(a));
+    return vsint16_if_else(a, _mm_setzero_si128(), a, vuint16_ca2(a));
 }
