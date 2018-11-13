@@ -25,8 +25,8 @@ void remi()
 	test_vuint8_if_else();
 	//test_vuint8_abs_simd();
 	//test_vuint16_abs_simd();
-	//test_fd_simd();
-	
+	test_vuint8_fd_simd();
+
 	/*
 		//Initialisation
 	int i;
@@ -175,8 +175,8 @@ void cyprien()
 
 int main()
 {
-	//remi();
-	cyprien();
+	remi();
+	//cyprien();
 }
 
 

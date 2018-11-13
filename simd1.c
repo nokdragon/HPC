@@ -15,15 +15,26 @@
 #include "simd1.h"
 
 #define MAX_32B 0xffffffff //2 pow 32 - 1
-#define MAX_8B 0xff //2 pow 8 -1
+#define MAX_UINT8 0xff //2 pow 8 - 1 = 255
+#define MAX_SINT8 127 
 #define MAX_16B 0xffff //2 pow 16 -1
+
+#define PRINT_BUG() printf("ATTENTION : Utilisation de la fonction %s, non valide à l'heure actuelle\n", __func__);
 
 //if a >= b return x, else return y
 vuint8 vuint8_if_else(vuint8 a, vuint8 b, vuint8 x, vuint8 y)
 {
     vuint8 c, z;
-    c = _mm_cmplt_epi8(a ,b);//compare a and b
-    z = _mm_or_si128(_mm_and_si128(c, y), _mm_andnot_si128(c,x));//select value
+    /*
+    Description du problème : l'opération c = _mm_cmplt_epi8(a,b) est signée
+    ex : si a = {0,127} et b = {128, 255}, alors c considère a plus grand, car il prends b pour un négatif
+    Solution, avant la comparaison, on soustrait à a et b, 127
+    */
+    
+    //c = _mm_cmplt_epi8(a ,b);//compare a and b
+    c = _mm_cmplt_epi8(_mm_sub_epi8(a, init_vuint8(MAX_SINT8)), _mm_sub_epi8(b, init_vuint8(MAX_SINT8)));
+    //display_vuint8(c, "%4.0d", "c\t"); puts("\n");
+    z = _mm_or_si128(_mm_and_si128(c,y), _mm_andnot_si128(c,x));//select value
     return z;    
 }
 
@@ -39,8 +50,8 @@ vsint16 vsint16_if_else(vsint16 a, vsint16 b, vsint16 x, vsint16 y)
 vuint8 vuint8_ca2(vuint8 a)
 {
      vuint8 _a;
-     _a = _mm_xor_si128(a, init_vuint8(MAX_8B)); //_a = NOT a
-     _a = _mm_add_epi8 (_a, _mm_set_epi8(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)); // on ajoute 1
+     _a = _mm_xor_si128(a, init_vuint8(MAX_UINT8)); //_a = NOT a
+     _a = _mm_add_epi8 (_a, init_vuint8(1)); // on ajoute 1
      //a = _mm_add_epi8 (_a, init_vuint8(1));
      return _a;
 }
@@ -49,6 +60,8 @@ vuint8 vuint8_ca2(vuint8 a)
 vuint8 vuint8_abs_simd(vuint8 a)
 {   
     //si a > 0, return a, else return son complément à deux
+
+    PRINT_BUG();
     return vuint8_if_else(a, _mm_setzero_si128(), a, vuint8_ca2(a));
 }
 

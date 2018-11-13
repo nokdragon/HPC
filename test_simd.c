@@ -15,8 +15,19 @@
 //#define PRINT_END(msg) printf("==============================================END %s==============================================\n\n\n\n", msg);
 #define PRINT_BEGIN() printf("\n\n==============================================BEGIN %s==============================================\n", __func__);
 #define PRINT_END() printf("==============================================END %s==============================================\n\n\n\n", __func__);
+#define PRINT_OK() printf("\nLa fonction ne contient pas d'erreur\n\n");
 
-#define MAX_UINT8 128
+#define MAX_SINT8 127
+#define MIN_SINT8 -128
+
+#define MAX_UINT8 255
+#define MIN_UINT8 0
+
+#define MAX_PIXEL_VALUE 255
+#define MIN_PIXEL_VALUE 0
+
+#define THETA 40
+
 
 int test_vuint8_if_else()
 {	
@@ -32,8 +43,8 @@ int test_vuint8_if_else()
 
 	int i,j,k;
 
-	for(i=-MAX_UINT8;i<MAX_UINT8;i++){
-		for(j=-MAX_UINT8;j<MAX_UINT8;j++){
+	for(i=MIN_UINT8;i<MAX_UINT8;i++){
+		for(j=MIN_UINT8;j<MAX_UINT8;j++){
 			a=init_vuint8(i);
 			b=init_vuint8(j);
 			res = vuint8_if_else(a,b,x,y);
@@ -70,12 +81,13 @@ int test_vuint8_if_else()
 		}
 	}
 
+	PRINT_OK();
 	PRINT_END();
-	return 0;
-
-	
+	return 0;	
 
 }
+
+
 /*
 void test_vuint8_if_else()
 {	
@@ -115,7 +127,8 @@ void test_vuint8_if_else()
 
 	PRINT_END();
 
-}*/
+}
+*/
 
 void test_vuint8_abs_simd()
 {	
@@ -151,7 +164,7 @@ void test_vuint16_abs_simd()
 	a = init_vuint16(-5);
 	abs_a = vuint16_abs_simd(a);
 	display_vsint16(a, " %d\t", "a\t"); puts("");
-	display_vuint16(abs_a, " %d\t", "abs_a\t"); puts("\n");
+	display_vsint16(abs_a, " %d\t", "abs_a\t"); puts("\n");
 
 	vuint16 b, abs_b;
 	b = init_vuint16(16);
@@ -169,7 +182,109 @@ void test_vuint16_abs_simd()
 
 }
 
-void test_fd_simd()
+/*
+void test_vuint8_fd_simd()
+{
+	PRINT_BEGIN();
+
+	vuint8 It, It_1, res;
+
+	It =  init_vuint8(40);
+	It_1 =  init_vuint8(41);
+	res = vuint8_fd_simd(It, It_1);
+	display_vuint8(It, " %d\t", "It\t"); puts("");
+	display_vuint8(It_1, " %d\t", "It_1\t"); puts("");
+	//display_vsint8(_mm_sub_epi8(It , It_1), " %d\t", "It - It_1"); puts("");
+	//display_vsint16(vuint8_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
+	printf("La soustraction absolue des deux vecteurs est bien inférieur à theta =  %d, donc on retourne :\n",  THETA);
+	display_vuint8(res, " %d\t", "res\t"); puts("\n");
+	puts("\n\n");
+
+	It =  init_vuint8(40);
+	It_1 =  init_vuint8(240);
+	res = vuint8_fd_simd(It, It_1);
+	display_vuint8(It, " %d\t", "It\t"); puts("");
+	display_vuint8(It_1, " %d\t", "It_1\t"); puts("");
+	//display_vsint8(_mm_sub_epi8(It , It_1), " %d\t", "It - It_1"); puts("");
+	//display_vsint16(vuint8_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
+	printf("La soustraction absolue des deux vecteurs est bien supérieur à theta =  %d, donc on retourne :\n",  THETA);
+	display_vuint8(res, " %d\t", "res\t"); puts("\n");
+	puts("\n\n");
+
+	It =  init_vuint8(40);
+	It_1 =  init_vuint8(40);
+	res = vuint8_fd_simd(It, It_1);
+	display_vuint8(It, " %d\t", "It\t"); puts("");
+	display_vuint8(It_1, " %d\t", "It_1\t"); puts("");
+	//display_vsint8(_mm_sub_epi8(It , It_1), " %d\t", "It - It_1"); puts("");
+	//display_vsint16(vuint8_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
+	printf("La soustraction absolue des deux vecteurs est bien inférieur à theta = %d, donc on retourne :\n",  THETA);
+	display_vuint8(res, " %d\t", "res\t"); puts("\n");
+
+	PRINT_END();
+}*/
+
+int test_vuint8_fd_simd()
+{
+	//PRINT_BEGIN("test_if_else");
+	PRINT_BEGIN();
+
+	uint8 * tmp; 
+	uint8 * tmp2;
+	vuint8 It, It_1, x, y, res,cmp;
+	x = init_vuint8(0xff);
+	y = init_vuint8(0);
+
+	int i,j,k;// i pour It, j pour It_1
+
+	for(i=MIN_UINT8;i<MAX_UINT8;i++){
+		for(j=MIN_UINT8;j<MAX_UINT8;j++){
+
+			It=init_vuint8(i);
+			It_1=init_vuint8(j);
+			res = vuint8_fd_simd(It, It_1);
+
+			if(abs(i - j) >= THETA){
+				for(k=0;k<16;k++){
+					//cmp =_mm_cmpeq_epi8 (x,res);
+					tmp=(uint8 *)&x;
+					tmp2=(uint8 *)&res;
+					if(tmp[k] == tmp2[k]){
+					}
+					else{
+						printf("Erreur de fd_simd simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res= "); puts("\n");
+						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
+					}
+				}
+			}
+			else{
+				for(k=0;k<16;k++){
+					//cmp=_mm_cmpeq_epi8 (y,res);
+					tmp=(uint8 *)&y;
+					tmp2=(uint8 *)&res;
+					if(tmp[k] == tmp2[k]){
+					}
+					else{
+						printf("Erreur de fd_simd simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res= "); puts("\n");
+						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						return 1;
+					}
+				}
+			}
+
+		}
+	}
+
+	PRINT_OK();
+	PRINT_END();
+	return 0;	
+}
+
+void test_vuint16_fd_simd()
 {
 	PRINT_BEGIN();
 
@@ -209,3 +324,4 @@ void test_fd_simd()
 
 	PRINT_END();
 }
+
