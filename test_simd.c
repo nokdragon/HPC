@@ -331,6 +331,22 @@ void test_vuint16_fd_simd()
 	PRINT_END();
 }
 
+void compare_matrix(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long nch)
+{
+	
+	long i,j;
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
+			if (m1[i][j] != m2[i][j]){
+				printf("m1[%ld][%ld] != m2[%ld][%ld]\n",i,j,i,j);
+				printf("%d != %d\n\n", m1[i][j], m2[i][j]);
+			}			
+			
+	    }
+  	}
+  	PRINT_END();
+}
+
 void test_vuint8_fd_simd_matrix()
 {
 	long nrl, nrh, ncl, nch;
@@ -355,6 +371,12 @@ void test_vuint8_fd_simd_matrix()
 
 		sprintf(file,"hall_FD/FD_simd%d.pgm",i);
 		SavePGM_ui8matrix(Ets,nrl, nrh, ncl, nch,file);
+
+		compare_matrix(Ets,Et, nrl,  nrh,  ncl, nch);
+
+		PRINT_OK();
+
+		PRINT_END();
 
 		//display_ui8matrix(Ets, nrl, nrh, ncl,  nch, " %d ", "Et");
 
