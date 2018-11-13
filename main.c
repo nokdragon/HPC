@@ -88,7 +88,7 @@ void execution() {
 	It = ui8matrix(nrl, nrh, ncl, nch);
 
 	uint8 **Et;
-	Et = ui8matrix(nrl, nrh, ncl, nch);
+	Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 
 	uint8 **Vt;
 	Vt = ui8matrix(nrl, nrh, ncl, nch);

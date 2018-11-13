@@ -17,6 +17,10 @@
 void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	int i, j;
 
+	vuint8 ligne1;
+	vuint8 ligne2;
+	vuint8 ligne3;
+
 	for(i=nrl+1; i<=nrh-1; i++) {
 	    for(j=ncl+1; j<=nch-1; j++) {
 			
