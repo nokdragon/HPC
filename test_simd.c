@@ -384,3 +384,88 @@ void test_vuint8_fd_simd_matrix()
 
 	}
 }
+
+int  test_vuint8_if_elif_else()
+{
+	/*
+	PRINT_BEGIN();
+	vuint8 a,b,x,y,z;
+	a = init_vuint8(4);
+	b = init_vuint8(5);
+	x = init_vuint8(6);
+	y = init_vuint8(7);
+	z = init_vuint8(8);
+	vuint8_if_elif_else( a,  b,  x,  y,  z);
+	PRINT_END();
+	*/
+
+
+
+	PRINT_BEGIN();
+
+	uint8 * tmp;
+	vuint8 a, b, x, y, z, res,cmp;
+	x = init_vuint8(7);
+	y = init_vuint8(8);
+	z = init_vuint8(9);
+
+
+	int i,j,k;
+
+	for(i=MIN_UINT8;i<MAX_UINT8;i++){//parcours toutes les entrées possible de a
+		for(j=MIN_UINT8;j<MAX_UINT8;j++){//et de b
+			a=init_vuint8(i);
+			b=init_vuint8(j);
+			res = vuint8_if_elif_else(a,b,x,y,z);
+			if(i>j){//si a est supérieur ou égale à b
+				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a x)
+					cmp=_mm_cmpeq_epi8 (x,res);
+					tmp=(uint8 *)&cmp;
+					if(tmp[k]){
+					}
+					else{
+						printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res= "); puts("\n");
+						display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
+					}
+				}
+			}
+			else if(i == j){
+				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a x)
+					cmp=_mm_cmpeq_epi8 (z,res);
+					tmp=(uint8 *)&cmp;
+					if(tmp[k]){
+					}
+					else{
+						printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res= "); puts("\n");
+						display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
+					}
+				}
+			}
+			else{//si a n'est pas supérieur ou égale à b
+				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a y)
+					cmp=_mm_cmpeq_epi8 (y,res);
+					tmp=(uint8 *)&cmp;
+					if(tmp[k]){
+					}
+					else{
+						printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res= "); puts("\n");
+						display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						return 1;
+					}
+				}
+			}
+
+		}
+	}
+
+	PRINT_OK();
+	PRINT_END();
+	return 0;	
+}
