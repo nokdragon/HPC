@@ -26,7 +26,7 @@ void remi()
 	//test_vuint8_abs_simd();
 	//test_vuint16_abs_simd();
 	//test_fd_simd();
-
+	
 	/*
 		//Initialisation
 	int i;
