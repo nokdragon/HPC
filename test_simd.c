@@ -27,12 +27,13 @@
 #define MIN_PIXEL_VALUE 0
 
 #define THETA 40
+#define BUFFSIZE 255
+#define NB_IMAGE 300
 
 
 int test_vuint8_if_else()
 {	
 
-	//PRINT_BEGIN("test_if_else");
 	PRINT_BEGIN();
 
 	uint8 * tmp;
@@ -229,30 +230,31 @@ int test_vuint8_fd_simd()
 	//PRINT_BEGIN("test_if_else");
 	PRINT_BEGIN();
 
-	uint8 * tmp; 
-	uint8 * tmp2;
-	vuint8 It, It_1, x, y, res,cmp;
-	x = init_vuint8(0xff);
-	y = init_vuint8(0);
+	uint8 * p_right_value; 
+	uint8 * p_res;
+	vuint8 It, It_1, right_value_1, right_value_2, res;
 
-	int i,j,k;// i pour It, j pour It_1
+	right_value_1 = init_vuint8(0xff);	
+	right_value_2 = init_vuint8(0);
+
+	int i,j,k;// i pour It, j pour It_1, k pour parcourir les vecteurs
 
 	for(i=MIN_UINT8;i<MAX_UINT8;i++){
 		for(j=MIN_UINT8;j<MAX_UINT8;j++){
 
-			It=init_vuint8(i);
-			It_1=init_vuint8(j);
+			It = init_vuint8(i);
+			It_1 = init_vuint8(j);
 			res = vuint8_fd_simd(It, It_1);
+			p_res = (uint8 *)&res;
 
 			if(abs(i - j) >= THETA){
 				for(k=0;k<16;k++){
 					//cmp =_mm_cmpeq_epi8 (x,res);
-					tmp=(uint8 *)&x;
-					tmp2=(uint8 *)&res;
-					if(tmp[k] == tmp2[k]){
+					p_right_value=(uint8 *)&right_value_1;
+					if(p_right_value[k] == p_res[k]){
 					}
 					else{
-						printf("Erreur de fd_simd simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						printf("Erreur de fd_simd  i=%d j=%d k=%d p_right_value[k]=%d\n",i,j,k,p_right_value[k]);
 						display_vuint8(res, "%4.0x", "res= "); puts("\n");
 						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
 						//tmp=_mm_cmpeq_epi8 (x,res);
@@ -263,12 +265,11 @@ int test_vuint8_fd_simd()
 			else{
 				for(k=0;k<16;k++){
 					//cmp=_mm_cmpeq_epi8 (y,res);
-					tmp=(uint8 *)&y;
-					tmp2=(uint8 *)&res;
-					if(tmp[k] == tmp2[k]){
+					p_right_value=(uint8 *)&right_value_2;
+					if(p_right_value[k] == p_res[k]){
 					}
 					else{
-						printf("Erreur de fd_simd simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						printf("Erreur de fd_simd i=%d j=%d k=%d p_right_value[k]=%d\n",i,j,k,p_right_value[k]);
 						display_vuint8(res, "%4.0x", "res= "); puts("\n");
 						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
 						return 1;
@@ -297,7 +298,7 @@ void test_vuint16_fd_simd()
 	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
 	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");
 	display_vsint16(vuint16_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
-	printf("La soustraction absolue des deux vecteurs est bien inférieur à theta =  %d, donc on retourne :\n",  THETA);
+	printf("La soustraction absolue des deux vecteurs est bien inférieure à theta =  %d, donc on retourne :\n",  THETA);
 	display_vuint16(res, " \t%d\t", "res\t"); puts("\n");
 	puts("\n\n");
 
@@ -308,7 +309,7 @@ void test_vuint16_fd_simd()
 	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
 	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");
 	display_vsint16(vuint16_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
-	printf("La soustraction absolue des deux vecteurs est bien supérieur à theta =  %d, donc on retourne :\n",  THETA);
+	printf("La soustraction absolue des deux vecteurs est bien supérieure à theta =  %d, donc on retourne :\n",  THETA);
 	display_vuint16(res, " \t%d\t", "res\t"); puts("\n");
 	puts("\n\n");
 
@@ -319,9 +320,30 @@ void test_vuint16_fd_simd()
 	display_vuint16(It_1, " \t%d\t", "It_1\t"); puts("");
 	display_vsint16(_mm_sub_epi16(It , It_1), " \t%d\t", "It - It_1"); puts("");
 	display_vsint16(vuint16_abs_simd(_mm_sub_epi16(It , It_1)), " \t%d\t", "|It - It_1|"); puts("\n");
-	printf("La soustraction absolue des deux vecteurs est bien inférieur à theta = %d, donc on retourne :\n",  THETA);
+	printf("La soustraction absolue des deux vecteurs est bien inférieure à theta = %d, donc on retourne :\n",  THETA);
 	display_vuint16(res, " \t%d\t", "res\t"); puts("\n");
 
 	PRINT_END();
 }
 
+void test_vuint8_fd_simd_matrix()
+{
+	long nrl, nrh, ncl, nch;
+	char file[BUFFSIZE];
+	uint8** It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	uint8** It = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
+
+
+	for(int i=1 ; i< 2 ; i++){
+
+		sprintf(file,"hall/hall%06d.pgm",i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		vuint8_fd_simd_matrix(It, It_1, Et);
+
+		display_ui8matrix(Et, nrl, nrh, ncl,  nch, " %d ", "Et");
+
+	}
+}

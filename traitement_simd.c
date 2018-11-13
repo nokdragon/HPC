@@ -54,19 +54,20 @@ vuint16 vuint16_fd_simd(vuint16 It, vuint16 It_1)
 	return vsint16_if_else(Ot, init_vuint16(THETA), init_vuint16(MAX_PIXEL_VALUE), _mm_setzero_si128());
 }
 
-uint8 ** to_matrix(vuint8 *v)
+void to_matrix(vuint8 *v, uint8 ** res)
 {
-	uint8 **res = ui8matrix(NRL, NRH, NCL, NCH);
+	//uint8 **res = ui8matrix(NRL, NRH, NCL, NCH);
 	uint8 * p = (uint8 *) v;
 	long i,j,k;
 	k = 0;
 	for(i=NRL; i<=NRH; i++) {
 	    for(j=NCL; j<=NCH; j++) {
 			res[i][j] = p[k];
+			//printf("res[%ld][%ld] = p[%ld] = %d\n",i,j,k,p[k]); 
 			k++;
 	    }
   	}
-  	return res;
+  	//return res;
 }
 
 
@@ -85,17 +86,21 @@ void vuint16_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Ot, uint16 **Et)
 }
 
 
-void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Ot, uint8 **Et)
+void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et)
 {	
 	vuint8 *pIt = (vuint8*) It;
 	vuint8 *pIt_1 = (vuint8*) It_1;
-	vuint8 *pEt = (vuint8*) Et;
+	vuint8 *pEt = (vuint8 *) Et[0];
+	//vuint8 res[NBE_VUINT8_IMAGE];
 
 	for (int i = 0; i < NBE_VUINT8_IMAGE; i++)
 	{
 		pEt[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
+		//res[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
+		//display_vuint8(res[i], "%4.0d", "res= "); puts("\n");
 	}	
 	
+	//to_matrix(res, Et);
 }
 
 /*
