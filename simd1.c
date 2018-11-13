@@ -13,11 +13,7 @@
 #include "vnrutil.h"
 
 #include "simd1.h"
-
-#define MAX_32B 0xffffffff //2 pow 32 - 1
-#define MAX_UINT8 0xff //2 pow 8 - 1 = 255
-#define MAX_SINT8 127 
-#define MAX_16B 0xffff //2 pow 16 -1
+#include "main.h"
 
 #define PRINT_BUG() printf("ATTENTION : Utilisation de la fonction %s, non valide à l'heure actuelle\n", __func__);
 
@@ -104,4 +100,13 @@ vuint8 vuint8_sub_abs(vuint8 a, vuint b)
     max = _mm_max_epu8(a, b);
     min = _mm_min_epu8(a, b); //Solution alternative, utiliser un if_else
     return _mm_sub_epi8(max , min);
+}
+
+vuint16 ext_8_16(vuint8 x)
+{   
+    vuint8 z8 = _mm_setzero_si128();
+    vuint16 res;
+    res= _mm_unpacklo_epi8(x,z8); 
+    res = _mm_unpackhi_epi8(x,z8);
+    return res;
 }

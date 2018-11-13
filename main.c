@@ -19,7 +19,6 @@
 #include "test.h"
 
 
-
 void remi()
 {
 	//test_vuint8_if_else();
@@ -27,7 +26,8 @@ void remi()
 	//test_vuint16_abs_simd();
 	//test_vuint8_fd_simd();
 	//test_vuint8_fd_simd_matrix();
-	test_vuint8_if_elif_else();
+	//test_vuint8_if_elif_else();
+	test_ext_8_16();
 
 	/*
 		//Initialisation
@@ -178,8 +178,8 @@ void cyprien()
 
 int main()
 {
-	//remi();
-	cyprien();
+	remi();
+	//cyprien();
 }
 
 
