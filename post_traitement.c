@@ -10,6 +10,7 @@
 #include "main.h"
 #include "traitement.h"
 #include "post_traitement.h"
+#include "post_traitement_simd.h"
 
 uint8 dilatation3(uint8 Et1, uint8 Et2, uint8 Et3, uint8 Et4, uint8 Et5, uint8 Et6, uint8 Et7, uint8 Et8, uint8 Et9) {
 	int tmp;
@@ -44,8 +45,8 @@ void dilatation3_matrix(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, l
 //dilatation de carré de 5x5
 void dilatation5(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	int i, j, k, l;
-	for(i=nrl+2; i<=nrh-2; i++) {
-	    for(j=ncl+2; j<=nch-2; j++) {
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
 	    	if(Et[i][j]==255){
 	    		for(k=-2;k<3;k++){
 		    		for(l=-2;l<3;l++){
@@ -80,8 +81,8 @@ uint8 erosion3(uint8 Et1, uint8 Et2, uint8 Et3, uint8 Et4, uint8 Et5, uint8 Et6,
 //erosion de carré de 3x3
 void erosion3_matrix(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	int i, j;
-	for (i = nrl + 1; i <= nrh - 1; i++) {
-		for (j = ncl + 1; j <= nch - 1; j++) {
+	for (i = nrl; i <= nrh; i++) {
+		for (j = ncl; j <= nch; j++) {
 			EtE[i][j] = erosion3(Et[i - 1][j - 1], Et[i - 1][j], Et[i - 1][j + 1], Et[i][j - 1], Et[i][j], Et[i][j + 1], Et[i + 1][j - 1], Et[i + 1][j], Et[i + 1][j + 1]);
 		}
 	}
@@ -94,8 +95,8 @@ void erosion3_matrix(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl, long
 //erosion de carré de 5x5
 void erosion5(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	int i, j, k, l;
-	for(i=nrl+2; i<=nrh-2; i++) {
-	    for(j=ncl+2; j<=nch-2; j++) {
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
 	    	if(Et[i][j]==0){
 	    		for(k=-2;k<3;k++){
 		    		for(l=-2;l<3;l++){
@@ -120,7 +121,7 @@ void ouverture3(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	dilatation3_matrix(Et, tmp,nrl, nrh, ncl, nch);
 
-	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
+	free_ui8matrix(tmp, nrl-2, nrh+2, ncl-2, nch+2);
 }
 
 //ouverture de carré 5x5
@@ -132,7 +133,7 @@ void ouverture5(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 
 	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	dilatation5(Et, tmp,nrl, nrh, ncl, nch);
-	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
+	free_ui8matrix(tmp, nrl-2, nrh+2, ncl-2, nch+2);
 }
 
 //fermeture de carré 3x3
@@ -144,7 +145,7 @@ void fermeture3(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 
 	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	erosion3_matrix(Et, tmp, nrl, nrh, ncl, nch);
-	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
+	free_ui8matrix(tmp, nrl-2, nrh+2, ncl-2, nch+2);
 }
 
 //fermeture de carré 5x5
@@ -156,7 +157,7 @@ void fermeture5(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 
 	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	erosion5(Et, tmp, nrl, nrh, ncl, nch);
-	free_ui8matrix(tmp, nrl, nrh, ncl, nch);
+	free_ui8matrix(tmp, nrl-2, nrh+2, ncl-2, nch+2);
 }
 
 

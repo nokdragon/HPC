@@ -13,6 +13,7 @@
 #include "test.h"
 
 
+
 //fonction de test unitaire de la fonction dilatation3. le test est exhaustif: il test toutes les entrées possible et vérifie que le résultat est bien celui escompté.
 uint8 test_dilatation3() {
 
@@ -153,7 +154,7 @@ void validation(){
 	It = ui8matrix(nrl, nrh, ncl, nch);
 
 	uint8 **Et;
-	Et = ui8matrix(nrl, nrh, ncl, nch);
+	Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 
 	uint8 **Vt;
 	Vt = ui8matrix(nrl, nrh, ncl, nch);
@@ -305,7 +306,7 @@ void chrono() {
 	It = ui8matrix(nrl, nrh, ncl, nch);
 
 	uint8 **Et;
-	Et = ui8matrix(nrl, nrh, ncl, nch);
+	Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 
 	uint8 **Vt;
 	Vt = ui8matrix(nrl, nrh, ncl, nch);
