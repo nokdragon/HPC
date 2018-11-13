@@ -88,19 +88,17 @@ void vuint16_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Ot, uint16 **Et)
 
 void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et)
 {	
-	vuint8 *pIt = (vuint8*) It;
-	vuint8 *pIt_1 = (vuint8*) It_1;
+	vuint8 *pIt = (vuint8*) It[0];
+	vuint8 *pIt_1 = (vuint8*) It_1[0];
 	vuint8 *pEt = (vuint8 *) Et[0];
-	//vuint8 res[NBE_VUINT8_IMAGE];
 
 	for (int i = 0; i < NBE_VUINT8_IMAGE; i++)
 	{
 		pEt[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
-		//res[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
 		//display_vuint8(res[i], "%4.0d", "res= "); puts("\n");
 	}	
-	
-	//to_matrix(res, Et);
+
+	//reste 1 bit
 }
 
 /*

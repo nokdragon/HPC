@@ -232,8 +232,10 @@ int test_vuint8_fd_simd()
 
 	uint8 * p_right_value; 
 	uint8 * p_res;
+	uint8 *pIt ;
+	uint8 *pIt_1;
 	vuint8 It, It_1, right_value_1, right_value_2, res;
-
+	uint8 res2;
 	right_value_1 = init_vuint8(0xff);	
 	right_value_2 = init_vuint8(0);
 
@@ -245,13 +247,16 @@ int test_vuint8_fd_simd()
 			It = init_vuint8(i);
 			It_1 = init_vuint8(j);
 			res = vuint8_fd_simd(It, It_1);
+			pIt = (uint8 *) &It;
+			pIt_1 = (uint8 *) &It_1;
+			res2 = Frame_Difference(pIt[0], pIt_1[0]);
 			p_res = (uint8 *)&res;
 
 			if(abs(i - j) >= THETA){
 				for(k=0;k<16;k++){
 					//cmp =_mm_cmpeq_epi8 (x,res);
 					p_right_value=(uint8 *)&right_value_1;
-					if(p_right_value[k] == p_res[k]){
+					if(p_right_value[k] == p_res[k] && (p_res[k] == res2)){
 					}
 					else{
 						printf("Erreur de fd_simd  i=%d j=%d k=%d p_right_value[k]=%d\n",i,j,k,p_right_value[k]);
@@ -266,7 +271,7 @@ int test_vuint8_fd_simd()
 				for(k=0;k<16;k++){
 					//cmp=_mm_cmpeq_epi8 (y,res);
 					p_right_value=(uint8 *)&right_value_2;
-					if(p_right_value[k] == p_res[k]){
+					if(p_right_value[k] == p_res[k] && (p_res[k] == res2)){
 					}
 					else{
 						printf("Erreur de fd_simd i=%d j=%d k=%d p_right_value[k]=%d\n",i,j,k,p_right_value[k]);
@@ -332,18 +337,26 @@ void test_vuint8_fd_simd_matrix()
 	char file[BUFFSIZE];
 	uint8** It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
 	uint8** It = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Ets = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
 
 
 	for(int i=1 ; i< 2 ; i++){
 
 		sprintf(file,"hall/hall%06d.pgm",i);
-
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-		vuint8_fd_simd_matrix(It, It_1, Et);
+		Frame_Difference_Matrix(It,  It_1,  Et,  nrl,  nrh,  ncl, nch);
+		vuint8_fd_simd_matrix(It, It_1, Ets);
 
-		display_ui8matrix(Et, nrl, nrh, ncl,  nch, " %d ", "Et");
+		sprintf(file,"hall_FD/FD%d.pgm",i);
+		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
+
+		sprintf(file,"hall_FD/FD_simd%d.pgm",i);
+		SavePGM_ui8matrix(Ets,nrl, nrh, ncl, nch,file);
+
+		//display_ui8matrix(Ets, nrl, nrh, ncl,  nch, " %d ", "Et");
 
 	}
 }
