@@ -10,25 +10,11 @@
 #include "simd1.h"
 #include "traitement_simd.h"
 #include "traitement.h"
+#include "main.h"
 
 //#define PRINT_BEGIN(msg) printf("\n\n==============================================BEGIN %s==============================================\n", msg);
 //#define PRINT_END(msg) printf("==============================================END %s==============================================\n\n\n\n", msg);
-#define PRINT_BEGIN() printf("\n\n==============================================BEGIN %s==============================================\n", __func__);
-#define PRINT_END() printf("==============================================END %s==============================================\n\n\n\n", __func__);
-#define PRINT_OK() printf("\nLa fonction ne contient pas d'erreur\n\n");
 
-#define MAX_SINT8 127
-#define MIN_SINT8 -128
-
-#define MAX_UINT8 255
-#define MIN_UINT8 0
-
-#define MAX_PIXEL_VALUE 255
-#define MIN_PIXEL_VALUE 0
-
-#define THETA 40
-#define BUFFSIZE 255
-#define NB_IMAGE 300
 
 
 
@@ -468,4 +454,12 @@ int  test_vuint8_if_elif_else()
 	PRINT_OK();
 	PRINT_END();
 	return 0;	
+}
+
+void test_ext_8_16()
+{
+	vuint8 v = init_vuint8(5);
+	vuint16 v16 = ext_8_16(v);
+	display_vuint8(v, "%4.0x", " v"); puts("\n");
+	display_vuint16(v16, "%4.0x", " v16 "); puts("\n");
 }
