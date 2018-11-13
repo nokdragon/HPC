@@ -14,21 +14,12 @@
 #include "vnrutil.h"
 #include "simd1.h"
 
-uint8 dilatation3_simd(vuint8 Et) {
-	int tmp;
-	tmp = Et1;
-	tmp += Et2;
-	tmp += Et3;
-	tmp += Et4;
-	tmp += Et5;
-	tmp += Et6;
-	tmp += Et7;
-	tmp += Et8;
-	tmp += Et9;
-	if (tmp == 0) {
-		return 0;
-	}
-	else {
-		return 255;
-	}
+void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+	int i, j;
+
+	for(i=nrl+1; i<=nrh-1; i++) {
+	    for(j=ncl+1; j<=nch-1; j++) {
+			
+	    }
+  	}
 }

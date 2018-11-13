@@ -465,6 +465,6 @@ void chrono() {
 
 	printf("FD : %ld cycles, %lf secondes\n", total_fd, (double)total_fd / CLOCKS_PER_SEC);
 	printf("FD avec post traitemen: %ld cycles, %lf secondes\n", total_fd_P, (double)total_fd_P / CLOCKS_PER_SEC);
-	printf("SD : %ld cycles, %lf secondes\n", total_fd, (double)total_sd / CLOCKS_PER_SEC);
+	printf("SD : %ld cycles, %lf secondes\n", total_sd, (double)total_sd / CLOCKS_PER_SEC);
 	printf("SD avec post traitemen: %ld cycles, %lf secondes\n", total_sd_P, (double)total_sd_P / CLOCKS_PER_SEC);
 }

@@ -170,16 +170,16 @@ void execution() {
 
 void cyprien()
 {
-	//validation();
-	chrono();
-	//execution();
+	validation();
+	//chrono();
+	execution();
 	
 }
 
 int main()
 {
-	remi();
-	//cyprien();
+	//remi();
+	cyprien();
 }
 
 
