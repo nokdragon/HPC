@@ -31,6 +31,8 @@
 #define NB_IMAGE 300
 
 
+
+//focntion de test unitaire exhaustif de vuint8_if_else
 int test_vuint8_if_else()
 {	
 
@@ -44,13 +46,13 @@ int test_vuint8_if_else()
 
 	int i,j,k;
 
-	for(i=MIN_UINT8;i<MAX_UINT8;i++){
-		for(j=MIN_UINT8;j<MAX_UINT8;j++){
+	for(i=MIN_UINT8;i<MAX_UINT8;i++){//parcours toutes les entrées possible de a
+		for(j=MIN_UINT8;j<MAX_UINT8;j++){//et de b
 			a=init_vuint8(i);
 			b=init_vuint8(j);
 			res = vuint8_if_else(a,b,x,y);
-			if(i>=j){
-				for(k=0;k<16;k++){
+			if(i>=j){//si a est supérieur ou égale à b
+				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a x)
 					cmp=_mm_cmpeq_epi8 (x,res);
 					tmp=(uint8 *)&cmp;
 					if(tmp[k]){
@@ -64,8 +66,8 @@ int test_vuint8_if_else()
 					}
 				}
 			}
-			else{
-				for(k=0;k<16;k++){
+			else{//si a n'est pas supérieur ou égale à b
+				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a y)
 					cmp=_mm_cmpeq_epi8 (y,res);
 					tmp=(uint8 *)&cmp;
 					if(tmp[k]){

@@ -12,6 +12,7 @@
 #include "test.h"
 
 
+//fonction de test unitaire de la fonction dilatation3. le test est exhaustif: il test toutes les entrées possible et vérifie que le résultat est bien celui escompté.
 uint8 test_dilatation3() {
 
 	int i, j, k, l, m, n, o, p, q;
@@ -55,7 +56,7 @@ uint8 test_dilatation3() {
 
 
 
-
+//fonction de test unitaire de la fonction erosion3. le test est exhaustif: il test toutes les entrées possible et vérifie que le résultat est bien celui escompté.
 uint8 test_erosion3() {
 
 	int i, j, k, l, m, n, o, p, q;
@@ -100,6 +101,7 @@ uint8 test_erosion3() {
 
 
 //ROC est un tableau de 4 int VP FN FP VN
+//cette focntion ajoute à la matrice ROC 1 dans la bonne case pour chaque pixel de la matrice Et. EtRef étant la référence
 void calculate_ROC(uint8 ** EtRef, uint8 ** Et, long nrl, long nrh, long ncl, long nch, long * ROC) {
 	int i, j;
 	
@@ -126,6 +128,7 @@ void calculate_ROC(uint8 ** EtRef, uint8 ** Et, long nrl, long nrh, long ncl, lo
 
 }
 
+//affichage de la matrice ROC
 void print_ROC(long * ROC){
 	printf("-----------------\n");
 	printf("| %ld\t| %ld\t|\n",ROC[0],ROC[1]);
@@ -134,7 +137,11 @@ void print_ROC(long * ROC){
 	printf("-----------------\n");
 }
 
+//Cette fonction execute le traitement et post traitement sur toutes les photos et pour chaque photo appartenant à la liste des vérités terrain on calcule la matrice ROC de tout les cas possible (fd et sd avec et sans morpho)
 void validation(){
+
+
+	//######################################### initialisation de tous les paramètres #########################################
 	int i;
 
 	long nrl, nrh, ncl, nch;
@@ -168,6 +175,8 @@ void validation(){
 
 	char file[255];
 
+	//######################################### initialisation des matrices ROC #########################################
+
 	long* ROC_FD;
 	ROC_FD=(long *)malloc(4*sizeof(long));
 
@@ -189,6 +198,7 @@ void validation(){
 		ROC_SD_P[i]=0;
 	}
 
+	//######################################### parcours de toutes les photos #########################################
 
 	for(i=1 ; i<300 ; i++){
 
@@ -204,9 +214,9 @@ void validation(){
 
 		//######################################### test sur fd #########################################
 
-		if((i % 20 == 4) && (i != 4) && (i<220)){
+		if((i % 20 == 4) && (i != 4) && (i<220)){//on teste uniquement quand la photo de vérité terrain existe
 			nbP+=(nrh - nrl) * (nch - ncl);
-			sprintf(file,"verite_terrain/hall%06d.pgm",i);
+			sprintf(file,"verite_terrain/hall%06d.pgm",i);//lecture de la vérité terrain
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, EtRef);
 
@@ -219,7 +229,7 @@ void validation(){
 
 		//######################################### test sur fd post traitement #########################################
 
-		if((i % 20 == 4) && (i != 4) && (i<220)){
+		if((i % 20 == 4) && (i != 4) && (i<220)){//on teste uniquement quand la photo de vérité terrain existe
 			calculate_ROC(EtRef, Et, nrl, nrh, ncl, nch, ROC_FD_P);
 		}
 
@@ -229,7 +239,7 @@ void validation(){
 
 		//######################################### test sur sd #########################################
 
-		if((i % 20 == 4) && (i != 4) && (i<220)){
+		if((i % 20 == 4) && (i != 4) && (i<220)){//on teste uniquement quand la photo de vérité terrain existe
 			calculate_ROC(EtRef, Et, nrl, nrh, ncl, nch, ROC_SD);
 		}
 
@@ -239,7 +249,7 @@ void validation(){
 
 		//######################################### test sur sd post traitement #########################################
 
-		if((i % 20 == 4) && (i != 4) && (i<220)){
+		if((i % 20 == 4) && (i != 4) && (i<220)){//on teste uniquement quand la photo de vérité terrain existe
 			calculate_ROC(EtRef, Et, nrl, nrh, ncl, nch, ROC_SD_P);
 		}
 
@@ -249,6 +259,8 @@ void validation(){
 		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
+
+	//######################################### Affichage des résultats #########################################
 	printf("-----------------\n");
 	printf("|   VP  |   FN  |\n");
 	printf("-----------------\n");
