@@ -463,3 +463,78 @@ void test_ext_8_16()
 	display_vuint8(v, "%4.0x", " v"); puts("\n");
 	display_vuint16(v16, "%4.0x", " v16 "); puts("\n");
 }
+
+void test_part1_sd()
+{
+	//============SIMD
+	int i, j;
+	long nrl, nrh, ncl, nch;
+	uint8** It_1;
+	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+
+	printf("nrl = %ld\n", nrl);
+	printf("nrh = %ld\n", nrh);
+	printf("ncl = %ld\n", ncl);
+	printf("nch = %ld\n", nch);
+
+
+	uint8** It;
+	It = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Et;
+	Et = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Vt;
+	Vt = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Vt_1;
+	Vt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_V(Vt_1, nrl, nrh, ncl, nch);
+
+	uint8 **Mt;
+	Mt = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Mt_1;
+	Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
+
+
+	char file[255];
+
+	uint8 **tmp;
+	tmp = ui8matrix(nrl, nrh, ncl, nch);
+
+
+	for (i = 1; i<300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//part1_sd_simd(It, It_1, Et, nrl, nrh, ncl, nch);
+		//void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+
+	}
+
+
+	//================SCALAR
+
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
+
+	    	if(Mt_1[i][j]<It[i][j]){
+	    		Mt[i][j] = Mt_1[i][j] + 1;
+	    	}
+	    	else if(Mt_1[i][j]>It[i][j]){
+	    		Mt[i][j] = Mt_1[i][j] - 1;
+	    	}
+	    	else{
+	    		Mt[i][j] = Mt_1[i][j];
+	    	}
+	    }
+	}
+
+	
+}

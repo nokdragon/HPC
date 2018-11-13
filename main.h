@@ -19,8 +19,6 @@
 #define MAX_SINT8 127
 #define MIN_SINT8 -128
 
-
-
 #define MAX_PIXEL_VALUE 255
 #define MIN_PIXEL_VALUE 0
 
