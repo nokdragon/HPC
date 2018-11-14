@@ -28,7 +28,7 @@ vuint8 vuint8_if_else(vuint8 a, vuint8 b, vuint8 x, vuint8 y)
     */
     
     //c = _mm_cmplt_epi8(a ,b);//compare a and b
-    c = _mm_cmplt_epi8(_mm_sub_epi8(a, init_vuint8(MAX_SINT8)), _mm_sub_epi8(b, init_vuint8(MAX_SINT8)));
+    c = _mm_cmplt_epi8(_mm_sub_epi8(a, init_vuint8(MAX_SINT8+1)), _mm_sub_epi8(b, init_vuint8(MAX_SINT8+1)));
     //display_vuint8(c, "%4.0d", "c\t"); puts("\n");
     z = _mm_or_si128(_mm_and_si128(c,y), _mm_andnot_si128(c,x));//select value
     return z;    
@@ -88,7 +88,7 @@ vuint8 vuint8_if_elif_else(vuint8 a, vuint8 b, vuint8 x, vuint8 y, vuint8 z)
     Solution, avant la comparaison, on soustrait à a et b, 127    */
     
     //c = _mm_cmplt_epi8(a ,b);//compare a and b
-    c = _mm_cmpeq_epi8(_mm_sub_epi8(a, init_vuint8(MAX_SINT8)), _mm_sub_epi8(b, init_vuint8(MAX_SINT8)));
+    c = _mm_cmpeq_epi8(_mm_sub_epi8(a, init_vuint8(MAX_SINT8+1)), _mm_sub_epi8(b, init_vuint8(MAX_SINT8+1)));
     //display_vuint8(c, "%4.0d", "c\t"); puts("\n");
     d = _mm_or_si128(_mm_and_si128(c,z), _mm_andnot_si128(c,vuint8_if_else(a,b,x,y)));//select value
     return d;    

@@ -14,7 +14,7 @@
 #include "vnrutil.h"
 #include "simd1.h"
 #include "main.h"
-
+#include "test_simd.h"
 
 
 
@@ -126,10 +126,6 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 		//Ot=abs( Mt[i][j] - It[i][j] );		
 	}
 
-	for (int i = 0; i < NBE_VUINT8_IMAGE; i++){
-		pOt[i]= vuint8_sub_abs(pMt[i], pIt[i]);
-	}
-
 	//on traite l'octet restant 
 	uint8 *oMt = (uint8*) Mt[0];
 	uint8 *oMt_1 = (uint8*) Mt_1[0];
@@ -147,6 +143,14 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 	else{
 		oMt[last_indice] = oMt_1[last_indice];
 	}
+
+//========================================================================
+
+	//Ot
+	for (int i = 0; i < NBE_VUINT8_IMAGE; i++){
+		pOt[i]= vuint8_sub_abs(pMt[i], pIt[i]);
+	}
+	
 	oOt[last_indice]=abs(oMt[last_indice] - oIt[last_indice]);
 
 //========================================================================
@@ -257,27 +261,184 @@ void SD(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **
 void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {
-	vuint8 *pOt = (vuint8*) Ot[0];
+	//vuint8 *pOt = (vuint8*) Ot[0];
 	vuint8 *pIt = (vuint8*) It[0];
 	//vuint8 *pIt_1 = (vuint8*) It_1[0];
 	//vuint8 *pEt = (vuint8 *) Et[0];
-	vuint8 *pVt = (vuint8*) Vt[0];
-	vuint8 *pVt_1 = (vuint8*) Vt_1[0];
+	//vuint8 *pVt = (vuint8*) Vt[0];
+	//vuint8 *pVt_1 = (vuint8*) Vt_1[0];
 	vuint8 *pMt = (vuint8*) Mt[0];
 	vuint8 *pMt_1 = (vuint8*) Mt_1[0];
 
-	vuint8 a,b,x,y,z;
+	vuint8 a,b,x,y,z, one, zero;
+	one = init_vuint8(1);
+	zero = _mm_setzero_si128();
 
 	for (int i = 0; i < NBE_VUINT8_IMAGE; i++)
 	{
+		/*probleme avec le -1
 		a = pMt_1[i];
 		b = pIt[i];
 		x = init_vsint8(-1);//Mt plus grand
 		y = init_vsint8(+1);//Mt plus petit
-		z = _mm_setzero_si128(); //Mt ==
-		
+		z = _mm_setzero_si128(); //Mt ==		
 		pMt[i] = _mm_add_epi8(pMt_1[i], vuint8_if_elif_else(a, b, x, y ,z));
+		*/
 
-		//Ot=abs( Mt[i][j] - It[i][j] );		
+		a = pMt_1[i];
+		b = pIt[i];
+		x = _mm_sub_epi8(pMt_1[i], one);//Mt plus grand
+		y = _mm_add_epi8(pMt_1[i], one);
+		z = a; //Mt ==		
+		pMt[i] = vuint8_if_elif_else(a, b, x, y ,z);
+
+		//display_vuint8(pMt[i], "%4.0d", "pMt= "); puts("\n");
+		//Ot=abs( Mt[i][j] - It[i][j] );	
 	}
+
+	//on traite l'octet restant 
+	uint8 *oMt = (uint8*) Mt[0];
+	uint8 *oMt_1 = (uint8*) Mt_1[0];
+	uint8 *oIt = (uint8*) It[0];
+	//uint8 *oIt_1 = (uint8*) It_1[0];
+	//uint8 * oOt = (uint8*) Ot[0];
+	int last_indice = NB_UINT8_IMAGE - 1; 
+
+	if(oMt_1[last_indice]<oIt[last_indice]){
+	    oMt[last_indice] = oMt_1[last_indice] + 1;
+	}
+	else if(oMt_1[last_indice]>oIt[last_indice]){
+		oMt[last_indice] = oMt_1[last_indice] - 1;
+	}
+	else{
+		oMt[last_indice] = oMt_1[last_indice];
+	}
+
+	return ;
+}
+
+void part1_sd_scalar(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+{
+	long i,j;
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
+
+	    	if(Mt_1[i][j]<It[i][j]){
+	    		Mt[i][j] = Mt_1[i][j] + 1;
+	    	}
+	    	else if(Mt_1[i][j]>It[i][j]){
+	    		Mt[i][j] = Mt_1[i][j] - 1;
+	    	}
+	    	else{
+	    		Mt[i][j] = Mt_1[i][j];
+	    	}
+	    }
+	}
+
+	return;
+}
+
+void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+					 uint8 **Mt, uint8 **Mt_1, uint8 **sMt, uint8 **sMt_1,  uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+{
+	vuint8 a,b,x,y,z, one;
+	one = init_vuint8(1);
+	/*
+	vuint8 test = init_vuint8(253);
+	a = init_vuint8(253);
+	b = init_vuint8(252);
+	x = init_vsint8(-1);//Mt plus grand
+	y = init_vsint8(+1);//Mt plus petit
+	z = _mm_setzero_si128(); //Mt ==
+	vuint test1 = _mm_adds_epi8(test, vuint8_if_elif_else(a, b, x, y ,z));
+	*/
+
+
+	long i,j,k;
+	k=0;
+	int cpt = 0;
+
+	if(compare_matrix(sMt, Mt, nrl,  nrh,  ncl,  nch)){
+		printf("DEBUT PROB\n");
+		return;
+	}
+	
+
+	vuint8 *pIt = (vuint8*) It[0];
+	vuint8 *pMt = (vuint8*) sMt[0];
+	vuint8 *pMt_1 = (vuint8*) sMt_1[0];
+	
+
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
+
+	    	
+	    	if(Mt_1[i][j]<It[i][j]){
+	    		Mt[i][j] = Mt_1[i][j] + 1;
+	    	}
+	    	else if(Mt_1[i][j]>It[i][j]){
+	    		Mt[i][j] = Mt_1[i][j] - 1;
+	    	}
+	    	else{
+	    		Mt[i][j] = Mt_1[i][j];
+	    	}
+	    	printf("Mt[%d][%d] = %d\t",i,j,Mt[i][j]);
+	    	printf("Mt_1[%d][%d] = %d\t",i,j,Mt_1[i][j]);
+	    	printf("It[%d][%d] = %d\n",i,j,It[i][j]);
+	    	cpt++;
+	    	 if(cpt == 16){
+	    	cpt = 0;
+	    	/*a = pMt_1[k];
+			b = pIt[k];
+			x = init_vsint8(-1);//Mt plus grand
+			y = init_vsint8(+1);//Mt plus petit
+			z = _mm_setzero_si128(); //Mt ==
+			*/
+
+			a = pMt_1[k];
+			b = pIt[k];
+			x = _mm_sub_epi8(pMt_1[k], one);//Mt plus grand
+			y = _mm_add_epi8(pMt_1[k], one);
+			z = a; //Mt ==		
+
+			//display_vuint8(pMt_1[k], " %d", "sMt_1 AVANT IF\t"); puts("");
+			//pMt[k] = _mm_add_epi8(pMt_1[k], vuint8_if_elif_else(a, b, x, y ,z));
+			pMt[k] = vuint8_if_elif_else(a, b, x, y ,z);
+			
+			//display_vuint8(pMt[k], " %d", "sMt\t"); puts("");
+			//display_vuint8(pMt_1[k], " %d", "sMt_1\t"); puts("");
+			display_vuint8(pMt_1[k], " %d", "sMt_1\t"); puts("");
+				display_vuint8(pIt[k], " %d", "It\t"); puts("");
+				printf("<, > ou = ?. On fait l'opération : \n");
+				display_vuint8(pMt_1[k], " %d", "sMt_1\t"); puts("");
+				printf("+\n");
+				display_vsint8(vuint8_if_elif_else(a, b, x, y ,z), " %d", "if\t"); puts("");
+				printf("=\n");
+				display_vuint8(pMt[k], " %d", "sMt\t"); puts("");
+			k++;
+			if(compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch)){
+				k--;
+				printf("Erreur : \n");
+				display_vuint8(pMt_1[k], " %d", "sMt_1\t"); puts("");
+				display_vuint8(pIt[k], " %d", "It\t"); puts("");
+				printf("<, > ou = ?. On fait l'opération : \n");
+				display_vuint8(pMt_1[k], " %d", "sMt_1\t"); puts("");
+				printf("+\n");
+				display_vsint8(vuint8_if_elif_else(a, b, x, y ,z), " %d", "if\t"); puts("");
+				printf("=\n");
+				display_vuint8(pMt[k], " %d", "sMt\t"); puts("");
+
+
+				//display_vuint8(test1, " %d", "test1\t"); puts("");
+				return;
+			}
+
+	    }
+	    }
+	    
+	   
+	}
+
+	return;
 }

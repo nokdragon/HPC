@@ -16,7 +16,18 @@
 //#define PRINT_END(msg) printf("==============================================END %s==============================================\n\n\n\n", msg);
 
 
-
+int comp_vuint8(vuint8 v1, vuint8 v2)
+{
+	uint8 *pv1 = (uint8 *) &v1;
+	uint8 *pv2 = (uint8 *) &v1;
+	for (int i = 0; i < 16; ++i)
+	{
+		if (pv1[i] != pv2[i])
+			return 1;
+	}
+	
+	return 0;
+}
 
 //focntion de test unitaire exhaustif de vuint8_if_else
 int test_vuint8_if_else()
@@ -25,20 +36,22 @@ int test_vuint8_if_else()
 	PRINT_BEGIN();
 
 	uint8 * tmp;
-	vuint8 a, b, x, y, res,cmp;
+	vuint8 a, b, x, y, res;//,cmp;
 	x = init_vuint8(7);
 	y = init_vuint8(8);
 
 
 	int i,j,k;
 
-	for(i=MIN_UINT8;i<MAX_UINT8;i++){//parcours toutes les entrées possible de a
-		for(j=MIN_UINT8;j<MAX_UINT8;j++){//et de b
+	for(i=MIN_UINT8;i<MAX_UINT8+1;i++){//parcours toutes les entrées possible de a
+		for(j=MIN_UINT8;j<MAX_UINT8+1;j++){//et de b
 			a=init_vuint8(i);
 			b=init_vuint8(j);
 			res = vuint8_if_else(a,b,x,y);
 			if(i>=j){//si a est supérieur ou égale à b
+				/*
 				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a x)
+					
 					cmp=_mm_cmpeq_epi8 (x,res);
 					tmp=(uint8 *)&cmp;
 					if(tmp[k]){
@@ -50,9 +63,18 @@ int test_vuint8_if_else()
 						//tmp=_mm_cmpeq_epi8 (x,res);
 						return 1;
 					}
+				}*/
+				if (comp_vuint8(x, res)){
+					printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res "); puts("\n");
+						display_vuint8(x, "%4.0x", "x "); puts("\n");
+						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
 				}
 			}
 			else{//si a n'est pas supérieur ou égale à b
+				/*
 				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a y)
 					cmp=_mm_cmpeq_epi8 (y,res);
 					tmp=(uint8 *)&cmp;
@@ -64,6 +86,14 @@ int test_vuint8_if_else()
 						display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
 						return 1;
 					}
+				}*/
+					if (comp_vuint8(y, res)){
+					printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res "); puts("\n");
+						display_vuint8(y, "%4.0x", "y "); puts("\n");
+						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
 				}
 			}
 
@@ -319,19 +349,26 @@ void test_vuint16_fd_simd()
 	PRINT_END();
 }
 
-void compare_matrix(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long nch)
+int compare_matrix(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long nch)
 {
 	
-	long i,j;
+	long i,j, cpt;
+	cpt = 0;
 	for(i=nrl; i<=nrh; i++) {
 	    for(j=ncl; j<=nch; j++) {
 			if (m1[i][j] != m2[i][j]){
+				cpt++;
+				
 				printf("m1[%ld][%ld] != m2[%ld][%ld]\n",i,j,i,j);
 				printf("%d != %d\n\n", m1[i][j], m2[i][j]);
+				return 1;
 			}			
 			
 	    }
   	}
+  	PRINT_OK();
+  	return 0;
+  	printf("nb val différentes = %ld \n", cpt);
   	PRINT_END();
 }
 
@@ -390,7 +427,7 @@ int  test_vuint8_if_elif_else()
 	PRINT_BEGIN();
 
 	uint8 * tmp;
-	vuint8 a, b, x, y, z, res,cmp;
+	vuint8 a, b, x, y, z, res;//,cmp;
 	x = init_vuint8(7);
 	y = init_vuint8(8);
 	z = init_vuint8(9);
@@ -398,12 +435,13 @@ int  test_vuint8_if_elif_else()
 
 	int i,j,k;
 
-	for(i=MIN_UINT8;i<MAX_UINT8;i++){//parcours toutes les entrées possible de a
-		for(j=MIN_UINT8;j<MAX_UINT8;j++){//et de b
+	for(i=MIN_UINT8;i<MAX_UINT8+1;i++){//parcours toutes les entrées possible de a
+		for(j=MIN_UINT8;j<MAX_UINT8+1;j++){//et de b
 			a=init_vuint8(i);
 			b=init_vuint8(j);
 			res = vuint8_if_elif_else(a,b,x,y,z);
 			if(i>j){//si a est supérieur ou égale à b
+				/*
 				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a x)
 					cmp=_mm_cmpeq_epi8 (x,res);
 					tmp=(uint8 *)&cmp;
@@ -416,9 +454,18 @@ int  test_vuint8_if_elif_else()
 						//tmp=_mm_cmpeq_epi8 (x,res);
 						return 1;
 					}
+				}*/
+				if (comp_vuint8(x, res)){
+					printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res "); puts("\n");
+						display_vuint8(x, "%4.0x", "x "); puts("\n");
+						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
 				}
 			}
 			else if(i == j){
+				/*
 				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a x)
 					cmp=_mm_cmpeq_epi8 (z,res);
 					tmp=(uint8 *)&cmp;
@@ -431,9 +478,18 @@ int  test_vuint8_if_elif_else()
 						//tmp=_mm_cmpeq_epi8 (x,res);
 						return 1;
 					}
+				}*/
+				if (comp_vuint8(z, res)){
+					printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res "); puts("\n");
+						display_vuint8(z, "%4.0x", "z "); puts("\n");
+						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
 				}
 			}
 			else{//si a n'est pas supérieur ou égale à b
+				/*
 				for(k=0;k<16;k++){//pour tous les uint8 du vuint8 on vérifie que le résultat est bon (res est bien égale a y)
 					cmp=_mm_cmpeq_epi8 (y,res);
 					tmp=(uint8 *)&cmp;
@@ -445,6 +501,15 @@ int  test_vuint8_if_elif_else()
 						display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
 						return 1;
 					}
+				}
+				*/
+				if (comp_vuint8(y, res)){
+					printf("Erreur de if_else simd i=%d j=%d k=%d tmp[k]=%d\n",i,j,k,tmp[k]);
+						display_vuint8(res, "%4.0x", "res "); puts("\n");
+						display_vuint8(y, "%4.0x", "y "); puts("\n");
+						//display_vuint8(cmp, "%4.0x", "cmp\t"); puts("\n");
+						//tmp=_mm_cmpeq_epi8 (x,res);
+						return 1;
 				}
 			}
 
@@ -467,74 +532,41 @@ void test_ext_8_16()
 void test_part1_sd()
 {
 	//============SIMD
-	int i, j;
+	int i;
 	long nrl, nrh, ncl, nch;
-	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
 
-	printf("nrl = %ld\n", nrl);
-	printf("nrh = %ld\n", nrh);
-	printf("ncl = %ld\n", ncl);
-	printf("nch = %ld\n", nch);
-
-
-	uint8** It;
-	It = ui8matrix(nrl, nrh, ncl, nch);
-
-	uint8 **Et;
-	Et = ui8matrix(nrl, nrh, ncl, nch);
-
-	uint8 **Vt;
-	Vt = ui8matrix(nrl, nrh, ncl, nch);
-
-	uint8 **Vt_1;
-	Vt_1 = ui8matrix(nrl, nrh, ncl, nch);
-
+	uint8** It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	uint8** It = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Vt = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Vt_1 = ui8matrix(nrl, nrh, ncl, nch);
 	Init_V(Vt_1, nrl, nrh, ncl, nch);
-
-	uint8 **Mt;
-	Mt = ui8matrix(nrl, nrh, ncl, nch);
-
-	uint8 **Mt_1;
-	Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **sMt = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **sMt_1 = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Mt = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Ot = ui8matrix(nrl, nrh, ncl, nch);
 
 	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
-
+	Init_M(sMt_1, It_1, nrl, nrh, ncl, nch);
 
 	char file[255];
 
-	uint8 **tmp;
-	tmp = ui8matrix(nrl, nrh, ncl, nch);
 
-
-	for (i = 1; i<300; i++) {
+	for (i = 1; i<2; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-		//part1_sd_simd(It, It_1, Et, nrl, nrh, ncl, nch);
-		//void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
-
 	}
+	
+	//part1_sd_simd(It, It_1, Et, Vt, Vt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);
+	//part1_sd_scalar(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);	
 
-
-	//================SCALAR
-
-	for(i=nrl; i<=nrh; i++) {
-	    for(j=ncl; j<=nch; j++) {
-
-	    	if(Mt_1[i][j]<It[i][j]){
-	    		Mt[i][j] = Mt_1[i][j] + 1;
-	    	}
-	    	else if(Mt_1[i][j]>It[i][j]){
-	    		Mt[i][j] = Mt_1[i][j] - 1;
-	    	}
-	    	else{
-	    		Mt[i][j] = Mt_1[i][j];
-	    	}
-	    }
-	}
+	part1mix(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);	
+	compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch);
+	//compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch);
 
 	
 }
