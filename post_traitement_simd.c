@@ -27,17 +27,11 @@ void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long n
 
 	for(i=nrl; i<=nrh; i++) {
 	    for(j=ncl; j<=nch-1; j+=14) {
-<<<<<<< HEAD
 	    	
 			ligne1 =_mm_loadu_si128((__m128i *)(&Et[i-1][j-1]));
 			ligne2 =_mm_loadu_si128((__m128i *)(&Et[i][j-1]));
 			ligne3 =_mm_loadu_si128((__m128i *)(&Et[i+1][j-1]));
 
-=======
-			ligne1 =_mm_loadu_si128(&Et[i-1][j-1]);
-			ligne2 =_mm_loadu_si128(&Et[i][j-1]);
-			ligne3 =_mm_loadu_si128(&Et[i+1][j-1]);			
->>>>>>> bcef43ca4844f80fba0380f67d8714421080771c
 
 			ligne1=_mm_or_si128 (ligne1, ligne2);
 			ligne1=_mm_or_si128 (ligne1, ligne3);

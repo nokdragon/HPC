@@ -182,8 +182,8 @@ void cyprien()
 
 int main()
 {
-	remi();
-	//cyprien();
+	//remi();
+	cyprien();
 }
 
 
