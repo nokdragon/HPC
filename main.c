@@ -175,7 +175,8 @@ void cyprien()
 	//validation();
 	//chrono();
 	//execution();
-	test_dilatation_simd();
+	//test_dilatation_erosion_simd();
+	test_morpho_simd();
 	
 }
 
