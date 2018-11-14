@@ -34,7 +34,7 @@ vuint8 vuint8_if_else(vuint8 a, vuint8 b, vuint8 x, vuint8 y)
     return z;    
 }
 
-vsint16 vsint16_if_else(vsint16 a, vsint16 b, vsint16 x, vsint16 y)
+vsint16 vsint16_if_else(vsint16 a, vsint16 b, vsint8 x, vsint8 y)
 {
     vsint16 c, z;
     c = _mm_cmplt_epi16(a ,b);//compare a and b
@@ -94,6 +94,21 @@ vuint8 vuint8_if_elif_else(vuint8 a, vuint8 b, vuint8 x, vuint8 y, vuint8 z)
     return d;    
 }
 
+vuint16 vuint16_if_elif_else(vuint16 a, vuint16 b, vuint8 x, vuint8 y, vuint8 z)
+{
+    vuint8 c, d;
+    /*
+    Description du problème : l'opération c = _mm_cmplt_epi8(a,b) est signée
+    ex : si a = {0,127} et b = {128, 255}, alors c considère a plus grand, car il prends b pour un négatif
+    Solution, avant la comparaison, on soustrait à a et b, 127    */
+    
+    //c = _mm_cmplt_epi8(a ,b);//compare a and b
+    c = _mm_cmpeq_epi16(a,b);
+    //display_vuint8(c, "%4.0d", "c\t"); puts("\n");
+    d = _mm_or_si128(_mm_and_si128(c,z), _mm_andnot_si128(c,vsint16_if_else(a,b,x,y)));//select value
+    return d;    
+}
+
 vuint8 vuint8_sub_abs(vuint8 a, vuint b)
 {
     vuint8 max, min;
@@ -106,7 +121,7 @@ vuint16 ext_8_16(vuint8 x)
 {   
     vuint8 z8 = _mm_setzero_si128();
     vuint16 res;
-    res= _mm_unpacklo_epi8(x,z8); 
+    res = _mm_unpacklo_epi8(x,z8); 
     res = _mm_unpackhi_epi8(x,z8);
     return res;
 }

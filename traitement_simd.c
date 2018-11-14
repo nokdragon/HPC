@@ -92,11 +92,13 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et)
 	}
 
 	//l'octet 
+	/*
 	uint8 *oIt = (uint8*) It[0];
 	uint8 *oIt_1 = (uint8*) It_1[0];
 	uint8 *oEt = (uint8 *) Et[0];
 	int last_indice = NB_UINT8_IMAGE - 1; 
 	oEt[last_indice] = Frame_Difference(oIt[last_indice], oIt_1[last_indice]);
+	*/
 
 }
 
@@ -270,11 +272,14 @@ void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_
 	vuint8 *pMt = (vuint8*) Mt[0];
 	vuint8 *pMt_1 = (vuint8*) Mt_1[0];
 
-	vuint8 a,b,x,y,z, one, zero;
+	vuint8 a,b,x,y,z, one;
 	one = init_vuint8(1);
-	zero = _mm_setzero_si128();
 
-	for (int i = 0; i < NBE_VUINT8_IMAGE; i++)
+	long len = ((nrh - nrl + 1) * (nch - ncl + 1))/16;
+	//float flen = (float) (((nrh - nrl) * (nch - ncl))/16);
+	//printf("len = %ld, flen = %f \n", len, flen);
+
+	for (int i = 0; i < len; i++)
 	{
 		/*probleme avec le -1
 		a = pMt_1[i];
@@ -296,6 +301,8 @@ void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_
 		//Ot=abs( Mt[i][j] - It[i][j] );	
 	}
 
+	
+	/*
 	//on traite l'octet restant 
 	uint8 *oMt = (uint8*) Mt[0];
 	uint8 *oMt_1 = (uint8*) Mt_1[0];
@@ -313,6 +320,8 @@ void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_
 	else{
 		oMt[last_indice] = oMt_1[last_indice];
 	}
+	*/
+
 
 	return ;
 }
@@ -359,7 +368,7 @@ void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 	k=0;
 	int cpt = 0;
 
-	if(compare_matrix(sMt, Mt, nrl,  nrh,  ncl,  nch)){
+	if(compare_matrix(sMt_1, Mt_1, nrl,  nrh,  ncl,  nch)){
 		printf("DEBUT PROB\n");
 		return;
 	}
@@ -369,7 +378,9 @@ void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 	vuint8 *pMt = (vuint8*) sMt[0];
 	vuint8 *pMt_1 = (vuint8*) sMt_1[0];
 	
-
+	//long len = ((nrh - nrl) * (nch - ncl))/15;
+	//float flen = (float) (((nrh - nrl +1) * (nch - ncl +1))/16);
+	//printf("len = %ld, flen = %f , %d %d% d %d\n", len, flen, nrl, nrh, ncl, nch);
 	for(i=nrl; i<=nrh; i++) {
 	    for(j=ncl; j<=nch; j++) {
 
@@ -383,9 +394,9 @@ void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 	    	else{
 	    		Mt[i][j] = Mt_1[i][j];
 	    	}
-	    	printf("Mt[%d][%d] = %d\t",i,j,Mt[i][j]);
-	    	printf("Mt_1[%d][%d] = %d\t",i,j,Mt_1[i][j]);
-	    	printf("It[%d][%d] = %d\n",i,j,It[i][j]);
+	    	//printf("Mt[%d][%d] = %d\t",i,j,Mt[i][j]);
+	    	//printf("Mt_1[%d][%d] = %d\t",i,j,Mt_1[i][j]);
+	    	//printf("It[%d][%d] = %d\n",i,j,It[i][j]);
 	    	cpt++;
 	    	 if(cpt == 16){
 	    	cpt = 0;
@@ -408,6 +419,7 @@ void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 			
 			//display_vuint8(pMt[k], " %d", "sMt\t"); puts("");
 			//display_vuint8(pMt_1[k], " %d", "sMt_1\t"); puts("");
+			/*
 			display_vuint8(pMt_1[k], " %d", "sMt_1\t"); puts("");
 				display_vuint8(pIt[k], " %d", "It\t"); puts("");
 				printf("<, > ou = ?. On fait l'opération : \n");
@@ -416,6 +428,7 @@ void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 				display_vsint8(vuint8_if_elif_else(a, b, x, y ,z), " %d", "if\t"); puts("");
 				printf("=\n");
 				display_vuint8(pMt[k], " %d", "sMt\t"); puts("");
+			*/
 			k++;
 			if(compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch)){
 				k--;
@@ -434,11 +447,114 @@ void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 				return;
 			}
 
+
 	    }
 	    }
 	    
 	   
 	}
-
+	printf(" k = %ld\n", k);
 	return;
+}
+
+void part2_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+{
+	vuint8 * pOt = (vuint8 *) Ot[0];
+
+	//vuint8 *pOt = (vuint8*) Ot[0];
+	vuint8 *pIt = (vuint8*) It[0];
+	//vuint8 *pIt_1 = (vuint8*) It_1[0];
+	//vuint8 *pEt = (vuint8 *) Et[0];
+	//vuint8 *pVt = (vuint8*) Vt[0];
+	//vuint8 *pVt_1 = (vuint8*) Vt_1[0];
+	vuint8 *pMt = (vuint8*) Mt[0];
+	//vuint8 *pMt_1 = (vuint8*) Mt_1[0];
+
+
+	for (int i = 0; i < NBE_VUINT8_IMAGE; i++){
+		//printf("i = %d \n", i);
+		pOt[i]= vuint8_sub_abs(pMt[i], pIt[i]);
+	}
+	
+}
+
+void part2_sd_scalar(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+{
+	long i,j;
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
+	    	Ot[i][j]=abs( Mt[i][j] - It[i][j] );
+	    }
+	}	
+}
+
+void part3_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+{
+	vuint8 * pOt = (vuint8 *) Ot[0];
+
+	//vuint8 *pOt = (vuint8*) Ot[0];
+	//uint8 *pIt = (vuint8*) It[0];
+	//vuint8 *pIt_1 = (vuint8*) It_1[0];
+	//vuint8 *pEt = (vuint8 *) Et[0];
+	vuint8 *pVt = (vuint8*) Vt[0];
+	vuint8 *pVt_1 = (vuint8*) Vt_1[0];
+	//vuint8 *pMt = (vuint8*) Mt[0];
+	//vuint8 *pMt_1 = (vuint8*) Mt_1[0];
+
+
+
+	vuint16 *pa = malloc(sizeof(vuint16) * NBE_VUINT16_IMAGE);
+	vuint16 *pb = malloc(sizeof(vuint16) * NBE_VUINT16_IMAGE);
+	vuint16 *pOt16 = malloc(sizeof(vuint16) * NBE_VUINT16_IMAGE);
+
+	for(int i = 0; i < NBE_VUINT16_IMAGE; ++i)
+	{
+		pa[i] = ext_8_16(pVt_1[i]);
+		//pb[i] = _mm_mullo_epi16(init_vsint16(N), ext_8_16(pOt[i]));
+		display_vuint16(pa[i], "%d ", "pa[i]\t"); puts("\n");		
+		display_vuint16(pb[i], "%d ", "pb[i]\t"); puts("\n");
+	}
+
+	vuint8 x,y,z,one;
+	one = init_vuint8(1);
+	for (int i = 0; i < NBE_VUINT8_IMAGE; ++i)
+	{
+		
+		display_vuint8(pOt[i], "%d ", "Ot\t"); puts("\n");
+		display_vuint16(ext_8_16(pOt[i]), "%d ", "Ot16\t"); puts("\n");
+		puts("\n\n");
+
+		x = _mm_sub_epi8(pVt_1[i], one);//Mt plus grand
+		y = _mm_add_epi8(pVt_1[i], one);//Mt plus petit
+		z = pVt_1[i]; //Mt ==
+		pVt[i] = vuint16_if_elif_else(pa[i], pb[i], x, y ,z);
+
+		
+	}
+	
+}
+
+void part3_sd_scalar(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+{
+	long i,j;
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {    
+	
+			if(Vt_1[i][j] < N * Ot[i][j] ){
+			    Vt[i][j] = Vt_1[i][j] + 1;
+			}
+			else if(Vt_1[i][j] > N * Ot[i][j]){
+			    Vt[i][j] = Vt_1[i][j] - 1;
+			}
+			else{
+			    Vt[i][j] = Vt_1[i][j];
+			}
+	    }
+	}
+
+
 }

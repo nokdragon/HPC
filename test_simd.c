@@ -366,7 +366,7 @@ int compare_matrix(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long 
 			
 	    }
   	}
-  	PRINT_OK();
+  	//PRINT_OK();
   	return 0;
   	printf("nb val différentes = %ld \n", cpt);
   	PRINT_END();
@@ -374,6 +374,7 @@ int compare_matrix(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long 
 
 void test_vuint8_fd_simd_matrix()
 {
+	PRINT_BEGIN();
 	long nrl, nrh, ncl, nch;
 	char file[BUFFSIZE];
 	uint8** It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
@@ -531,11 +532,13 @@ void test_ext_8_16()
 
 void test_part1_sd()
 {
+	PRINT_BEGIN();
 	//============SIMD
 	int i;
 	long nrl, nrh, ncl, nch;
 
-	uint8** It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	uint8** It_1;
+	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
 	uint8** It = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Vt = ui8matrix(nrl, nrh, ncl, nch);
@@ -552,21 +555,87 @@ void test_part1_sd()
 
 	char file[255];
 
+	
+	for (i = 1; i<2; i++) {
 
+		
+		It = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		sprintf(file, "hall/hall%06d.pgm", i);
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+	}	
+
+	part1_sd_simd(It, It_1, Et, Vt, Vt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);
+	part1_sd_scalar(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
+	//part1mix(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);	
+	if(compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch)) return;
+	//compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch);
+	PRINT_OK();
+	PRINT_END();
+
+	
+}
+
+void test_part2_sd() 
+{
+	
+	//============SIMD
+	int i;
+	long nrl, nrh, ncl, nch;
+
+	uint8** It_1;
+	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	uint8** It = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Vt = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Vt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **sVt = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **sVt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_V(Vt_1, nrl, nrh, ncl, nch);
+	uint8 **sMt = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **sMt_1 = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Mt = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Ot = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **sOt = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
+	Init_M(sMt_1, It_1, nrl, nrh, ncl, nch);
+
+	
+
+	char file[255];
+
+	
 	for (i = 1; i<2; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
-
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-	}
-	
-	//part1_sd_simd(It, It_1, Et, Vt, Vt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);
-	//part1_sd_scalar(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);	
+	}	
 
-	part1mix(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);	
-	compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch);
+	part1_sd_simd(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+	part1_sd_scalar(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
+
+	
+	part2_sd_simd(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+	part2_sd_scalar(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
+
+
+
+	if(compare_matrix(sVt, Vt, nrl,  nrh,  ncl,  nch)) return;
+	PRINT_DEBUG
+	if(compare_matrix(Ot, sOt, nrl,  nrh,  ncl,  nch)) return;
+
+	PRINT_DEBUG
+	part3_sd_simd(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+	part3_sd_scalar(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
+
+	if(compare_matrix(Ot, sOt, nrl,  nrh,  ncl,  nch)) return;
+	if(compare_matrix(sVt, Vt, nrl,  nrh,  ncl,  nch)) return;
 	//compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch);
-
-	
+	PRINT_OK();
+	PRINT_END();
 }

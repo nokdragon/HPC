@@ -20,5 +20,6 @@ vuint16 vuint16_abs_simd(vsint16 a);
 
 vuint8 vuint8_if_elif_else(vuint8 a, vuint8 b, vuint8 x, vuint8 y, vuint8 z);
 vuint8 vuint8_sub_abs(vuint8 a, vuint b);
+vuint16 vuint16_if_elif_else(vuint16 a, vuint16 b, vuint16 x, vuint16 y, vuint16 z);
 
 vuint16 ext_8_16(vuint8 x);
