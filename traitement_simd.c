@@ -498,43 +498,71 @@ void part3_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_
 	//vuint8 *pOt = (vuint8*) Ot[0];
 	//uint8 *pIt = (vuint8*) It[0];
 	//vuint8 *pIt_1 = (vuint8*) It_1[0];
-	//vuint8 *pEt = (vuint8 *) Et[0];
+	vuint8 *pEt = (vuint8 *) Et[0];
 	vuint8 *pVt = (vuint8*) Vt[0];
 	vuint8 *pVt_1 = (vuint8*) Vt_1[0];
 	//vuint8 *pMt = (vuint8*) Mt[0];
 	//vuint8 *pMt_1 = (vuint8*) Mt_1[0];
 
-
-
-	vuint16 *pa = malloc(sizeof(vuint16) * NBE_VUINT16_IMAGE);
-	vuint16 *pb = malloc(sizeof(vuint16) * NBE_VUINT16_IMAGE);
-	vuint16 *pOt16 = malloc(sizeof(vuint16) * NBE_VUINT16_IMAGE);
-
-	for(int i = 0; i < NBE_VUINT16_IMAGE; ++i)
-	{
-		pa[i] = ext_8_16(pVt_1[i]);
-		//pb[i] = _mm_mullo_epi16(init_vsint16(N), ext_8_16(pOt[i]));
-		display_vuint16(pa[i], "%d ", "pa[i]\t"); puts("\n");		
-		display_vuint16(pb[i], "%d ", "pb[i]\t"); puts("\n");
-	}
-
-	vuint8 x,y,z,one;
+	vuint8 a,b,x,y,z, one;
+	int i,j;
 	one = init_vuint8(1);
-	for (int i = 0; i < NBE_VUINT8_IMAGE; ++i)
+	for (i = 0; i < NBE_VUINT8_IMAGE; ++i)
 	{
-		
-		display_vuint8(pOt[i], "%d ", "Ot\t"); puts("\n");
-		display_vuint16(ext_8_16(pOt[i]), "%d ", "Ot16\t"); puts("\n");
-		puts("\n\n");
+		a = pVt_1[i];
+		b = pOt[i];
+		for (j = 0; j < N+1; j++)
+			b = _mm_adds_epu8(b, pOt[i]);
 
 		x = _mm_sub_epi8(pVt_1[i], one);//Mt plus grand
 		y = _mm_add_epi8(pVt_1[i], one);//Mt plus petit
-		z = pVt_1[i]; //Mt ==
-		pVt[i] = vuint16_if_elif_else(pa[i], pb[i], x, y ,z);
-
+		z = a;
+		pVt[i] = vuint8_if_elif_else(a, b, x, y ,z);
+		
 		
 	}
+
+	for ( i = 0; i < NBE_VUINT8_IMAGE; ++i)
+	{
+		
+		if(i==0){
+			//display_vuint8(b, "%d ", "b\t"); puts("\n");
+			//display_vuint8(pVt_1[i], "%d ", "pvt_1\t"); puts("\n");
+			//display_vuint8(pOt[i], "%d ", "Ot\t"); puts("\n");
+			display_vuint8(pVt[i], "%d ", "pvt absv\t"); puts("\n");
+		}
+		a = pVt[i];
+		b = init_vuint8(VMIN);
+		x = a;
+		y = b;
+		pVt[i] = vuint8_if_else(a,b,x,y); 
+		//opti possible en evitant de faire un autre if_else si le premier a été fait
+		b = init_vuint8(VMAX);
+		x = b;
+		y = pVt[i];
+		pVt[i] = vuint8_if_else(a,b,x,y); 
+
+		if(i==0){
+			//display_vuint8(b, "%d ", "b\t"); puts("\n");
+			//display_vuint8(pVt_1[i], "%d ", "pvt_1\t"); puts("\n");
+			//display_vuint8(pOt[i], "%d ", "Ot\t"); puts("\n");
+			display_vuint8(pVt[i], "%d ", "pvt ap\t"); puts("\n");
+			a = pVt[i];
+		b = init_vuint8(VMIN);
+		x = a;
+		y = b;
+			display_vuint8(vuint8_if_else(a,b,x,y), "%d ", "if\t"); puts("\n");
+		}
+	}
 	
+		for (int i = 0; i < NBE_VUINT8_IMAGE; ++i)
+	{
+		a = pOt[i];
+		b = pVt[i];
+		x = init_vuint8(MAX_UINT8);
+		y = _mm_setzero_si128();
+		pEt[i] = vuint8_if_else(a,b,x,y); 
+	}
 }
 
 void part3_sd_scalar(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
@@ -553,6 +581,18 @@ void part3_sd_scalar(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **V
 			else{
 			    Vt[i][j] = Vt_1[i][j];
 			}
+			if(Vt[i][j]<VMIN){
+	    		Vt[i][j]=VMIN;
+	    	}
+	    	else if(Vt[i][j]>VMAX){
+	    		Vt[i][j]=VMAX;
+	    	}
+	    	if(Ot[i][j] < Vt[i][j]){
+	    		Et[i][j]=0;
+	    	}
+	    	else{
+	    		Et[i][j]=255;
+	    	}
 	    }
 	}
 

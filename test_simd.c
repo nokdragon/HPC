@@ -593,7 +593,7 @@ void test_part2_sd()
 	uint8 **sVt = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **sVt_1 = ui8matrix(nrl, nrh, ncl, nch);
 
-	Init_V(Vt_1, nrl, nrh, ncl, nch);
+	
 	uint8 **sMt = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **sMt_1 = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Mt = ui8matrix(nrl, nrh, ncl, nch);
@@ -604,6 +604,8 @@ void test_part2_sd()
 	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
 	Init_M(sMt_1, It_1, nrl, nrh, ncl, nch);
 
+	Init_V(Vt_1, nrl, nrh, ncl, nch);
+	Init_V(sVt_1, nrl, nrh, ncl, nch);
 	
 
 	char file[255];
@@ -634,7 +636,8 @@ void test_part2_sd()
 	part3_sd_scalar(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
 
 	if(compare_matrix(Ot, sOt, nrl,  nrh,  ncl,  nch)) return;
-	if(compare_matrix(sVt, Vt, nrl,  nrh,  ncl,  nch)) return;
+	PRINT_DEBUG
+	if(compare_matrix(Vt, sVt, nrl,  nrh,  ncl,  nch)) return;
 	//compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch);
 	PRINT_OK();
 	PRINT_END();
