@@ -13,6 +13,7 @@
 #include "traitement.h"
 #include "main.h"
 #include "post_traitement.h"
+#include "test_post_traitement_simd.h"
 #include "simd1.h"
 #include "test_simd.h"
 #include "traitement_simd.h"
@@ -171,16 +172,17 @@ void execution() {
 
 void cyprien()
 {
-	validation();
+	//validation();
 	//chrono();
-	execution();
+	//execution();
+	test_dilatation_simd();
 	
 }
 
 int main()
 {
-	remi();
-	//cyprien();
+	//remi();
+	cyprien();
 }
 
 
