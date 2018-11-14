@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -O0 -O3 -fstrict-aliasing -msse4.2
+CFLAGS = -Wall -O0 -O3 -fstrict-aliasing -msse4.2 -fopenmp
 EXEC_NAME = exec
 INCLUDES =
 LIBS =

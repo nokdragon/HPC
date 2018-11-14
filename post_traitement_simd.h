@@ -23,3 +23,6 @@ void posTraitementOF_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch);
 
 //post traitement fermeture puis ouverture
 void posTraitementFO_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch);
+
+
+void Copy_simd(uint8 **Mt, uint8 **It, long nrl, long nrh, long ncl, long nch);

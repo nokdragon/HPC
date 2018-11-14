@@ -14,6 +14,18 @@
 #include "vnrutil.h"
 #include "simd1.h"
 
+
+//Copie It dans Mt
+void Copy_simd(uint8 **Mt, uint8 **It, long nrl, long nrh, long ncl, long nch)
+{
+	int i, j;
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j+=16) {
+	    	_mm_storeu_si128 ((__m128i *)(&Mt[i][j]), _mm_loadu_si128((__m128i *)(&It[i][j])));
+	    }
+  	}
+}
+
 void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	int i, j;
 
@@ -54,10 +66,10 @@ void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long n
 void dilatation5_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
 	dilatation3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy(Et, tmp, nrl, nrh, ncl, nch);
+	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
 	dilatation3_matrix_simd(EtD, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
@@ -106,10 +118,10 @@ void erosion3_matrix_simd(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl,
 void erosion5_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
 	erosion3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy(Et, tmp, nrl, nrh, ncl, nch);
+	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
 	erosion3_matrix_simd(EtD, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
@@ -121,10 +133,10 @@ void ouverture3_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
 	erosion3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy(Et, tmp, nrl, nrh, ncl, nch);
+	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
 	dilatation3_matrix_simd(Et, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
@@ -134,10 +146,10 @@ void ouverture3_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 void ouverture5_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
 	erosion5_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy(Et, tmp, nrl, nrh, ncl, nch);
+	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
 	dilatation5_matrix_simd(Et, tmp, nrl, nrh, ncl, nch);
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 }
@@ -146,10 +158,10 @@ void ouverture5_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 void fermeture3_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
 	dilatation3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy(Et, tmp, nrl, nrh, ncl, nch);
+	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
 	erosion3_matrix_simd(Et, tmp, nrl, nrh, ncl, nch);
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 }
@@ -158,10 +170,10 @@ void fermeture3_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 void fermeture5_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
 	dilatation5_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy(Et, tmp, nrl, nrh, ncl, nch);
+	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
 	erosion5_matrix_simd(Et, tmp, nrl, nrh, ncl, nch);
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 }

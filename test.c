@@ -11,6 +11,8 @@
 #include "main.h"
 #include "traitement.h"
 #include "test.h"
+#include "post_traitement_simd.h"
+
 
 
 
@@ -375,6 +377,8 @@ void chrono() {
 	end_t = clock();
 	total_fd = (end_t - start_t) - total_vide;
 
+	printf("FD : %ld cycles, %lf secondes\n", total_fd, (double)total_fd / CLOCKS_PER_SEC);
+
 	//######################################### parcours de toutes les photos avec traitement FD avec post traitement #########################################
 
 	start_t = clock();
@@ -405,6 +409,9 @@ void chrono() {
 	end_t = clock();
 	total_fd_P = (end_t - start_t) - total_vide;
 
+	printf("FD avec post traitement: %ld cycles, %lf secondes\n", total_fd_P, (double)total_fd_P / CLOCKS_PER_SEC);
+
+
 
 	//######################################### parcours de toutes les photos avec traitement SD #########################################
 
@@ -430,6 +437,9 @@ void chrono() {
 
 	end_t = clock();
 	total_sd = (end_t - start_t) - total_vide;
+
+	printf("SD : %ld cycles, %lf secondes\n", total_sd, (double)total_sd / CLOCKS_PER_SEC);
+
 
 	//######################################### parcours de toutes les photos avec traitement SD avec post traitement #########################################
 
@@ -461,11 +471,142 @@ void chrono() {
 	end_t = clock();
 	total_sd_P = (end_t - start_t) - total_vide;
 
+	printf("SD avec post traitement: %ld cycles, %lf secondes\n", total_sd_P, (double)total_sd_P / CLOCKS_PER_SEC);
 
-	//######################################### Affichage des résultats #########################################
 
-	printf("FD : %ld cycles, %lf secondes\n", total_fd, (double)total_fd / CLOCKS_PER_SEC);
-	printf("FD avec post traitemen: %ld cycles, %lf secondes\n", total_fd_P, (double)total_fd_P / CLOCKS_PER_SEC);
-	printf("SD : %ld cycles, %lf secondes\n", total_sd, (double)total_sd / CLOCKS_PER_SEC);
-	printf("SD avec post traitemen: %ld cycles, %lf secondes\n", total_sd_P, (double)total_sd_P / CLOCKS_PER_SEC);
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//#############################################################################  CHRONO SIMD  ##########################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+
+
+
+
+	//######################################### parcours de toutes les photos avec traitement FD #########################################
+
+	start_t = clock();
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement fd #########################################
+
+
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	end_t = clock();
+	total_fd = (end_t - start_t) - total_vide;
+
+	printf("FD SIMD : %ld cycles, %lf secondes\n", total_fd, (double)total_fd / CLOCKS_PER_SEC);
+
+	//######################################### parcours de toutes les photos avec traitement FD avec post traitement #########################################
+
+	start_t = clock();
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement fd #########################################
+
+
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### post traitement #########################################
+
+		posTraitementFO_simd(Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	end_t = clock();
+	total_fd_P = (end_t - start_t) - total_vide;
+
+	printf("FD SIMD avec post traitement SIMD: %ld cycles, %lf secondes\n", total_fd_P, (double)total_fd_P / CLOCKS_PER_SEC);
+
+
+
+	//######################################### parcours de toutes les photos avec traitement SD #########################################
+
+	start_t = clock();
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement sd #########################################
+
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	end_t = clock();
+	total_sd = (end_t - start_t) - total_vide;
+
+	printf("SD SIMD : %ld cycles, %lf secondes\n", total_sd, (double)total_sd / CLOCKS_PER_SEC);
+
+
+	//######################################### parcours de toutes les photos avec traitement SD avec post traitement #########################################
+
+	start_t = clock();
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement sd #########################################
+
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+
+		//######################################### post traitement #########################################
+
+		posTraitementOF_simd(Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	end_t = clock();
+	total_sd_P = (end_t - start_t) - total_vide;
+
+	printf("SD SIMD avec post traitement SIMD : %ld cycles, %lf secondes\n", total_sd_P, (double)total_sd_P / CLOCKS_PER_SEC);
+
+
 }

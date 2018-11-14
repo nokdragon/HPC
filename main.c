@@ -173,17 +173,17 @@ void execution() {
 void cyprien()
 {
 	//validation();
-	//chrono();
+	chrono();
 	//execution();
 	//test_dilatation_erosion_simd();
-	test_morpho_simd();
+	//test_morpho_simd();
 	
 }
 
 int main()
 {
-	remi();
-	//cyprien();
+	//remi();
+	cyprien();
 }
 
 
