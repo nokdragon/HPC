@@ -18,6 +18,7 @@
 #define PRINT_DEBUG printf("In %s, line : %d \n", __func__, __LINE__);
 #define MAX_SINT8 127
 #define MIN_SINT8 -128
+#define MAX_SINT16 32767 
 
 #define MAX_PIXEL_VALUE 255
 #define MIN_PIXEL_VALUE 0
@@ -36,7 +37,7 @@
 #define NBE_VUINT8_IMAGE 5280//(int) NB_UINT8_IMAGE / (128/8), avec 128/8 = 16 5280 en fait a priori
 #define NBOR_VUINT8_IMAGE 1//NB_UINT8_IMAGE - (NBE_VUINT8_IMAGE * 16)
 
-#define NBE_VUINT16_IMAGE 10486//(int) NBE_VUINT8_IMAGE  2 = 
+#define NBE_VUINT16_IMAGE 10560//(int) NBE_VUINT8_IMAGE  2 = 
 #define NBOR_VUINT16_IMAGE 1//NB_UINT8_IMAGE - NBE_VUINT16_IMAGE * 8 = 83889 - (10486 * 8)
 
 #define NRL 0
@@ -50,5 +51,12 @@
 #define MAX_SINT8 127 
 #define MAX_16B 0xffff //2 pow 16 -1
 
+//Paramètre de FD
+#define THETA 40 
+
+//Paramètres de SD
+#define VMIN 1
+#define VMAX 254
+#define N 3
 
 
