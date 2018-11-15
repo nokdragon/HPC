@@ -298,13 +298,14 @@ void validation(){
 
 
 void chrono() {
-	clock_t start_t, end_t, total_vide, total_fd, total_fd_P, total_sd, total_sd_P;
+	double total_vide, total_fd, total_fd_P, total_sd, total_sd_P;
 
 	total_fd = 0;
 	total_fd_P = 0;
 	total_sd = 0;
 	total_sd_P = 0;
-
+	
+	struct timespec start, end;
 	//######################################### initialisation de tous les paramètres #########################################
 	int i;
 
@@ -340,7 +341,7 @@ void chrono() {
 
 	//######################################### parcours de toutes les photos sans traitement #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -355,14 +356,15 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_vide = end_t - start_t;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_vide = (end.tv_sec - start.tv_sec);
+	total_vide += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
 
 
 	//######################################### parcours de toutes les photos avec traitement FD #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -382,14 +384,15 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_fd = (end_t - start_t) - total_vide;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd = (end.tv_sec - start.tv_sec);
+	total_fd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	printf("FD : %ld cycles, %lf secondes\n", total_fd, (double)total_fd / CLOCKS_PER_SEC);
+	printf("FD : %lf secondes\n", total_fd);
 
 	//######################################### parcours de toutes les photos avec traitement FD avec post traitement #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -414,16 +417,17 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_fd_P = (end_t - start_t) - total_vide;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd_P = (end.tv_sec - start.tv_sec);
+	total_fd_P += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	printf("FD avec post traitement: %ld cycles, %lf secondes\n", total_fd_P, (double)total_fd_P / CLOCKS_PER_SEC);
+	printf("FD avec post traitement: %lf secondes\n", total_fd_P);
 
 
 
 	//######################################### parcours de toutes les photos avec traitement SD #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -443,15 +447,16 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_sd = (end_t - start_t) - total_vide;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_sd = (end.tv_sec - start.tv_sec);
+	total_sd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	printf("SD : %ld cycles, %lf secondes\n", total_sd, (double)total_sd / CLOCKS_PER_SEC);
+	printf("SD : %lf secondes\n", total_sd);
 
 
 	//######################################### parcours de toutes les photos avec traitement SD avec post traitement #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -476,10 +481,11 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_sd_P = (end_t - start_t) - total_vide;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_sd_P = (end.tv_sec - start.tv_sec);
+	total_sd_P += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	printf("SD avec post traitement: %ld cycles, %lf secondes\n", total_sd_P, (double)total_sd_P / CLOCKS_PER_SEC);
+	printf("SD avec post traitement: %lf secondes\n", total_sd_P);
 
 
 	//######################################################################################################################################################################################################################
@@ -497,7 +503,7 @@ void chrono() {
 
 	//######################################### parcours de toutes les photos avec traitement FD #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -520,14 +526,15 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_fd = (end_t - start_t) - total_vide;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd = (end.tv_sec - start.tv_sec);
+	total_fd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	printf("FD SIMD : %ld cycles, %lf secondes\n", total_fd, (double)total_fd / CLOCKS_PER_SEC);
+	printf("FD SIMD : %lf secondes\n", total_fd);
 
 	//######################################### parcours de toutes les photos avec traitement FD avec post traitement #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -552,16 +559,17 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_fd_P = (end_t - start_t) - total_vide;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd_P = (end.tv_sec - start.tv_sec);
+	total_fd_P += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	printf("FD SIMD avec post traitement SIMD: %ld cycles, %lf secondes\n", total_fd_P, (double)total_fd_P / CLOCKS_PER_SEC);
+	printf("FD SIMD avec post traitement SIMD: %lf secondes\n", total_fd_P);
 
 
 
 	//######################################### parcours de toutes les photos avec traitement SD #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -581,15 +589,16 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_sd = (end_t - start_t) - total_vide;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_sd = (end.tv_sec - start.tv_sec);
+	total_sd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	printf("SD SIMD : %ld cycles, %lf secondes\n", total_sd, (double)total_sd / CLOCKS_PER_SEC);
+	printf("SD SIMD : %lf secondes\n", total_sd);
 
 
 	//######################################### parcours de toutes les photos avec traitement SD avec post traitement #########################################
 
-	start_t = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
 		sprintf(file, "hall/hall%06d.pgm", i);
@@ -614,10 +623,12 @@ void chrono() {
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
-	end_t = clock();
-	total_sd_P = (end_t - start_t) - total_vide;
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_sd_P = (end.tv_sec - start.tv_sec);
+	total_sd_P += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	printf("SD SIMD avec post traitement SIMD : %ld cycles, %lf secondes\n", total_sd_P, (double)total_sd_P / CLOCKS_PER_SEC);
+
+	printf("SD SIMD avec post traitement SIMD : %lf secondes\n", total_sd_P);
 
 
 }
