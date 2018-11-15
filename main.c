@@ -18,6 +18,9 @@
 #include "test_mouvement_SSE2.h"
 #include "mouvement_SSE2.h"
 #include "test_mouvement.h"
+#include "bench_mouvement.h"
+#include "bench_mouvement_SSE2.h"
+
 
 
 void remi()
@@ -231,6 +234,8 @@ void cyprien()
 {
 	//validation();
 	chrono();
+	printf("fd %f, sd %f\n", chrono_FD(10),chrono_SD(10));
+	printf("fd_SSE2 %f, sd_SSE2 %f\n", chrono_FD_SSE2(10),chrono_SD_SSE2(10));
 	//execution();
 	//test_dilatation_erosion_simd();
 	//test_morpho_simd();
@@ -239,7 +244,7 @@ void cyprien()
 
 int main()
 {
-	remi();
+	//remi();
 	cyprien();
 }
 

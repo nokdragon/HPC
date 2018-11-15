@@ -363,7 +363,7 @@ void chrono() {
 	total_vide = (end.tv_sec - start.tv_sec);
 	total_vide += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-
+	printf("vide : %lf secondes\n", total_vide);
 
 	//######################################### parcours de toutes les photos avec traitement FD #########################################
 

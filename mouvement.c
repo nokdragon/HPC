@@ -64,7 +64,6 @@ void SD(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **
 {
 	long i,j;
 	uint8 Ot;
-
 	for(i=nrl; i<=nrh; i++) {
 	    for(j=ncl; j<=nch; j++) {
 
