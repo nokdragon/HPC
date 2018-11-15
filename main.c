@@ -25,13 +25,13 @@ void remi()
 	//test_vuint8_if_else();
 	//test_vuint8_abs_simd();
 	//test_vuint16_abs_simd();
-	test_vuint8_fd_simd();
-	test_vuint8_fd_simd_matrix(); // pas de seg fault
+	//test_vuint8_fd_simd();
+	//test_vuint8_fd_simd_matrix(); // pas de seg fault
 	//test_vuint8_if_elif_else();
 	//test_ext_8_16();
 	//test_part1_sd();
 	//test_part2_sd();
-	//test_sd_simd();
+	test_sd_simd();
 
 	/*
 	vuint8 a,b,x,y,z, one;

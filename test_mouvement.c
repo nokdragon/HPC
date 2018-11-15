@@ -333,6 +333,9 @@ void chrono() {
 	uint8 **Mt_1;
 	Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
 
+	uint8 **Ot;
+	Ot = ui8matrix(nrl, nrh, ncl, nch);
+
 	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
 
 
@@ -579,7 +582,7 @@ void chrono() {
 		//######################################### traitement sd #########################################
 
 
-		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+		vuint8_sd_simd(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
 
 
 		//######################################### Itération #########################################

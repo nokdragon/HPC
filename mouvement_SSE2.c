@@ -124,6 +124,70 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long 
 
 void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {
+	vuint8 a,b,x,y,z, one;
+	long i,j,k;
+	one = init_vuint8(1);
+
+	vuint8 vMt;
+	vuint8 vIt;
+	vuint8 vOt;
+	vuint8 vVt_1;
+	vuint8 vIt_1;
+
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j+= NB_OCTET_M128) {
+
+	    	a = _mm_loadu_si128((__m128i *) &Mt_1[i][j]);
+	    	b = _mm_loadu_si128((__m128i *) &It[i][j]);
+			x = _mm_sub_epi8(a, one);//Mt plus grand
+			y = _mm_add_epi8(a, one);
+			z = a; //Mt ==		
+			_mm_storeu_si128( (__m128i *) &Mt[i][j], vuint8_if_elif_else(a, b, x, y ,z) );
+
+			vMt = _mm_loadu_si128((__m128i *) &Mt[i][j]);
+			vIt = _mm_loadu_si128((__m128i *) &It[i][j]);
+			_mm_storeu_si128( (__m128i *) &Ot[i][j], vuint8_sub_abs( vMt, vIt) ) ;
+
+			
+			vOt = _mm_loadu_si128((__m128i *) &Ot[i][j]);
+			a = _mm_loadu_si128((__m128i *) &Vt_1[i][j]);
+	    	b = _mm_loadu_si128((__m128i *) &Ot[i][j]);
+	    	for (k = 0; k < N - 1; k++)
+				b = _mm_adds_epu8(b, vOt);		
+			vVt_1 = _mm_loadu_si128((__m128i *) &Vt_1[i][j]);	
+			x = _mm_sub_epi8(vVt_1, one);//Mt plus grand
+			y = _mm_add_epi8(vVt_1, one);//Mt plus petit
+			z = vVt_1;	
+			_mm_storeu_si128( (__m128i *) &Mt[i][j], vuint8_if_elif_else(a, b, x, y ,z) );
+
+			
+			a = _mm_loadu_si128((__m128i *) &Vt[i][j]);
+			b = init_vuint8(VMIN);
+			vIt = _mm_loadu_si128((__m128i *) &It[i][j]);
+			vIt_1 = _mm_loadu_si128((__m128i *) &It_1[i][j]);
+			_mm_storeu_si128( (__m128i *) &Vt[i][j], _mm_max_epu8(vIt, vIt_1));			
+			//opti eventuelle en evitant de faire un autre if_else si le premier a été fait
+			a = _mm_loadu_si128((__m128i *) &Vt[i][j]); // opti, pas necessaire probablement
+			b = init_vuint8(VMAX); 
+			x = b; //opti : mettre directemeent b a al place de x dans le if
+			y = _mm_loadu_si128((__m128i *) &Vt[i][j]);
+			_mm_storeu_si128( (__m128i *) &Vt[i][j], vuint8_if_else(a,b,x,y));
+
+		
+			a = _mm_loadu_si128((__m128i *) &Ot[i][j]);
+			b = _mm_loadu_si128((__m128i *) &Vt[i][j]);			
+			x = init_vuint8(MAX_UINT8);
+			y = _mm_setzero_si128();
+			_mm_storeu_si128( (__m128i *) &Et[i][j], vuint8_if_else(a,b,x,y));
+			
+	    }
+	}	
+
+}
+
+
+void vuint8_sd_simd_vnul(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+{
 	vuint8 *pOt = (vuint8*) Ot[0];
 	vuint8 *pIt = (vuint8*) It[0];
 	//vuint8 *pIt_1 = (vuint8*) It_1[0];
@@ -212,7 +276,4 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 		y = _mm_setzero_si128();
 		pEt[i] = vuint8_if_else(a,b,x,y); 
 	}
-
 }
-
-

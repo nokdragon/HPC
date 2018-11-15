@@ -227,6 +227,7 @@ void test_vuint8_fd_simd_matrix()
 
 		Frame_Difference_Matrix(It,  It_1,  Et,  nrl,  nrh,  ncl, nch);
 		vuint8_fd_simd_matrix(It, It_1, Ets, nrl,  nrh,  ncl, nch);
+		//vuint8_sd_simd_vnul(It, It_1, Ets, nrl,  nrh,  ncl, nch);
 
 		sprintf(file,"hall_FD/FD%d.pgm",i);
 		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
@@ -291,6 +292,7 @@ void test_sd_simd()
 
 		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
 		vuint8_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl, nrh, ncl, nch);
+		//vuint8_sd_simd_vnul(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl, nrh, ncl, nch);
 		//part1_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 		//part2_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 		//part3_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
