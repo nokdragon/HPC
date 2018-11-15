@@ -382,9 +382,7 @@ void test_vuint8_fd_simd_matrix()
 
 	uint8 **Ets = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
-
-
-	for(int i=1 ; i< 2 ; i++){
+	for(int i=1 ; i< 300 ; i++){
 
 		sprintf(file,"hall/hall%06d.pgm",i);
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
@@ -398,15 +396,19 @@ void test_vuint8_fd_simd_matrix()
 		sprintf(file,"hall_FD/FD_simd%d.pgm",i);
 		SavePGM_ui8matrix(Ets,nrl, nrh, ncl, nch,file);
 
-		compare_matrix(Ets,Et, nrl,  nrh,  ncl, nch);
+		if(compare_matrix(Ets,Et, nrl,  nrh,  ncl, nch))
+			return;
 
-		PRINT_OK();
+		Copy(It_1, It, nrl, nrh, ncl, nch);
 
-		PRINT_END();
+		
 
 		//display_ui8matrix(Ets, nrl, nrh, ncl,  nch, " %d ", "Et");
 
 	}
+	PRINT_OK();
+
+	PRINT_END();
 }
 
 int  test_vuint8_if_elif_else()

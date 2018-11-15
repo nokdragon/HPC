@@ -8,10 +8,13 @@
 
 #include "nrdef.h"
 #include "nrutil.h"
+#include "vnrdef.h"
 #include "main.h"
 #include "traitement.h"
 #include "test.h"
 #include "post_traitement_simd.h"
+#include "traitement_simd.h"
+
 
 
 
@@ -499,7 +502,10 @@ void chrono() {
 		//######################################### traitement fd #########################################
 
 
-		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+		//Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+		printf("avanat image %d\n",i);
+		vuint8_fd_simd_matrix(It, It_1, Et);
+		printf("apres image 1\n\n");
 
 
 		//######################################### Itération #########################################
