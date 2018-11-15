@@ -68,11 +68,13 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et)
 	On traite d'abord un octet, puis les 5243paquet de 128 bits en simd
 	*/
 
+	int i;
+
 	vuint8 *pIt = (vuint8*) It[0];
 	vuint8 *pIt_1 = (vuint8*) It_1[0];
 	vuint8 *pEt = (vuint8 *) Et[0];
 
-	for (int i = 0; i < NBE_VUINT8_IMAGE; i++)
+	for (i = 0; i < NBE_VUINT8_IMAGE; i++)
 	{
 		pEt[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
 		//display_vuint8(res[i], "%4.0d", "res= "); puts("\n");
@@ -105,7 +107,7 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 	one = init_vuint8(1);
 	long len = ((nrh - nrl + 1) * (nch - ncl + 1))/16;
 
-	for (int i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 	{
 
 		a = pMt_1[i];
@@ -171,7 +173,7 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 		}
 	}
 	
-		for (int i = 0; i < NBE_VUINT8_IMAGE; ++i)
+		for (i = 0; i < NBE_VUINT8_IMAGE; ++i)
 	{
 		a = pOt[i];
 		b = pVt[i];
