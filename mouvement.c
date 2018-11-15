@@ -7,7 +7,7 @@
 
 #include "nrdef.h"
 #include "nrutil.h"
-#include "traitement.h"
+#include "mouvement.h"
 #include "main.h"
 
 #include "vnrdef.h"

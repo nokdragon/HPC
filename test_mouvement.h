@@ -9,8 +9,8 @@
 #include "nrdef.h"
 #include "nrutil.h"
 #include "main.h"
-#include "traitement.h"
-#include "post_traitement.h"
+#include "mouvement.h"
+#include "morpho.h"
 
 
 //test unitaire de dilatation3

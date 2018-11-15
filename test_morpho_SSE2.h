@@ -8,8 +8,8 @@
 
 #include "vnrdef.h"
 #include "vnrutil.h"
-#include "post_traitement_simd.h"
-#include "post_traitement.h"
+#include "morpho_SSE2.h"
+#include "morpho.h"
 #include "main.h"
 
 

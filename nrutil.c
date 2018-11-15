@@ -943,6 +943,12 @@ void WritePGMrow(uint8 *line, long width, FILE  *file)
 
    fwrite(&(line[0]), sizeof(uint8), width, file);
 }
+
+//sert à viter un warning à la compilation pour "gris" dans la fonction en dessous
+void delete_warning(long a)
+{
+
+}
 /* ------------------------------------------------------------------------------ */
 uint8** LoadPGM_ui8matrix(char *filename, long *nrl, long *nrh, long *ncl, long *nch)
 /* ------------------------------------------------------------------------------ */
@@ -975,6 +981,8 @@ uint8** LoadPGM_ui8matrix(char *filename, long *nrl, long *nrh, long *ncl, long 
   width  = atoi(readitem(file, buffer));
   height = atoi(readitem(file, buffer));
   gris   = atoi(readitem(file, buffer));
+
+  delete_warning(gris);
 
   *nrl = 0;
   *nrh = height - 1;

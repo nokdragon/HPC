@@ -8,9 +8,9 @@
 #include "nrdef.h"
 #include "nrutil.h"
 #include "main.h"
-#include "traitement.h"
-#include "post_traitement.h"
-#include "post_traitement_simd.h"
+#include "mouvement.h"
+#include "morpho.h"
+#include "morpho_SSE2.h"
 
 uint8 dilatation3(uint8 Et1, uint8 Et2, uint8 Et3, uint8 Et4, uint8 Et5, uint8 Et6, uint8 Et7, uint8 Et8, uint8 Et9) {
 	int tmp;

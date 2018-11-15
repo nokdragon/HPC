@@ -7,9 +7,9 @@
 
 #include "nrdef.h"
 #include "nrutil.h"
-#include "traitement.h"
+#include "mouvement.h"
 #include "main.h"
-#include "post_traitement.h"
+#include "morpho.h"
 
 int main(){
 	

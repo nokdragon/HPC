@@ -8,8 +8,8 @@
 #include "vnrutil.h"
 
 #include "simd1.h"
-#include "traitement_simd.h"
-#include "traitement.h"
+#include "mouvement_SSE2.h"
+#include "mouvement.h"
 #include "main.h"
 
 //#define PRINT_BEGIN(msg) printf("\n\n==============================================BEGIN %s==============================================\n", msg);

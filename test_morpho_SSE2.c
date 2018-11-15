@@ -1,5 +1,5 @@
 
-#include "test_post_traitement_simd.h"
+#include "test_morpho_SSE2.h"
 
 
 int compare_matrix2(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long nch)

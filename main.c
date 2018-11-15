@@ -10,14 +10,14 @@
 #include "nrutil.h"
 #include "vnrdef.h"
 #include "vnrutil.h"
-#include "traitement.h"
+#include "mouvement.h"
 #include "main.h"
-#include "post_traitement.h"
-#include "test_post_traitement_simd.h"
+#include "morpho.h"
+#include "test_morpho_SSE2.h"
 #include "simd1.h"
 #include "test_simd.h"
-#include "traitement_simd.h"
-#include "test.h"
+#include "mouvement_SSE2.h"
+#include "test_mouvement.h"
 
 
 void remi()

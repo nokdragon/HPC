@@ -9,7 +9,7 @@
 #include "nrdef.h"
 #include "nrutil.h"
 #include "main.h"
-#include "traitement.h"
+#include "mouvement.h"
 
 //dilatation de carré de 3x3
 uint8 dilatation3(uint8 Et1, uint8 Et2, uint8 Et3, uint8 Et4, uint8 Et5, uint8 Et6, uint8 Et7, uint8 Et8, uint8 Et9);

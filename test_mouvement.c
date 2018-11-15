@@ -10,10 +10,10 @@
 #include "nrutil.h"
 #include "vnrdef.h"
 #include "main.h"
-#include "traitement.h"
-#include "test.h"
-#include "post_traitement_simd.h"
-#include "traitement_simd.h"
+#include "mouvement.h"
+#include "test_mouvement.h"
+#include "morpho_SSE2.h"
+#include "mouvement_SSE2.h"
 
 
 
