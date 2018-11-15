@@ -67,20 +67,36 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long 
 	Soit 5243 paquets de 128 bits + 1 octets
 	On traite d'abord un octet, puis les 5243paquet de 128 bits en simd
 	*/
-
+	/*
 	int i;
-
 	vuint8 *pIt = (vuint8*) It[0];
 	vuint8 *pIt_1 = (vuint8*) It_1[0];
-	vuint8 *pEt = (vuint8 *) Et[0];
-
-
+	vuint8 *pEt = (vuint8 *) Et[0];	
 	long len = ((nrh - nrl + 1) * (nch - ncl + 1))/16;
-
 	for (i = 0; i < len; i++)
 	{
+		
+		
 		pEt[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
 		//display_vuint8(res[i], "%4.0d", "res= "); puts("\n");
+	}
+	*/
+
+	vuint8 pIt, pIt_1, pEt;
+	long i,j;
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
+
+			//pEt = load(&Et[i][j]);
+			//pIt = _mm_loadu_si128((__m128i *)&It[i][j]);
+			//pIt_1 = _mm_loadu_si128((__m128i *)&It_1[i][j]);
+
+	    	pIt = _mm_loadu_si128((__m128i *)&It[i][j]);
+			pIt_1 = _mm_loadu_si128((__m128i *)&It_1[i][j]);
+
+			_mm_storeu_si128((__m128i *)&Et[i][j],vuint8_fd_simd(pIt, pIt_1));
+
+	    }
 	}
 
 	//l'octet 
