@@ -15,6 +15,7 @@
 #include "SSE2util.h"
 #include "main.h"
 #include "test_mouvement_SSE2.h"
+#include "cimetiere.h"
 
 
 
@@ -143,37 +144,114 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 			y = _mm_add_epi8(a, one);
 			z = a; //Mt ==		
 			_mm_storeu_si128( (__m128i *) &Mt[i][j], vuint8_if_elif_else(a, b, x, y ,z) );
+		}
+	}
+		/*
+		a = pMt_1[i];
+		b = pIt[i];
+		x = _mm_sub_epi8(pMt_1[i], one);//Mt plus grand
+		y = _mm_add_epi8(pMt_1[i], one);
+		z = a; //Mt ==		
+		pMt[i] = vuint8_if_elif_else(a, b, x, y ,z);
+		*/
 
+	uint8 ** sMt = ui8matrix(nrl, nrh, ncl, nch);
+	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
+	//
+	part1_sd_scalar( It,  It_1,  Et,  Vt,  Vt_1, sMt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
+	if(compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch)) {
+		//PRINT_DEBUG
+		return;
+	}
+
+
+
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j+= NB_OCTET_M128) {
 			vMt = _mm_loadu_si128((__m128i *) &Mt[i][j]);
 			vIt = _mm_loadu_si128((__m128i *) &It[i][j]);
 			_mm_storeu_si128( (__m128i *) &Ot[i][j], vuint8_sub_abs( vMt, vIt) ) ;
+		}
+	}
+
+	/*
+	for (i = 0; i < NBE_VUINT8_IMAGE; i++){
+		//printf("i = %d \n", i);
+		pOt[i]= vuint8_sub_abs(pMt[i], pIt[i]);
+	}*/
+
+
 
 			
-			vOt = _mm_loadu_si128((__m128i *) &Ot[i][j]);
-			a = _mm_loadu_si128((__m128i *) &Vt_1[i][j]);
-	    	b = _mm_loadu_si128((__m128i *) &Ot[i][j]);
-	    	for (k = 0; k < N - 1; k++)
-				b = _mm_adds_epu8(b, vOt);		
-			vVt_1 = _mm_loadu_si128((__m128i *) &Vt_1[i][j]);	
-			x = _mm_sub_epi8(vVt_1, one);//Mt plus grand
-			y = _mm_add_epi8(vVt_1, one);//Mt plus petit
-			z = vVt_1;	
-			_mm_storeu_si128( (__m128i *) &Mt[i][j], vuint8_if_elif_else(a, b, x, y ,z) );
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j+= NB_OCTET_M128) {
+				
+				a = _mm_loadu_si128((__m128i *) &Vt_1[i][j]);
+		    	b = _mm_loadu_si128((__m128i *) &Ot[i][j]);
+		    	vOt = _mm_loadu_si128((__m128i *) &Ot[i][j]);
+		    	for (k = 0; k < N - 1; k++)
+					b = _mm_adds_epu8(b, vOt);		
+				vVt_1 = _mm_loadu_si128((__m128i *) &Vt_1[i][j]);	
+				x = _mm_sub_epi8(vVt_1, one);//Mt plus grand
+				y = _mm_add_epi8(vVt_1, one);//Mt plus petit
+				z = vVt_1;	
+				_mm_storeu_si128( (__m128i *) &Vt[i][j], vuint8_if_elif_else(a, b, x, y ,z) );
+			}
+		}
 
-			
+	/*
+	one = init_vuint8(1);
+	for (i = 0; i < NBE_VUINT8_IMAGE; i++)
+	{
+		a = pVt_1[i];
+		b = pOt[i];
+		for (j = 0; j < N-1; j++){
+			b = _mm_adds_epu8(b, pOt[i]);
+		}
+
+		x = _mm_sub_epi8(pVt_1[i], one);//Mt plus grand
+		y = _mm_add_epi8(pVt_1[i], one);//Mt plus petit
+		z = pVt_1[i];
+		pVt[i] = vuint8_if_elif_else(a, b, x, y ,z);	
+		
+	}*/
+
+
+
+
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j+= NB_OCTET_M128) {
 			a = _mm_loadu_si128((__m128i *) &Vt[i][j]);
 			b = init_vuint8(VMIN);
+			x = a;
+			y= b;
 			vIt = _mm_loadu_si128((__m128i *) &It[i][j]);
 			vIt_1 = _mm_loadu_si128((__m128i *) &It_1[i][j]);
-			_mm_storeu_si128( (__m128i *) &Vt[i][j], _mm_max_epu8(vIt, vIt_1));			
+			_mm_storeu_si128( (__m128i *) &Vt[i][j], vuint8_if_else(a,b,x,y));
+			//_mm_storeu_si128( (__m128i *) &Vt[i][j], _mm_max_epu8(vIt, vIt_1));			
 			//opti eventuelle en evitant de faire un autre if_else si le premier a été fait
-			a = _mm_loadu_si128((__m128i *) &Vt[i][j]); // opti, pas necessaire probablement
+			//a = _mm_loadu_si128((__m128i *) &Vt[i][j]); // opti, pas necessaire probablement
 			b = init_vuint8(VMAX); 
 			x = b; //opti : mettre directemeent b a al place de x dans le if
 			y = _mm_loadu_si128((__m128i *) &Vt[i][j]);
 			_mm_storeu_si128( (__m128i *) &Vt[i][j], vuint8_if_else(a,b,x,y));
+		}
+	}
 
-		
+	/*
+	a = pVt[i];
+		b = init_vuint8(VMIN);
+		x = a;
+		y = b;
+		pVt[i] = vuint8_if_else(a,b,x,y); 
+		//opti possible en evitant de faire un autre if_else si le premier a été fait
+		b = init_vuint8(VMAX);
+		x = b;
+		y = pVt[i];
+		pVt[i] = vuint8_if_else(a,b,x,y); */
+
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j+= NB_OCTET_M128) {
 			a = _mm_loadu_si128((__m128i *) &Ot[i][j]);
 			b = _mm_loadu_si128((__m128i *) &Vt[i][j]);			
 			x = init_vuint8(MAX_UINT8);
@@ -183,6 +261,15 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 	    }
 	}	
 
+	/*
+		for (i = 0; i < NBE_VUINT8_IMAGE; ++i)
+	{
+		a = pOt[i];
+		b = pVt[i];
+		x = init_vuint8(MAX_UINT8);
+		y = _mm_setzero_si128();
+		pEt[i] = vuint8_if_else(a,b,x,y); 
+	}*/
 }
 
 

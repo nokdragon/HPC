@@ -204,4 +204,5 @@ int compare_matrix(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long 
     return 0;
     printf("nb val différentes = %ld \n", cpt);
     PRINT_END();
+    
 }
