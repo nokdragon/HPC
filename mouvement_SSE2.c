@@ -60,7 +60,7 @@ void vuint16_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Ot, uint16 **Et)
 }
 */
 
-void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et)
+void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long nrh, long ncl, long nch)
 {	
 	/*
 	Description du problème : une image est composé de 83889 octets
@@ -74,7 +74,10 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et)
 	vuint8 *pIt_1 = (vuint8*) It_1[0];
 	vuint8 *pEt = (vuint8 *) Et[0];
 
-	for (i = 0; i < NBE_VUINT8_IMAGE; i++)
+
+	long len = ((nrh - nrl + 1) * (nch - ncl + 1))/16;
+
+	for (i = 0; i < len; i++)
 	{
 		pEt[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
 		//display_vuint8(res[i], "%4.0d", "res= "); puts("\n");

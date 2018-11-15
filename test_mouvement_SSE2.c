@@ -226,7 +226,7 @@ void test_vuint8_fd_simd_matrix()
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
 		Frame_Difference_Matrix(It,  It_1,  Et,  nrl,  nrh,  ncl, nch);
-		vuint8_fd_simd_matrix(It, It_1, Ets);
+		vuint8_fd_simd_matrix(It, It_1, Ets, nrl,  nrh,  ncl, nch);
 
 		sprintf(file,"hall_FD/FD%d.pgm",i);
 		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);

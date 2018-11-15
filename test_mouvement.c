@@ -19,6 +19,7 @@
 
 
 
+
 //fonction de test unitaire de la fonction dilatation3. le test est exhaustif: il test toutes les entrées possible et vérifie que le résultat est bien celui escompté.
 uint8 test_dilatation3() {
 
@@ -505,11 +506,11 @@ void chrono() {
 
 		//######################################### traitement fd #########################################
 
-
+		Et = ui8matrix(nrl,nrh,ncl,nch);
 		//Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
-		printf("avanat image %d\n",i);
-		vuint8_fd_simd_matrix(It, It_1, Et);
-		printf("apres image 1\n\n");
+		vuint8_fd_simd_matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+		Et = ui8matrix(nrl-2,nrh+2,ncl-2,nch+2);
+
 
 
 		//######################################### Itération #########################################
