@@ -8,6 +8,7 @@
 #include "nrdef.h"
 #include "nrutil.h"
 #include "morpho.h"
+#include "morpho_SSE2.h"
 #include "main.h"
 
 #include "vnrdef.h"

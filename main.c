@@ -20,6 +20,8 @@
 #include "test_mouvement.h"
 #include "bench_mouvement.h"
 #include "bench_mouvement_SSE2.h"
+#include "bench_morpho.h"
+#include "bench_morpho_SSE2.h"
 
 
 
@@ -230,12 +232,40 @@ void execution() {
 	}
 }
 
+void chrono(int n){
+	double fd_vide,sd_vide,fd,sd,fd_SSE2,sd_SSE2,morpho_vide,morpho,morpho_SSE2;
+	fd_vide=chrono_FD_vide(n);
+	fd=chrono_FD(n);
+
+	printf("FD: %f secs\n", fd-fd_vide);
+
+	sd_vide=chrono_SD_vide(n);
+	sd=chrono_SD(n);
+
+	printf("SD: %f secs\n", sd-sd_vide);
+
+	fd_SSE2=chrono_FD_SSE2(n);
+
+	printf("FD_SSE2: %f secs\n", fd_SSE2-fd_vide);
+
+	sd_SSE2=chrono_SD_SSE2(n);
+
+	printf("SD_SSE2: %f secs\n", sd_SSE2-sd_vide);
+
+	morpho_vide=chrono_morpho_vide(n);
+
+	morpho=chrono_morpho(n);
+	
+	printf("morpho %f secs\n", morpho-morpho_vide);
+
+	morpho_SSE2=chrono_morpho_SSE2(n);
+	printf("morpho_SSE2 %f secs\n", morpho_SSE2-morpho_vide);
+}
+
 void cyprien()
 {
 	//validation();
-	chrono();
-	printf("fd %f, sd %f\n", chrono_FD(10),chrono_SD(10));
-	printf("fd_SSE2 %f, sd_SSE2 %f\n", chrono_FD_SSE2(10),chrono_SD_SSE2(10));
+	chrono(10);
 	//execution();
 	//test_dilatation_erosion_simd();
 	//test_morpho_simd();

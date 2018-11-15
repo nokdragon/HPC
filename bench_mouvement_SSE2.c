@@ -10,6 +10,7 @@
 #include "nrdef.h"
 
 #include "mouvement.h"
+#include "morpho_SSE2.h"
 #include "SSE2util.h"
 #include "mouvement_SSE2.h"
 #include "bench_mouvement_SSE2.h"
@@ -62,7 +63,7 @@ double chrono_FD_SSE2(int n){
 
 			//######################################### Itération #########################################
 
-			Copy(It_1, It, nrl, nrh, ncl, nch);
+			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -139,9 +140,9 @@ double chrono_SD_SSE2(int n){
 
 			//######################################### Itération #########################################
 
-			Copy(It_1, It, nrl, nrh, ncl, nch);
-			Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
-			Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
+			Copy_simd(Mt_1, Mt, nrl, nrh, ncl, nch);
+			Copy_simd(Vt_1, Vt, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
