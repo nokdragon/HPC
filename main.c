@@ -26,11 +26,68 @@ void remi()
 	//test_vuint8_abs_simd();
 	//test_vuint16_abs_simd();
 	//test_vuint8_fd_simd();
-	test_vuint8_fd_simd_matrix(); // pas de seg fault
+	//test_vuint8_fd_simd_matrix(); // pas de seg fault
 	//test_vuint8_if_elif_else();
 	//test_ext_8_16();
 	//test_part1_sd();
-	//test_part2_sd();
+	test_part2_sd();
+	test_sd_simd();
+
+	/*
+	vuint8 a,b,x,y,z, one;
+	one = init_vuint8(1);
+	vuint8 pVt;//init_vuint8(3);
+	vuint8 pVt_1 = init_vuint8(3);
+	vuint8 pOt = init_vuint8(1);
+
+	a = pVt_1;
+	b = pOt;
+	for (int j = 0; j < N -1; j++){
+			b = _mm_adds_epu8(b, pOt);
+		}
+	x = _mm_sub_epi8(pVt_1, one);//Mt plus grand
+	y = _mm_add_epi8(pVt_1, one);//Mt plus petit
+	z = pVt_1;
+	pVt = vuint8_if_elif_else(a, b, x, y ,z);
+	display_vuint8(pVt_1, "%4.0x", "pVt_1= "); puts("\n");
+	display_vuint8(pOt, "%4.0x", "pOt= "); puts("\n");
+	display_vuint8(b, "%4.0x", "n*OT= "); puts("\n");
+	display_vuint8(pVt, "%4.0x", "pVt= "); puts("\n");
+	*/
+
+
+
+	/*
+			vuint8 * pOt = (vuint8 *) Ot[0];
+
+	//vuint8 *pOt = (vuint8*) Ot[0];
+	//uint8 *pIt = (vuint8*) It[0];
+	//vuint8 *pIt_1 = (vuint8*) It_1[0];
+	vuint8 *pEt = (vuint8 *) Et[0];
+	vuint8 *pVt = (vuint8*) Vt[0];
+	vuint8 *pVt_1 = (vuint8*) Vt_1[0];
+	//vuint8 *pMt = (vuint8*) Mt[0];
+	//vuint8 *pMt_1 = (vuint8*) Mt_1[0];
+	//uint8 ** mb = ui8matrix(nrl,nrh,ncl,nch);
+
+	vuint8 a,b,x,y,z, one;
+	int i,j;
+	one = init_vuint8(1);
+	for (i = 0; i < NBE_VUINT8_IMAGE; i++)
+	{
+		a = pVt_1[i];
+		b = pOt[i];
+		for (j = 0; j < N; j++){
+			b = _mm_adds_epu8(b, pOt[i]);
+		}
+
+		x = _mm_sub_epi8(pVt_1[i], one);//Mt plus grand
+		y = _mm_add_epi8(pVt_1[i], one);//Mt plus petit
+		z = pVt_1[i];
+		pVt[i] = vuint8_if_elif_else(a, b, x, y ,z);
+	*/
+
+
 	/*
 		//Initialisation
 	int i;

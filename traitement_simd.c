@@ -299,6 +299,19 @@ void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_
 
 		//display_vuint8(pMt[i], "%4.0d", "pMt= "); puts("\n");
 		//Ot=abs( Mt[i][j] - It[i][j] );	
+
+		/* CE QUI MARCHE
+
+			a = pMt_1[k];
+			b = pIt[k];
+			x = _mm_sub_epi8(pMt_1[k], one);//Mt plus grand
+			y = _mm_add_epi8(pMt_1[k], one);
+			z = a; //Mt ==		
+
+			//display_vuint8(pMt_1[k], " %d", "sMt_1 AVANT IF\t"); puts("");
+			//pMt[k] = _mm_add_epi8(pMt_1[k], vuint8_if_elif_else(a, b, x, y ,z));
+			pMt[k] = vuint8_if_elif_else(a, b, x, y ,z);
+			*/
 	}
 
 	
@@ -453,7 +466,7 @@ void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 	    
 	   
 	}
-	printf(" k = %ld\n", k);
+	//printf(" k = %ld\n", k);
 	return;
 }
 
@@ -503,34 +516,42 @@ void part3_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_
 	vuint8 *pVt_1 = (vuint8*) Vt_1[0];
 	//vuint8 *pMt = (vuint8*) Mt[0];
 	//vuint8 *pMt_1 = (vuint8*) Mt_1[0];
+	//uint8 ** mb = ui8matrix(nrl,nrh,ncl,nch);
 
 	vuint8 a,b,x,y,z, one;
 	int i,j;
 	one = init_vuint8(1);
-	for (i = 0; i < NBE_VUINT8_IMAGE; ++i)
+	for (i = 0; i < NBE_VUINT8_IMAGE; i++)
 	{
 		a = pVt_1[i];
 		b = pOt[i];
-		for (j = 0; j < N+1; j++)
+		for (j = 0; j < N-1; j++){
 			b = _mm_adds_epu8(b, pOt[i]);
+		}
 
 		x = _mm_sub_epi8(pVt_1[i], one);//Mt plus grand
 		y = _mm_add_epi8(pVt_1[i], one);//Mt plus petit
-		z = a;
+		z = pVt_1[i];
 		pVt[i] = vuint8_if_elif_else(a, b, x, y ,z);
+
+		/*
+		if(i==3){
+			display_vuint8(b, "%d ", "b\t"); puts("\n");
+			display_vuint8(pVt_1[i], "%d ", "pvt_1\t"); puts("\n");
+			display_vuint8(pOt[i], "%d ", "Ot\t"); puts("\n");
+			display_vuint8(pVt[i], "%d ", "pvt absv\t"); puts("\n");
+		}*/
 		
 		
 	}
+	
+	//to_matrix(mb,b);
+	//printf("mb[0][52] = %d\n", mb[0][52]);
 
 	for ( i = 0; i < NBE_VUINT8_IMAGE; ++i)
 	{
 		
-		if(i==0){
-			//display_vuint8(b, "%d ", "b\t"); puts("\n");
-			//display_vuint8(pVt_1[i], "%d ", "pvt_1\t"); puts("\n");
-			//display_vuint8(pOt[i], "%d ", "Ot\t"); puts("\n");
-			display_vuint8(pVt[i], "%d ", "pvt absv\t"); puts("\n");
-		}
+		
 		a = pVt[i];
 		b = init_vuint8(VMIN);
 		x = a;
@@ -546,12 +567,12 @@ void part3_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_
 			//display_vuint8(b, "%d ", "b\t"); puts("\n");
 			//display_vuint8(pVt_1[i], "%d ", "pvt_1\t"); puts("\n");
 			//display_vuint8(pOt[i], "%d ", "Ot\t"); puts("\n");
-			display_vuint8(pVt[i], "%d ", "pvt ap\t"); puts("\n");
+			//display_vuint8(pVt[i], "%d ", "pvt ap\t"); puts("\n");
 			a = pVt[i];
 		b = init_vuint8(VMIN);
 		x = a;
 		y = b;
-			display_vuint8(vuint8_if_else(a,b,x,y), "%d ", "if\t"); puts("\n");
+			//display_vuint8(vuint8_if_else(a,b,x,y), "%d ", "if\t"); puts("\n");
 		}
 	}
 	
@@ -580,6 +601,11 @@ void part3_sd_scalar(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **V
 			}
 			else{
 			    Vt[i][j] = Vt_1[i][j];
+			}
+
+			if(j==52 && i==0){
+
+				//printf("Vt_1[i][j] = %d, Ot = %d; N * Ot[i][j] = %d, Vt[i][j] =%d \n",Vt_1[i][j],Ot[i][j], N * Ot[i][j], Vt[i][j]);
 			}
 			if(Vt[i][j]<VMIN){
 	    		Vt[i][j]=VMIN;
