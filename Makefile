@@ -13,6 +13,7 @@ clean :
 	rm -rf $(EXEC_NAME) $(OBJ_FILES) .depends *~ *#
 	rm -rf hall_FD/*
 	rm -rf hall_SD/*
+	rm $(EXEC_NAME).exe
 
 $(EXEC_NAME) : $(OBJ_FILES) $(FILES)
 	$(CC) -o $(EXEC_NAME) $(OBJ_FILES) $(LIBS)

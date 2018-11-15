@@ -144,7 +144,11 @@ void print_ROC(long * ROC){
 	printf("-----------------\n");
 }
 
-//Cette fonction execute le traitement et post traitement sur toutes les photos et pour chaque photo appartenant à la liste des vérités terrain on calcule la matrice ROC de tout les cas possible (fd et sd avec et sans morpho)
+/*
+Cette fonction execute le traitement et post traitement sur toutes les photos
+ pour chaque photo appartenant à la liste des vérités terrain
+ on calcule la matrice ROC de tout les cas possible (fd et sd avec et sans morpho)
+ */
 void validation(){
 
 

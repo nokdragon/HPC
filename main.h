@@ -15,6 +15,8 @@
 #define PRINT_BEGIN() printf("\n\n==============================================BEGIN %s==============================================\n", __func__);
 #define PRINT_END() printf("==============================================END %s==============================================\n\n\n\n", __func__);
 #define PRINT_OK() printf("\nLa fonction ne contient pas d'erreur\n\n");
+#define PRINT_BUG() printf("ATTENTION : Utilisation de la fonction %s, non valide à l'heure actuelle\n", __func__);
+
 #define PRINT_DEBUG printf("In %s, line : %d \n", __func__, __LINE__);
 #define MAX_SINT8 127
 #define MIN_SINT8 -128

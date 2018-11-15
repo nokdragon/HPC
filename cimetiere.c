@@ -14,7 +14,7 @@
 
 #include "vnrdef.h"
 #include "vnrutil.h"
-#include "simd1.h"
+#include "SSE2util.h"
 #include "main.h"
 #include "test_mouvement_SSE2.h"
 

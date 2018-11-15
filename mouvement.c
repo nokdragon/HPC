@@ -12,7 +12,7 @@
 
 #include "vnrdef.h"
 #include "vnrutil.h"
-#include "simd1.h"
+#include "SSE2util.h"
 
 //fonction Frame Difference (FD) 
 /*It est la matrice de l'image courante (a l'instant t)
