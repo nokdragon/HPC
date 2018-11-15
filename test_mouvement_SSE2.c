@@ -218,8 +218,8 @@ void test_vuint8_fd_simd_matrix()
 	uint8** It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
 	uint8** It = ui8matrix(nrl, nrh, ncl, nch);
 
-	uint8 **Ets = ui8matrix(nrl, nrh, ncl, nch);
-	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Ets = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+	uint8 **Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 	for(int i=1 ; i< 300 ; i++){
 
 		sprintf(file,"hall/hall%06d.pgm",i);
@@ -248,6 +248,10 @@ void test_vuint8_fd_simd_matrix()
 	PRINT_OK();
 
 	PRINT_END();
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(Ets, nrl-2, nrh+2, ncl-2, nch+2);
 }
 
 
@@ -266,7 +270,7 @@ void test_sd_simd()
 	char file[255];
 
 	//Scalar init
-	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 	uint8 **Vt = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Vt_1 = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Mt = ui8matrix(nrl, nrh, ncl, nch);
@@ -275,7 +279,7 @@ void test_sd_simd()
 	Init_V(Vt_1, nrl, nrh, ncl, nch);
 
 	//SIMD init
-	uint8 **sEt = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **sEt = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 	uint8 **sVt = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **sVt_1 = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **sMt = ui8matrix(nrl, nrh, ncl, nch);
@@ -308,9 +312,25 @@ void test_sd_simd()
 
 		if(compare_matrix(Et, sEt, nrl,  nrh,  ncl,  nch)) return;
 
+
 	}	
 
 	PRINT_OK();
 	PRINT_END();
+
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(Vt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Vt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt_1, nrl, nrh, ncl, nch);
+	
+	free_ui8matrix(sOt, nrl, nrh, ncl, nch);
+	free_ui8matrix(sEt, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(sVt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(sVt, nrl, nrh, ncl, nch);
+	free_ui8matrix(sMt, nrl, nrh, ncl, nch);
+	free_ui8matrix(sMt_1, nrl, nrh, ncl, nch);
 
 }

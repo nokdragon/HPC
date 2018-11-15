@@ -132,6 +132,7 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 	vuint8 vIt;
 	vuint8 vOt;
 	vuint8 vVt_1;
+	vuint8 vVt;
 	vuint8 vIt_1;
 
 	for(i=nrl; i<=nrh; i++) {
@@ -141,44 +142,37 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 	    	b = _mm_loadu_si128((__m128i *) &It[i][j]);
 			x = _mm_sub_epi8(a, one);//Mt plus grand
 			y = _mm_add_epi8(a, one);
-			z = a; //Mt ==		
-			_mm_storeu_si128( (__m128i *) &Mt[i][j], vuint8_if_elif_else(a, b, x, y ,z) );
+	
+			_mm_storeu_si128( (__m128i *) &Mt[i][j], vuint8_if_elif_else(a, b, x, y ,a) );
 
 			vMt = _mm_loadu_si128((__m128i *) &Mt[i][j]);
 			vIt = _mm_loadu_si128((__m128i *) &It[i][j]);
-			_mm_storeu_si128( (__m128i *) &Ot[i][j], vuint8_sub_abs( vMt, vIt) ) ;
+
+
 
 			
-			vOt = _mm_loadu_si128((__m128i *) &Ot[i][j]);
-			a = _mm_loadu_si128((__m128i *) &Vt_1[i][j]);
-	    	b = _mm_loadu_si128((__m128i *) &Ot[i][j]);
+			vOt = vuint8_sub_abs( vMt, vIt);
+	    	b = vOt;
 	    	for (k = 0; k < N - 1; k++)
-				b = _mm_adds_epu8(b, vOt);		
+				b = _mm_adds_epu8(b, vOt);
 			vVt_1 = _mm_loadu_si128((__m128i *) &Vt_1[i][j]);	
 			x = _mm_sub_epi8(vVt_1, one);//Mt plus grand
 			y = _mm_add_epi8(vVt_1, one);//Mt plus petit
-			z = vVt_1;	
-			_mm_storeu_si128( (__m128i *) &Mt[i][j], vuint8_if_elif_else(a, b, x, y ,z) );
+
+			vVt= vuint8_if_elif_else(vVt_1, b, x, y ,vVt_1);
 
 			
-			a = _mm_loadu_si128((__m128i *) &Vt[i][j]);
 			b = init_vuint8(VMIN);
-			vIt = _mm_loadu_si128((__m128i *) &It[i][j]);
-			vIt_1 = _mm_loadu_si128((__m128i *) &It_1[i][j]);
-			_mm_storeu_si128( (__m128i *) &Vt[i][j], _mm_max_epu8(vIt, vIt_1));			
-			//opti eventuelle en evitant de faire un autre if_else si le premier a été fait
-			a = _mm_loadu_si128((__m128i *) &Vt[i][j]); // opti, pas necessaire probablement
-			b = init_vuint8(VMAX); 
-			x = b; //opti : mettre directemeent b a al place de x dans le if
-			y = _mm_loadu_si128((__m128i *) &Vt[i][j]);
-			_mm_storeu_si128( (__m128i *) &Vt[i][j], vuint8_if_else(a,b,x,y));
+			vVt=_mm_max_epu8(vVt, b);
 
-		
-			a = _mm_loadu_si128((__m128i *) &Ot[i][j]);
-			b = _mm_loadu_si128((__m128i *) &Vt[i][j]);			
+			b = init_vuint8(VMAX); 
+			vVt=_mm_min_epu8(vVt, b);
+
+			_mm_storeu_si128( (__m128i *) &Vt[i][j],vVt);
+				
 			x = init_vuint8(MAX_UINT8);
 			y = _mm_setzero_si128();
-			_mm_storeu_si128( (__m128i *) &Et[i][j], vuint8_if_else(a,b,x,y));
+			_mm_storeu_si128( (__m128i *) &Et[i][j], vuint8_if_else(vOt,vVt,x,y));
 			
 	    }
 	}	

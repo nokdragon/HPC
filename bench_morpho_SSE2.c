@@ -97,5 +97,14 @@ double chrono_morpho_SSE2(int n){
 	total_morpho_SSE2 = (end.tv_sec - start.tv_sec);
 	total_morpho_SSE2 += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
+
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(Vt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Vt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt_1, nrl, nrh, ncl, nch);
+
 	return (double)(total_morpho_SSE2/n);
 }
