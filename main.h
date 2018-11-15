@@ -53,6 +53,8 @@
 #define MAX_SINT8 127 
 #define MAX_16B 0xffff //2 pow 16 -1
 
+#define NB_OCTET_M128 16
+
 //Paramètre de FD
 #define THETA 40 
 

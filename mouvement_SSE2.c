@@ -26,11 +26,17 @@ vuint8 vuint8_fd_simd(vuint8 It, vuint8 It_1)
 	la solution est donc de calculer : 
 	max(It, It_1) - min(It, It_1) = {0,255}, castable dans un uint 8 cette fois !
 	*/
+
+	/*
 	vuint8 Ot, max, min;
 	max = _mm_max_epu8(It, It_1);
 	min = _mm_min_epu8(It, It_1); //Solution alternative, utiliser un if_else
 	Ot = _mm_sub_epi8(max , min);
+	*/
+	vuint8 Ot = vuint8_sub_abs(It, It_1);
 	return vuint8_if_else(Ot, init_vuint8(THETA), init_vuint8(MAX_PIXEL_VALUE), _mm_setzero_si128());
+	
+	//return(It);
 }
 
 /*TO DEL
@@ -67,37 +73,43 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long 
 	Soit 5243 paquets de 128 bits + 1 octets
 	On traite d'abord un octet, puis les 5243paquet de 128 bits en simd
 	*/
+	
 	/*
 	int i;
 	vuint8 *pIt = (vuint8*) It[0];
 	vuint8 *pIt_1 = (vuint8*) It_1[0];
-	vuint8 *pEt = (vuint8 *) Et[0];	
+
 	long len = ((nrh - nrl + 1) * (nch - ncl + 1))/16;
-	for (i = 0; i < len; i++)
+	printf("len = %ld\n",len );
+
+	
+	for (i = 0; i < len ; i++)
 	{
-		
-		
-		pEt[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
+		if(i>5220)
+			printf("i = %d\n",i );
+		//pEt[i] = vuint8_fd_simd(pIt[i], pIt_1[i]);
+		_mm_storeu_si128((__m128i *)&Et[i], vuint8_fd_simd(pIt[i], pIt_1[i]));
 		//display_vuint8(res[i], "%4.0d", "res= "); puts("\n");
 	}
 	*/
+	
 
-	vuint8 pIt, pIt_1, pEt;
+	
+	vuint8 pIt, pIt_1;
 	long i,j;
 	for(i=nrl; i<=nrh; i++) {
-	    for(j=ncl; j<=nch; j++) {
+	    for(j=ncl; j<=nch; j+=16) {  	
+	    	
+		    	//cpt = 0;	
+				//pEt = load(&Et[i][j]);
+				pIt = _mm_loadu_si128((__m128i *)&It[i][j]);
+				pIt_1 = _mm_loadu_si128((__m128i *)&It_1[i][j]);
+				_mm_storeu_si128((__m128i *)&Et[i][j], vuint8_fd_simd(pIt, pIt_1));
 
-			//pEt = load(&Et[i][j]);
-			//pIt = _mm_loadu_si128((__m128i *)&It[i][j]);
-			//pIt_1 = _mm_loadu_si128((__m128i *)&It_1[i][j]);
-
-	    	pIt = _mm_loadu_si128((__m128i *)&It[i][j]);
-			pIt_1 = _mm_loadu_si128((__m128i *)&It_1[i][j]);
-
-			_mm_storeu_si128((__m128i *)&Et[i][j],vuint8_fd_simd(pIt, pIt_1));
-
+				//display_vuint8(pIt, "%d ", "pIt\t"); puts("\n");
+	    	
 	    }
-	}
+	}	
 
 	//l'octet 
 	/*
