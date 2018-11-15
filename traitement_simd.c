@@ -112,81 +112,54 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 	vuint8 *pVt_1 = (vuint8*) Vt_1[0];
 	vuint8 *pMt = (vuint8*) Mt[0];
 	vuint8 *pMt_1 = (vuint8*) Mt_1[0];
+	vuint8 a,b,x,y,z, one;
+	int i,j;
 
-	vuint8 a,b,x,y,z;
+	one = init_vuint8(1);
+	long len = ((nrh - nrl + 1) * (nch - ncl + 1))/16;
 
-	for (int i = 0; i < NBE_VUINT8_IMAGE; i++)
+	for (int i = 0; i < len; i++)
 	{
+
 		a = pMt_1[i];
 		b = pIt[i];
-		x = init_vsint8(-1);//Mt plus grand
-		y = init_vsint8(+1);//Mt plus petit
-		z = _mm_setzero_si128(); //Mt ==
-		
-		pMt[i] = _mm_add_epi8(pMt_1[i], vuint8_if_elif_else(a, b, x, y ,z));
+		x = _mm_sub_epi8(pMt_1[i], one);//Mt plus grand
+		y = _mm_add_epi8(pMt_1[i], one);
+		z = a; //Mt ==		
+		pMt[i] = vuint8_if_elif_else(a, b, x, y ,z);
 
-		//Ot=abs( Mt[i][j] - It[i][j] );		
-	}
-
-	//on traite l'octet restant 
-	uint8 *oMt = (uint8*) Mt[0];
-	uint8 *oMt_1 = (uint8*) Mt_1[0];
-	uint8 *oIt = (uint8*) It[0];
-	//uint8 *oIt_1 = (uint8*) It_1[0];
-	uint8 * oOt = (uint8*) Ot[0];
-	int last_indice = NB_UINT8_IMAGE - 1; 
-
-	if(oMt_1[last_indice]<oIt[last_indice]){
-	    oMt[last_indice] = oMt_1[last_indice] + 1;
-	}
-	else if(oMt_1[last_indice]>oIt[last_indice]){
-		oMt[last_indice] = oMt_1[last_indice] - 1;
-	}
-	else{
-		oMt[last_indice] = oMt_1[last_indice];
 	}
 
 //========================================================================
 
-	//Ot
-	for (int i = 0; i < NBE_VUINT8_IMAGE; i++){
+	for (i = 0; i < NBE_VUINT8_IMAGE; i++){
+		//printf("i = %d \n", i);
 		pOt[i]= vuint8_sub_abs(pMt[i], pIt[i]);
 	}
-	
-	oOt[last_indice]=abs(oMt[last_indice] - oIt[last_indice]);
 
 //========================================================================
 
-	vuint16 a16,b16,x16,y16,z16;
-	for (int i = 0; i < NBE_VUINT16_IMAGE; ++i)
+	one = init_vuint8(1);
+	for (i = 0; i < NBE_VUINT8_IMAGE; i++)
 	{
-		a16 = pVt_1[i];
-		b16 = _mm_mullo_epi16(init_vsint16(N), ext_8_16(pOt[i]));
-		x16 = init_vsint8(-1);//Mt plus grand
-		y16 = init_vsint8(+1);//Mt plus petit
-		z16 = _mm_setzero_si128(); //Mt ==
-		pVt[i] = _mm_add_epi8(pMt_1[i],vuint8_if_elif_else(a16, b16, x16, y16 ,z16));
+		a = pVt_1[i];
+		b = pOt[i];
+		for (j = 0; j < N-1; j++){
+			b = _mm_adds_epu8(b, pOt[i]);
+		}
+
+		x = _mm_sub_epi8(pVt_1[i], one);//Mt plus grand
+		y = _mm_add_epi8(pVt_1[i], one);//Mt plus petit
+		z = pVt_1[i];
+		pVt[i] = vuint8_if_elif_else(a, b, x, y ,z);	
+		
 	}
 
-	//traiter l'octet 
-//========================================================================
-
-	for (int i = 0; i < NBE_VUINT16_IMAGE; ++i)
-	{
-		a16 = pVt_1[i];
-		b16 = _mm_mullo_epi16(init_vsint16(N), ext_8_16(pOt[i]));
-		x16 = init_vsint8(-1);//Mt plus grand
-		y16 = init_vsint8(+1);//Mt plus petit
-		z16 = _mm_setzero_si128(); //Mt ==
-		pVt[i] = _mm_add_epi8(pMt_1[i],vuint8_if_elif_else(a16, b16, x16, y16 ,z16));
-	}
-
-	//traiter l'octet 
 //========================================================================
 		
-	
-	for (int i = 0; i < NBE_VUINT8_IMAGE; ++i)
-	{
+	for ( i = 0; i < NBE_VUINT8_IMAGE; ++i)
+	{	
+		
 		a = pVt[i];
 		b = init_vuint8(VMIN);
 		x = a;
@@ -194,13 +167,24 @@ void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt
 		pVt[i] = vuint8_if_else(a,b,x,y); 
 		//opti possible en evitant de faire un autre if_else si le premier a été fait
 		b = init_vuint8(VMAX);
-		y = b;
+		x = b;
+		y = pVt[i];
 		pVt[i] = vuint8_if_else(a,b,x,y); 
 
-
+		if(i==0){
+			//display_vuint8(b, "%d ", "b\t"); puts("\n");
+			//display_vuint8(pVt_1[i], "%d ", "pvt_1\t"); puts("\n");
+			//display_vuint8(pOt[i], "%d ", "Ot\t"); puts("\n");
+			//display_vuint8(pVt[i], "%d ", "pvt ap\t"); puts("\n");
+			a = pVt[i];
+		b = init_vuint8(VMIN);
+		x = a;
+		y = b;
+			//display_vuint8(vuint8_if_else(a,b,x,y), "%d ", "if\t"); puts("\n");
+		}
 	}
-
-	for (int i = 0; i < NBE_VUINT8_IMAGE; ++i)
+	
+		for (int i = 0; i < NBE_VUINT8_IMAGE; ++i)
 	{
 		a = pOt[i];
 		b = pVt[i];

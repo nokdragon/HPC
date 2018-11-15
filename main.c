@@ -30,7 +30,7 @@ void remi()
 	//test_vuint8_if_elif_else();
 	//test_ext_8_16();
 	//test_part1_sd();
-	test_part2_sd();
+	//test_part2_sd();
 	test_sd_simd();
 
 	/*

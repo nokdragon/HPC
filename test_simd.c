@@ -735,10 +735,10 @@ void test_sd_simd()
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
 		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
-		//vuint8_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl, nrh, ncl, nch);
-		part1_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
-		part2_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
-		part3_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+		vuint8_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl, nrh, ncl, nch);
+		//part1_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+		//part2_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+		//part3_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 
 
 		Copy(It_1, It, nrl, nrh, ncl, nch);
@@ -752,8 +752,6 @@ void test_sd_simd()
 		if(compare_matrix(Et, sEt, nrl,  nrh,  ncl,  nch)) return;
 
 	}	
-
-	
 
 	PRINT_OK();
 	PRINT_END();
