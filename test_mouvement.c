@@ -506,10 +506,10 @@ void chrono() {
 
 		//######################################### traitement fd #########################################
 
-		Et = ui8matrix(nrl,nrh,ncl,nch);
+		//Et = ui8matrix(nrl,nrh,ncl,nch);
 		//Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 		vuint8_fd_simd_matrix(It, It_1, Et, nrl, nrh, ncl, nch);
-		Et = ui8matrix(nrl-2,nrh+2,ncl-2,nch+2);
+		//Et = ui8matrix(nrl-2,nrh+2,ncl-2,nch+2);
 
 
 
