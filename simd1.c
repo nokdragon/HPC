@@ -125,3 +125,33 @@ vuint16 ext_8_16(vuint8 x)
     res = _mm_unpackhi_epi8(x,z8);
     return res;
 }
+
+void vector_to_scalar(vuint8 *v, uint8 ** res)
+{
+    //uint8 **res = ui8matrix(NRL, NRH, NCL, NCH);
+    uint8 * p = (uint8 *) v;
+    long i,j,k;
+    k = 0;
+    for(i=NRL; i<=NRH; i++) {
+        for(j=NCL; j<=NCH; j++) {
+            res[i][j] = p[k];
+            //printf("res[%ld][%ld] = p[%ld] = %d\n",i,j,k,p[k]); 
+            k++;
+        }
+    }
+    //return res;
+}
+
+int comp_vuint8(vuint8 v1, vuint8 v2)
+{
+    uint8 *pv1 = (uint8 *) &v1;
+    uint8 *pv2 = (uint8 *) &v1;
+    for (int i = 0; i < 16; ++i)
+    {
+        if (pv1[i] != pv2[i])
+            return 1;
+    }
+    
+    return 0;
+}
+

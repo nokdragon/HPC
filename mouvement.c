@@ -46,34 +46,6 @@ uint8 Frame_Difference(uint8 It, uint8 It_1) {
 	}
 }
 
-void create_FD_folder()
-{
-	//Initialisation 
-	int i;
-	long nrl, nrh, ncl, nch;
-	uint8** m;
-	uint8** m_1;
-	m_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
-	
-
-	uint8 **Et;
-	Et = ui8matrix(nrl, nrh, ncl, nch);
-
-	char file[STR_SIZE]; // current filename
-
-	for(i=1;i<NB_IMAGE;i++){
-
-		sprintf(file,"hall/hall%06d.pgm",i);
-
-		m = LoadPGM_ui8matrix(file, &nrl, &nrh, &ncl, &nch);
-
-		Frame_Difference_Matrix(m, m_1, Et, nrl, nrh, ncl, nch);
-
-		sprintf(file,"hall_FD/ET_FD%d.pgm",i);
-		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
-	}
-}
-
 
 //fonction Sigma-Delta (SD) 
 /*It est la matrice de l'image courante (a l'instant t)

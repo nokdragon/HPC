@@ -23,3 +23,6 @@ vuint8 vuint8_sub_abs(vuint8 a, vuint b);
 vuint16 vuint16_if_elif_else(vuint16 a, vuint16 b, vuint16 x, vuint16 y, vuint16 z);
 
 vuint16 ext_8_16(vuint8 x);
+
+void vector_to_scalar(vuint8 *v, uint8 ** res);
+int comp_vuint8(vuint8 v1, vuint8 v2);
