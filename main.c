@@ -15,7 +15,7 @@
 #include "morpho.h"
 #include "test_morpho_SSE2.h"
 #include "simd1.h"
-#include "test_simd.h"
+#include "test_mouvement_SSE2.h"
 #include "mouvement_SSE2.h"
 #include "test_mouvement.h"
 
