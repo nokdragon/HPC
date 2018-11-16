@@ -37,7 +37,7 @@ int test_dilatation_erosion_simd() {
 	sprintf(file, "hall_SD/%d.pgm", 2);
 	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
 
-	compare_matrix2(Dref, D, nrl, nrh, ncl, nch);
+	compare_matrix(Dref, D, nrl, nrh, ncl, nch);
 
 	erosion3_matrix(D, Et, nrl, nrh, ncl, nch);
 	erosion3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
@@ -48,12 +48,22 @@ int test_dilatation_erosion_simd() {
 	sprintf(file, "hall_SD/%d.pgm", 4);
 	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
 
-	return compare_matrix2(Dref, D, nrl, nrh, ncl, nch);
+
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(D, nrl, nrh, ncl, nch);
+	free_ui8matrix(Dref, nrl, nrh, ncl, nch);
+
+	return compare_matrix(Dref, D, nrl, nrh, ncl, nch);
 
 }
 
 int test_morpho_simd() {
+	PRINT_BEGIN();
+
 	long nrl, nrh, ncl, nch;
+
 	uint8** It_1;
 	It_1 = LoadPGM_ui8matrix("hall/hall000024.pgm", &nrl, &nrh, &ncl, &nch);
 
@@ -90,7 +100,7 @@ int test_morpho_simd() {
 	sprintf(file, "hall_SD/%d.pgm", 2);
 	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
 
-	compare_matrix2(Dref, D, nrl, nrh, ncl, nch);
+	compare_matrix(Dref, D, nrl, nrh, ncl, nch);
 
 	Copy(D, Et, nrl, nrh, ncl, nch);
 
@@ -106,6 +116,22 @@ int test_morpho_simd() {
 	sprintf(file, "hall_SD/%d.pgm", 4);
 	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
 
-	return compare_matrix2(Dref, D, nrl, nrh, ncl, nch);
+	/*
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(D, nrl, nrh, ncl, nch);
+	free_ui8matrix(Dref, nrl, nrh, ncl, nch);
+	*/
+
+
+	if(compare_matrix(Dref, D, nrl, nrh, ncl, nch))
+		return 1;
+
+	PRINT_OK();
+	PRINT_END();
+	return 0;
+
+	
 
 }

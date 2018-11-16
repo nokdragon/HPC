@@ -29,5 +29,3 @@ void validation();
 //affiche la matrice ROC
 void print_ROC(long * ROC);
 
-//test les performances des fonctions sd et fd avec ou sans post traitement
-void chrono();

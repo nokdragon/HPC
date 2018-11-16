@@ -91,31 +91,7 @@ int test_vuint8_if_else()
 }
 
 
-void test_vuint8_abs_simd()
-{	
-	PRINT_BEGIN();
 
-	vuint8 a, abs_a;
-	a = init_vuint8(-5);
-	abs_a = vuint8_abs_simd(a);
-	display_vsint8(a, " %d\t", "a\t"); puts("");
-	display_vuint8(abs_a, " %d\t", "abs_a\t"); puts("\n");
-
-	vuint8 b, abs_b;
-	b = init_vuint8(8);
-	abs_b = vuint8_abs_simd(b);
-	display_vuint8(b, " %d\t", "b\t"); puts("");
-	display_vuint8(abs_b, " %d\t", "abs_b\t"); puts("\n");
-
-	vuint8 c, abs_c;
-	c = init_vuint8(0);
-	abs_c = vuint8_abs_simd(c);
-	display_vuint8(c, " %d\t", "c\t"); puts("");
-	display_vuint8(abs_c, " %d\t", "abs_c\t"); puts("\n");
-
-	PRINT_END();
-
-}
 
 void test_vuint16_abs_simd()
 {	

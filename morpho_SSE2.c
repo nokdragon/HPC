@@ -8,6 +8,7 @@
 #include "nrdef.h"
 #include "nrutil.h"
 #include "morpho.h"
+#include "morpho_SSE2.h"
 #include "main.h"
 
 #include "vnrdef.h"
@@ -36,7 +37,6 @@ void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long n
 	ligne1= init_vsint8(0);
 	ligne2= init_vsint8(0);
 	ligne3= init_vsint8(0);
-
 	for(i=nrl; i<=nrh; i++) {
 	    for(j=ncl; j<=nch-1; j+=14) {
 	    	
@@ -66,10 +66,10 @@ void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long n
 void dilatation5_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
+	//Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
 	dilatation3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
+	//Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
 	dilatation3_matrix_simd(EtD, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);

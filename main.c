@@ -18,117 +18,12 @@
 #include "test_mouvement_SSE2.h"
 #include "mouvement_SSE2.h"
 #include "test_mouvement.h"
+#include "bench_mouvement.h"
+#include "bench_mouvement_SSE2.h"
+#include "bench_morpho.h"
+#include "bench_morpho_SSE2.h"
 
 
-void remi()
-{
-	//test_vuint8_if_else();
-	//test_vuint8_abs_simd();
-	//test_vuint16_abs_simd();
-	//test_vuint8_fd_simd();
-	//test_vuint8_fd_simd_matrix(); // pas de seg fault
-	//test_vuint8_if_elif_else();
-	//test_ext_8_16();
-	//test_part1_sd();
-	//test_part2_sd();
-	test_sd_simd();
-
-	/*
-	vuint8 a,b,x,y,z, one;
-	one = init_vuint8(1);
-	vuint8 pVt;//init_vuint8(3);
-	vuint8 pVt_1 = init_vuint8(3);
-	vuint8 pOt = init_vuint8(1);
-
-	a = pVt_1;
-	b = pOt;
-	for (int j = 0; j < N -1; j++){
-			b = _mm_adds_epu8(b, pOt);
-		}
-	x = _mm_sub_epi8(pVt_1, one);//Mt plus grand
-	y = _mm_add_epi8(pVt_1, one);//Mt plus petit
-	z = pVt_1;
-	pVt = vuint8_if_elif_else(a, b, x, y ,z);
-	display_vuint8(pVt_1, "%4.0x", "pVt_1= "); puts("\n");
-	display_vuint8(pOt, "%4.0x", "pOt= "); puts("\n");
-	display_vuint8(b, "%4.0x", "n*OT= "); puts("\n");
-	display_vuint8(pVt, "%4.0x", "pVt= "); puts("\n");
-	*/
-
-
-
-	/*
-			vuint8 * pOt = (vuint8 *) Ot[0];
-
-	//vuint8 *pOt = (vuint8*) Ot[0];
-	//uint8 *pIt = (vuint8*) It[0];
-	//vuint8 *pIt_1 = (vuint8*) It_1[0];
-	vuint8 *pEt = (vuint8 *) Et[0];
-	vuint8 *pVt = (vuint8*) Vt[0];
-	vuint8 *pVt_1 = (vuint8*) Vt_1[0];
-	//vuint8 *pMt = (vuint8*) Mt[0];
-	//vuint8 *pMt_1 = (vuint8*) Mt_1[0];
-	//uint8 ** mb = ui8matrix(nrl,nrh,ncl,nch);
-
-	vuint8 a,b,x,y,z, one;
-	int i,j;
-	one = init_vuint8(1);
-	for (i = 0; i < NBE_VUINT8_IMAGE; i++)
-	{
-		a = pVt_1[i];
-		b = pOt[i];
-		for (j = 0; j < N; j++){
-			b = _mm_adds_epu8(b, pOt[i]);
-		}
-
-		x = _mm_sub_epi8(pVt_1[i], one);//Mt plus grand
-		y = _mm_add_epi8(pVt_1[i], one);//Mt plus petit
-		z = pVt_1[i];
-		pVt[i] = vuint8_if_elif_else(a, b, x, y ,z);
-	*/
-
-
-	/*
-		//Initialisation
-	int i;
-	long nrl, nrh, ncl, nch;
-	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
-
-	printf("nrl = %ld\n",nrl);
-	printf("nrh = %ld\n",nrh);
-	printf("ncl = %ld\n",ncl);
-	printf("nch = %ld\n",nch);
-
-
-	uint8** It;
-	It = ui8matrix(nrl, nrh, ncl, nch);
-
-	uint8 **Ot = ui8matrix(nrl, nrh, ncl, nch);
-
-	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
-
-
-	char file[255];
-
-	//uint8 **tmp;
-	//tmp = ui8matrix(nrl, nrh, ncl, nch);
-
-	for(i=1 ; i < 2 ; i++){
-
-		sprintf(file,"hall/hall%06d.pgm",i);
-
-		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
-
-		fd_simd_matrix(It, It_1, Ot, Et);
-
-		display_ui8matrix(Et, nrl, nrh, ncl,  nch,  "%d ", "Et");
-
-
-	}
-	*/
-	
-}
 
 
 void execution() {
@@ -225,21 +120,74 @@ void execution() {
 		//ou une copie faudra voir ce qui est le plus économe
 
 	}
+
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(Vt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Vt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt_1, nrl, nrh, ncl, nch);
+}
+
+void chrono(int n){
+	double fd_vide,sd_vide,fd,sd,fd_SSE2,sd_SSE2,morpho_vide,morpho,morpho_SSE2;	
+	fd_vide=chrono_FD_vide(n*2);
+	sd_vide=chrono_SD_vide(n);
+	morpho_vide=chrono_morpho_vide(n);
+
+	// FD
+	fd=chrono_FD(n);
+	printf("FD: %f secs\n", fd-fd_vide);
+
+	fd_SSE2=chrono_FD_SSE2(n);
+	printf("FD_SSE2: %f secs\n", fd_SSE2-fd_vide);
+
+	// SD
+	sd=chrono_SD(n);
+	printf("SD: %f secs\n", sd-sd_vide);	
+
+	sd_SSE2=chrono_SD_SSE2(n);
+	printf("SD_SSE2: %f secs\n", sd_SSE2-sd_vide);
+	
+	// morpho
+	morpho=chrono_morpho(n);	
+	printf("morpho %f secs\n", morpho-morpho_vide);
+
+	morpho_SSE2=chrono_morpho_SSE2(n);
+	printf("morpho_SSE2 %f secs\n", morpho_SSE2-morpho_vide);
 }
 
 void cyprien()
 {
 	//validation();
-	chrono();
+	//chrono(10);
 	//execution();
 	//test_dilatation_erosion_simd();
-	//test_morpho_simd();
+	test_morpho_simd();
 	
 }
 
+
+void remi()
+{
+	//test_vuint8_if_else();
+	//test_vuint8_abs_simd();
+	//test_vuint16_abs_simd();
+	//test_vuint8_fd_simd();
+	//test_vuint8_fd_simd_matrix();
+	//test_vuint8_if_elif_else();
+	//test_ext_8_16();
+	//test_part1_sd();
+	//test_part2_sd();
+	//test_sd_simd();
+	bench_fd(10, 30);
+}
+
+
 int main()
 {
-	remi();
+	//remi();
 	cyprien();
 }
 

@@ -6,6 +6,7 @@
 #include <ctype.h> 
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 #include "nrdef.h"
 #include "nrutil.h"
@@ -19,6 +20,42 @@
 #include "test_mouvement_SSE2.h"
 
 #include "cimetiere.h"
+
+
+//aide possible at : https://stackoverflow.com/questions/32408665/fastest-way-to-compute-absolute-value-using-sse
+vuint8 vuint8_abs_simd(vuint8 a)
+{   
+    //si a > 0, return a, else return son complément à deux
+
+    PRINT_BUG();
+    return vuint8_if_else(a, _mm_setzero_si128(), a, vuint8_ca2(a));
+}
+
+void test_vuint8_abs_simd()
+{	
+	PRINT_BEGIN();
+
+	vuint8 a, abs_a;
+	a = init_vuint8(-5);
+	abs_a = vuint8_abs_simd(a);
+	display_vsint8(a, " %d\t", "a\t"); puts("");
+	display_vuint8(abs_a, " %d\t", "abs_a\t"); puts("\n");
+
+	vuint8 b, abs_b;
+	b = init_vuint8(8);
+	abs_b = vuint8_abs_simd(b);
+	display_vuint8(b, " %d\t", "b\t"); puts("");
+	display_vuint8(abs_b, " %d\t", "abs_b\t"); puts("\n");
+
+	vuint8 c, abs_c;
+	c = init_vuint8(0);
+	abs_c = vuint8_abs_simd(c);
+	display_vuint8(c, " %d\t", "c\t"); puts("");
+	display_vuint8(abs_c, " %d\t", "abs_c\t"); puts("\n");
+
+	PRINT_END();
+
+}
 
 void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
@@ -545,3 +582,344 @@ void part1_sd_scalar(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **V
 
 	return;
 }
+
+/*
+void chrono() {
+	double total_vide, total_fd, total_fd_P, total_sd, total_sd_P;
+
+	total_fd = 0;
+	total_fd_P = 0;
+	total_sd = 0;
+	total_sd_P = 0;
+	
+	struct timespec start, end;
+	//######################################### initialisation de tous les paramètres #########################################
+	int i;
+
+	long nrl, nrh, ncl, nch;
+	uint8** It_1;
+	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+
+	uint8** It;
+	It = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Et;
+	Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+
+	uint8 **Vt;
+	Vt = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Vt_1;
+	Vt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_V(Vt_1, nrl, nrh, ncl, nch);
+
+	uint8 **Mt;
+	Mt = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Mt_1;
+	Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Ot;
+	Ot = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
+
+
+	char file[255];
+
+
+	//######################################### parcours de toutes les photos sans traitement #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_vide = (end.tv_sec - start.tv_sec);
+	total_vide += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	printf("vide : %lf secondes\n", total_vide);
+
+	//######################################### parcours de toutes les photos avec traitement FD #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement fd #########################################
+
+
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd = (end.tv_sec - start.tv_sec);
+	total_fd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	printf("FD : %lf secondes\n", total_fd);
+
+	//######################################### parcours de toutes les photos avec traitement FD avec post traitement #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement fd #########################################
+
+
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### post traitement #########################################
+
+		posTraitementFO(Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd_P = (end.tv_sec - start.tv_sec);
+	total_fd_P += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	printf("FD avec post traitement: %lf secondes\n", total_fd_P);
+
+
+
+	//######################################### parcours de toutes les photos avec traitement SD #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement sd #########################################
+
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_sd = (end.tv_sec - start.tv_sec);
+	total_sd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	printf("SD : %lf secondes\n", total_sd);
+
+
+	//######################################### parcours de toutes les photos avec traitement SD avec post traitement #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement sd #########################################
+
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+
+		//######################################### post traitement #########################################
+
+		posTraitementOF(Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_sd_P = (end.tv_sec - start.tv_sec);
+	total_sd_P += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	printf("SD avec post traitement: %lf secondes\n", total_sd_P);
+
+
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//#############################################################################  CHRONO SIMD  ##########################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+	//######################################################################################################################################################################################################################
+
+
+
+
+	//######################################### parcours de toutes les photos avec traitement FD #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement fd #########################################
+
+		//Et = ui8matrix(nrl,nrh,ncl,nch);
+		//Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+		vuint8_fd_simd_matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+		//Et = ui8matrix(nrl-2,nrh+2,ncl-2,nch+2);
+
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd = (end.tv_sec - start.tv_sec);
+	total_fd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	printf("FD SIMD : %lf secondes\n", total_fd);
+
+	//######################################### parcours de toutes les photos avec traitement FD avec post traitement #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement fd #########################################
+
+
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### post traitement #########################################
+
+		posTraitementFO_simd(Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd_P = (end.tv_sec - start.tv_sec);
+	total_fd_P += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	printf("FD SIMD avec post traitement SIMD: %lf secondes\n", total_fd_P);
+
+
+
+	//######################################### parcours de toutes les photos avec traitement SD #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement sd #########################################
+
+
+		vuint8_sd_simd(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_sd = (end.tv_sec - start.tv_sec);
+	total_sd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	printf("SD SIMD : %lf secondes\n", total_sd);
+
+
+	//######################################### parcours de toutes les photos avec traitement SD avec post traitement #########################################
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	for (i = 1; i < 300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		//######################################### traitement sd #########################################
+
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+
+		//######################################### post traitement #########################################
+
+		posTraitementOF_simd(Et, nrl, nrh, ncl, nch);
+
+
+		//######################################### Itération #########################################
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_sd_P = (end.tv_sec - start.tv_sec);
+	total_sd_P += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+
+	printf("SD SIMD avec post traitement SIMD : %lf secondes\n", total_sd_P);
+
+
+}
+*/
