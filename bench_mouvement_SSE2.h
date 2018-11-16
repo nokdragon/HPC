@@ -9,3 +9,7 @@ double chrono_SD_SSE2(int n);
 double chrono_FD_SSE2v2(int n);
 
 void bench_fd(int n, int nb_iterations);
+
+double chrono_fd_SoAoS(int n);
+
+double chrono_FD_SoAoS_vide(int n);

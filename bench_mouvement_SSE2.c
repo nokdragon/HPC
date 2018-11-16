@@ -177,7 +177,6 @@ double chrono_SD_SSE2(int n){
 
 	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
 
-
 	uint8 **Ot;
 	Ot = ui8matrix(nrl, nrh, ncl, nch);
 
@@ -253,8 +252,161 @@ void bench_fd(int n, int nb_iterations)
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
 		printf("v2 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
 
+		fd_vide=chrono_FD_SoAoS_vide(n);
+		fd_SSE2=chrono_fd_SoAoS(n);
+		res_fd_sse2 = fd_SSE2-fd_vide;
+		fd_gain = res_fd / res_fd_sse2;
+		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
+		printf("v3 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
+
 		puts("\n");
 
 	
 	}
+}
+
+double chrono_fd_SoAoS(int n)
+{
+
+	int it;
+
+	double total_fd;
+
+	total_fd = 0;
+
+	struct timespec start, end;
+	//######################################### initialisation de tous les paramètres #########################################
+	int i, lig ;
+
+	long nrl, nrh, ncl, nch;
+	uint8** It_moins_1;
+	It_moins_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+
+	uint8** It;
+	It = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8** It_plus_1;
+	It_plus_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Et;
+	Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+
+	uint8 **Et_plus_1;
+	Et_plus_1 = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+
+	char file[255];
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+
+	for(it=0;it<n;it++){
+		
+
+		//######################################### parcours de toutes les photos avec traitement FD #########################################
+
+		
+		for (i = 1; i < NB_IMAGE - 1 ; i+=2) {
+
+			sprintf(file, "hall/hall%06d.pgm", i);
+			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+			sprintf(file, "hall/hall%06d.pgm", i+1);
+			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It_plus_1);  
+
+			for(lig = 0;lig <= nrh; lig++){
+			
+
+			//######################################### traitement fd #########################################
+
+
+			vuint8_fd_simd_row(It[lig], It_moins_1[lig], Et[lig], ncl, nch);
+			vuint8_fd_simd_row(It_plus_1[lig], It[lig], Et_plus_1[lig], ncl, nch);
+
+
+			//######################################### Itération #########################################
+
+			}
+
+			Copy_simd(It_moins_1, It, nrl, nrh, ncl, nch);
+			Copy_simd(It, It_plus_1, nrl, nrh, ncl, nch);
+		}
+	}
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd = (end.tv_sec - start.tv_sec);
+	total_fd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+
+	/*
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
+	*/
+
+	return (double)(total_fd/n);
+	
+}
+
+
+
+double chrono_FD_SoAoS_vide(int n)
+{
+	int it;
+
+	double total_fd_vide;
+
+	total_fd_vide = 0;
+
+	struct timespec start, end;
+	//######################################### initialisation de tous les paramètres #########################################
+	int i, lig;
+
+	long nrl, nrh, ncl, nch;
+	uint8** It_moins_1;
+	It_moins_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+
+	uint8** It;
+	It = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8** It_plus_1;
+	It_plus_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+
+	char file[255];
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+
+	for(it=0;it<n;it++){
+		
+
+		//######################################### parcours de toutes les photos avec traitement FD #########################################
+
+		
+		for (i = 1; i < NB_IMAGE - 1 ; i+=2) {
+
+			sprintf(file, "hall/hall%06d.pgm", i);
+			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+			sprintf(file, "hall/hall%06d.pgm", i+1);
+			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It_plus_1);
+
+			for(lig = 0;lig <= nrh; lig++){
+			
+
+
+			//######################################### Itération #########################################
+
+			}
+
+			Copy_simd(It_moins_1, It, nrl, nrh, ncl, nch);
+			Copy_simd(It, It_plus_1, nrl, nrh, ncl, nch);
+		}
+	}
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_fd_vide = (end.tv_sec - start.tv_sec);
+	total_fd_vide += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	/*
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	*/
+	return (double)(total_fd_vide/n);
 }

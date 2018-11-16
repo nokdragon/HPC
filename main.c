@@ -163,8 +163,7 @@ void cyprien()
 	//validation();
 	//chrono(10);
 	//execution();
-	//test_dilatation_erosion_simd();
-	test_morpho_simd();
+	
 	
 }
 
@@ -181,14 +180,16 @@ void remi()
 	//test_part1_sd();
 	//test_part2_sd();
 	//test_sd_simd();
+	//test_dilatation_erosion_simd();
+	//test_morpho_simd();
 	bench_fd(10, 30);
 }
 
 
 int main()
 {
-	//remi();
-	cyprien();
+	remi();
+	//cyprien();
 }
 
 

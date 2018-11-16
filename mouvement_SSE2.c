@@ -58,6 +58,7 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long 
 
 }
 
+
 void vuint8_fd_simd_row(uint8 *It, uint8 *It_1, uint8 *Et, long ncl, long nch)
 {	
 
