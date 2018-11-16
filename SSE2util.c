@@ -51,15 +51,6 @@ vuint8 vuint8_ca2(vuint8 a)
      return _a;
 }
 
-//aide possible at : https://stackoverflow.com/questions/32408665/fastest-way-to-compute-absolute-value-using-sse
-vuint8 vuint8_abs_simd(vuint8 a)
-{   
-    //si a > 0, return a, else return son complément à deux
-
-    PRINT_BUG();
-    return vuint8_if_else(a, _mm_setzero_si128(), a, vuint8_ca2(a));
-}
-
 //complement à deux
 vsint16 vuint16_ca2(vuint16 a)
 {
@@ -109,11 +100,32 @@ vuint16 vuint16_if_elif_else(vuint16 a, vuint16 b, vuint8 x, vuint8 y, vuint8 z)
 }
 
 vuint8 vuint8_sub_abs(vuint8 a, vuint b)
-{
+{   
+    /*
+    display_vuint8(a, " %d ", "a\t"); puts("");
+    display_vuint8(b, " %d ", "b\t"); puts("");
+    display_vuint8(_mm_sub_epi8(a , b), " %d ", "a-b\t"); puts("");
+    display_vuint8(_mm_sub_epi8(b , a), " %d ", "b-a\t"); puts("\n");
+    display_vuint8(_mm_min_epu8(_mm_subs_epi8(a , b), _mm_subs_epi8(b , a)), " %d ", "res\t"); puts("\n");
+    */
+     vuint8 max, min;
+    max = _mm_max_epu8(a, b);
+    min = _mm_min_epu8(a, b); //Solution alternative, utiliser un if_else
+    return _mm_sub_epi8(max , min);
+
+    //return _mm_sub_epi8(_mm_max_epu8(a, b) , _mm_min_epu8(a, b));
+    
+}
+
+vuint8 vuint8_sub_absv2(vuint8 a, vuint b)
+{   
+    /*
     vuint8 max, min;
     max = _mm_max_epu8(a, b);
     min = _mm_min_epu8(a, b); //Solution alternative, utiliser un if_else
     return _mm_sub_epi8(max , min);
+    */
+    return _mm_min_epu8(_mm_sub_epi8(a , b), _mm_sub_epi8(b , a));
 }
 
 vuint16 ext_8_16(vuint8 x)

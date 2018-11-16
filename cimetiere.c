@@ -21,6 +21,42 @@
 
 #include "cimetiere.h"
 
+
+//aide possible at : https://stackoverflow.com/questions/32408665/fastest-way-to-compute-absolute-value-using-sse
+vuint8 vuint8_abs_simd(vuint8 a)
+{   
+    //si a > 0, return a, else return son complément à deux
+
+    PRINT_BUG();
+    return vuint8_if_else(a, _mm_setzero_si128(), a, vuint8_ca2(a));
+}
+
+void test_vuint8_abs_simd()
+{	
+	PRINT_BEGIN();
+
+	vuint8 a, abs_a;
+	a = init_vuint8(-5);
+	abs_a = vuint8_abs_simd(a);
+	display_vsint8(a, " %d\t", "a\t"); puts("");
+	display_vuint8(abs_a, " %d\t", "abs_a\t"); puts("\n");
+
+	vuint8 b, abs_b;
+	b = init_vuint8(8);
+	abs_b = vuint8_abs_simd(b);
+	display_vuint8(b, " %d\t", "b\t"); puts("");
+	display_vuint8(abs_b, " %d\t", "abs_b\t"); puts("\n");
+
+	vuint8 c, abs_c;
+	c = init_vuint8(0);
+	abs_c = vuint8_abs_simd(c);
+	display_vuint8(c, " %d\t", "c\t"); puts("");
+	display_vuint8(abs_c, " %d\t", "abs_c\t"); puts("\n");
+
+	PRINT_END();
+
+}
+
 void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {

@@ -220,6 +220,7 @@ void test_vuint8_fd_simd_matrix()
 
 	uint8 **Ets = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 	uint8 **Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+	uint8 **Ets2 = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 	for(int i=1 ; i< 300 ; i++){
 
 		sprintf(file,"hall/hall%06d.pgm",i);
@@ -227,6 +228,7 @@ void test_vuint8_fd_simd_matrix()
 
 		Frame_Difference_Matrix(It,  It_1,  Et,  nrl,  nrh,  ncl, nch);
 		vuint8_fd_simd_matrix(It, It_1, Ets, nrl,  nrh,  ncl, nch);
+		vuint8_fd_simd_matrixv2(It, It_1, Ets2, nrl,  nrh,  ncl, nch);
 		//vuint8_sd_simd_vnul(It, It_1, Ets, nrl,  nrh,  ncl, nch);
 
 		sprintf(file,"hall_FD/FD%d.pgm",i);
@@ -236,6 +238,9 @@ void test_vuint8_fd_simd_matrix()
 		SavePGM_ui8matrix(Ets,nrl, nrh, ncl, nch,file);
 
 		if(compare_matrix(Ets,Et, nrl,  nrh,  ncl, nch))
+			return;
+
+		if(compare_matrix(Ets2,Et, nrl,  nrh,  ncl, nch))
 			return;
 
 		Copy(It_1, It, nrl, nrh, ncl, nch);
