@@ -212,7 +212,7 @@ int test_morpho_simd() {
 
 		Copy(Dref, Et, nrl-2, nrh+2, ncl-2, nch+2);
 
-		posTraitementOF(D, nrl, nrh, ncl, nch);
+		fermeture3(D, nrl, nrh, ncl, nch);
 
 
 		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3);
@@ -222,7 +222,7 @@ int test_morpho_simd() {
 		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+1);
 		SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
 
-		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
+		fermeture3_simd(Dref, nrl, nrh, ncl, nch);
 
 		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+2);
 		SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);

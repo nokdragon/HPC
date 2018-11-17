@@ -115,10 +115,9 @@ void ouverture3(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 
 	uint8 **tmp;
 	tmp = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
-	Copy(tmp,Et, nrl, nrh, ncl, nch);
+	Init_mat(tmp, nrl-2, nrh+2, ncl-2, nch+2);
 	erosion3_matrix(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	dilatation3_matrix(Et, tmp,nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl-2, nrh+2, ncl-2, nch+2);
@@ -140,11 +139,12 @@ void ouverture5(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 void fermeture3(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	uint8 **tmp;
 	tmp = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
-	Copy(tmp,Et, nrl, nrh, ncl, nch);
+	Init_mat(tmp, nrl-2, nrh+2, ncl-2, nch+2);
+
 	dilatation3_matrix(tmp, Et,nrl, nrh, ncl, nch);
 
-	Copy(Et,tmp,nrl, nrh, ncl, nch);
 	erosion3_matrix(Et, tmp, nrl, nrh, ncl, nch);
+
 	free_ui8matrix(tmp, nrl-2, nrh+2, ncl-2, nch+2);
 }
 
@@ -167,8 +167,8 @@ void posTraitementOF(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	ouverture3(Et,nrl, nrh, ncl, nch);
 	fermeture3(Et,nrl, nrh, ncl, nch);
 
-	ouverture5(Et,nrl, nrh, ncl, nch);
-	fermeture5(Et,nrl, nrh, ncl, nch);
+	//ouverture5(Et,nrl, nrh, ncl, nch);
+	//fermeture5(Et,nrl, nrh, ncl, nch);
 }
 
 //post traitement fermeture puis ouverture
