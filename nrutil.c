@@ -949,6 +949,7 @@ void delete_warning(long a)
 {
 
 }
+
 /* ------------------------------------------------------------------------------ */
 uint8** LoadPGM_ui8matrix(char *filename, long *nrl, long *nrh, long *ncl, long *nch)
 /* ------------------------------------------------------------------------------ */
@@ -1005,7 +1006,7 @@ void MLoadPGM_ui8matrix(char *filename, int nrl, int nrh, int ncl, int nch, uint
 {
     /* cette version ne lit plus que le type P5 */
     
-    int height, width;//, gris;
+    int height, width, gris;
     FILE *file;
     
     char *buffer;
@@ -1027,8 +1028,10 @@ void MLoadPGM_ui8matrix(char *filename, int nrl, int nrh, int ncl, int nch, uint
     
     width  = atoi(readitem(file, buffer));
     height = atoi(readitem(file, buffer));
-    //gris   = atoi(readitem(file, buffer));
+    gris   = atoi(readitem(file, buffer));
     
+    delete_warning(gris);
+
     for(i=0; i<height; i++) {
         ReadPGMrow(file, width, m[i]);
     }

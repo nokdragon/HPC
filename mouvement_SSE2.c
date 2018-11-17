@@ -15,9 +15,7 @@
 #include "SSE2util.h"
 #include "main.h"
 #include "test_mouvement_SSE2.h"
-#include "cimetiere.h"
 #include "mouvement_SSE2.h"
-
 
 
 vuint8 vuint8_fd_simd(vuint8 It, vuint8 It_1)
