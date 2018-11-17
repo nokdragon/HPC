@@ -130,8 +130,8 @@ void execution() {
 void chrono(int n){
 
 
-	printf("copy%f\n",chrono_copy(100));
-	printf("copy_simd%f\n",chrono_copy_simd(100));
+	printf("copy :%f\n",chrono_copy(100));
+	printf("copy_simd :%f reduction de  %f%%\n",chrono_copy_simd(100),(1-chrono_copy_simd(100)/chrono_copy(100))*100);
 
 
 

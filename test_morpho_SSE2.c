@@ -3,6 +3,9 @@
 #include "SSE2util.h"
 #include "mouvement.h"
 
+#define B1 6 //bordure que l'on ne vérifie pas car le simd et le scalaire la traite différement : pas d'insidence sur les résultat car se que l'on détecte est relativement centré
+#define B2 11 //bordure que l'on ne vérifie pas car le simd et le scalaire la traite différement : pas d'insidence sur les résultat car se que l'on détecte est relativement centré
+
 
 
 int test_dilatation_erosion_simd() {
@@ -183,7 +186,7 @@ int test_morpho_simd() {
 
 		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
 
-		if(compare_matrix(D, Dref, nrl+6, nrh-6, ncl+6, nch-6)){
+		if(compare_matrix(D, Dref, nrl+B1, nrh-B1, ncl+B1, nch-B1)){
 			printf("Erreur sur la posTraitementOF_simd en testant avec FD sur l'image %d\n",i);
 			flag++;
 		}
@@ -198,7 +201,7 @@ int test_morpho_simd() {
 
 		posTraitementFO_simd(Dref, nrl, nrh, ncl, nch);
 
-		if(compare_matrix(D, Dref, nrl+11, nrh-11, ncl+11, nch-11)){
+		if(compare_matrix(D, Dref, nrl+B2, nrh-B2, ncl+B2, nch-B2)){
 			printf("Erreur sur la posTraitementFO_simd en testant avec FD sur l'image %d\n",i);
 			flag++;
 		}
@@ -218,7 +221,7 @@ int test_morpho_simd() {
 		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
 
 
-		if(compare_matrix(D, Dref, nrl+5, nrh-5, ncl+5, nch-5)){
+		if(compare_matrix(D, Dref, nrl+B1, nrh-B1, ncl+B1, nch-B1)){
 			printf("Erreur sur la posTraitementOF_simd en testant avec SD sur l'image %d\n",i);
 			flag++;
 		}
@@ -247,7 +250,7 @@ int test_morpho_simd() {
 
 
 
-		if(compare_matrix(D, Dref, nrl+11, nrh-11, ncl+11, nch-11)){
+		if(compare_matrix(D, Dref, nrl+B2, nrh-B2, ncl+B2, nch-B2)){
 			printf("Erreur sur la posTraitementFO_simd en testant avec SD sur l'image %d\n",i);
 			flag++;
 		}
