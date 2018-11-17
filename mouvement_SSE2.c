@@ -76,6 +76,16 @@ void vuint8_fd_simd_row(uint8 *It, uint8 *It_1, uint8 *Et, long ncl, long nch)
 
 }
 
+
+void vuint8_fd_simd_iteration(vuint8 vIt, vuint8 vIt_1, vuint8 Et)
+{	
+	_mm_storeu_si128( &Et, vuint8_fd_simd(vIt, vIt_1));
+	//display_vuint8(pIt, "%d ", "pIt\t"); puts("\n");	    	
+}		
+
+
+
+
 void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {
 	vuint8 a,b,x,y, one;

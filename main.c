@@ -182,7 +182,7 @@ void remi()
 	//test_sd_simd();
 	//test_dilatation_erosion_simd();
 	//test_morpho_simd();
-	bench_fd(10, 30);
+	bench_fd(100, 30);
 }
 
 

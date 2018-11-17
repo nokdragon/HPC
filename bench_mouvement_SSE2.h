@@ -13,3 +13,5 @@ void bench_fd(int n, int nb_iterations);
 double chrono_fd_SoAoS(int n);
 
 double chrono_FD_SoAoS_vide(int n);
+
+double chrono_fd_SoAoSv2(int n);
