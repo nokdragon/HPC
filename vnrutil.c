@@ -548,7 +548,9 @@ vuint8 init_vuint8(uint8 x)
     p[8]  = p[9]  = p[10] = p[11] = x;
     p[12] = p[13] = p[14] = p[15] = x;
     */
-    T[0] = _mm_set_epi8(x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x);
+    
+    //T[0] = _mm_set_epi8(x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x);
+    T[0] = _mm_set1_epi8(x);
     
     return T[0];
 }
@@ -577,7 +579,9 @@ vuint16 init_vuint16(uint16 x)
     p[0] = p[1] = p[2] = p[3] = x;
     p[4] = p[5] = p[6] = p[7] = x;
     */
-    T[0] = _mm_set_epi16(x,x,x,x,x,x,x,x);
+
+    //T[0] = _mm_set_epi16(x,x,x,x,x,x,x,x);
+    T[0] = _mm_set1_epi16(x);
     return T[0];
 }
 /* ------------------------ */
@@ -591,7 +595,9 @@ vsint16 init_vsint16(sint16 x)
     p[0] = p[1] = p[2] = p[3] = x;
     p[4] = p[5] = p[6] = p[7] = x;
     */
-    T[0] = _mm_set_epi16(x,x,x,x,x,x,x,x);
+    
+    //T[0] = _mm_set_epi16(x,x,x,x,x,x,x,x);
+    T[0] = _mm_set1_epi16(x);
     return T[0];
 }
 /* ------------------------ */
@@ -604,7 +610,9 @@ vuint32 init_vuint32(uint32 x)
     
     p[0] = p[1] = p[2] = p[3] = x;
     */
-    T[0] = _mm_set_epi32(x,x,x,x);
+    
+    //T[0] = _mm_set_epi32(x,x,x,x);
+    T[0] = _mm_set1_epi32(x);
     return T[0];
 }
 /* ------------------------ */
@@ -617,7 +625,9 @@ vsint32 init_vsint32(sint32 x)
     
     p[0] = p[1] = p[2] = p[3] = x;
     */
-    T[0] = _mm_set_epi32(x,x,x,x);
+
+    //T[0] = _mm_set_epi32(x,x,x,x);
+    T[0] = _mm_set1_epi32(x);    
     return T[0];
 }
 /* --------------------------- */
@@ -756,7 +766,8 @@ vuint8 init_vuint8_all(uint8 x0, uint8 x1, uint8 x2, uint8 x3, uint8 x4, uint8 x
     p[12] = x12;
     p[13] = x13;
     p[14] = x14;
-    p[15] = x15;*/
+    p[15] = x15;
+    */
 
     T[0] = _mm_set_epi8(x0,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15);
     return T[0];

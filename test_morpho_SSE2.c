@@ -303,14 +303,14 @@ int test_morpho_simd() {
 	sprintf(file, "hall_SD/%d.pgm", 4);
 	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
 
-	/*
+
 	free_ui8matrix(It, nrl, nrh, ncl, nch);
 	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
 	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
 	free_ui8matrix(D, nrl, nrh, ncl, nch);
 	free_ui8matrix(Dref, nrl, nrh, ncl, nch);
-	*/
-/*
+
+
 
 	if(compare_matrix(Dref, D, nrl, nrh, ncl, nch))
 		return 1;

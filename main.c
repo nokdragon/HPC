@@ -181,27 +181,27 @@ void cyprien()
 
 
 void remi()
-{
-	//test_vuint8_if_else();
+{	
+	test_vuint8_if_else();
 	//test_vuint8_abs_simd();
 	//test_vuint16_abs_simd();
-	//test_vuint8_fd_simd();
-	//test_vuint8_fd_simd_matrix();
-	//test_vuint8_if_elif_else();
+	test_vuint8_fd_simd();
+	test_vuint8_fd_simd_matrix();
+	test_vuint8_if_elif_else();
 	//test_ext_8_16();
 	//test_part1_sd();
 	//test_part2_sd();
-	//test_sd_simd();
-	//test_dilatation_erosion_simd();
-	//test_morpho_simd();
-	bench_fd(100, 30);
+	test_sd_simd();
+	//test_dilatation_erosion_simd(); // bug 
+	//test_morpho_simd(); //bug
+	//bench_fd(100, 30);
 }
 
 
 int main()
 {
-	//remi();
-	cyprien();
+	remi();
+	//cyprien();
 }
 
 
