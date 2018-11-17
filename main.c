@@ -52,6 +52,9 @@ void execution() {
 	uint8 **Mt;
 	Mt = ui8matrix(nrl, nrh, ncl, nch);
 
+	uint8 **Ot;
+	Ot = ui8matrix(nrl, nrh, ncl, nch);
+
 	uint8 **Mt_1;
 	Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
 
@@ -60,9 +63,6 @@ void execution() {
 
 	char file[255];
 
-	uint8 **tmp;
-	tmp = ui8matrix(nrl, nrh, ncl, nch);
-
 
 	for (i = 1; i<300; i++) {
 
@@ -70,51 +70,25 @@ void execution() {
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+		vuint8_fd_simd_matrix(It, It_1, Et, nrl,  nrh,  ncl, nch);
 
 
-		Copy(tmp, Et, nrl, nrh, ncl, nch);
 
-		//posTraitementOF(Et, nrl, nrh, ncl, nch);
-		sprintf(file, "hall_FD/ETOF_FD%d.pgm", i);
+		posTraitementFO(Et, nrl, nrh, ncl, nch);
+		sprintf(file, "hall_FD/ETFO_FD%d.pgm", i);
 		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
 
-
-		//posTraitementFO(tmp, nrl, nrh, ncl, nch);
-		//sprintf(file,"hall_FD/ETFO_FD%d.pgm",i);
-		//SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);
-
-		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
-
-		sprintf(file, "hall_SD/ET_SD%d.pgm", i);
-		//SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
-
-
-
-		Copy(tmp, Et, nrl, nrh, ncl, nch);
-
-
+		vuint8_sd_simd(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
 
 		posTraitementOF(Et, nrl, nrh, ncl, nch);
 		sprintf(file, "hall_SD/ETC_SD%d.pgm", i);
 		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
 
-		/*
-		posTraitementFO(tmp, nrl, nrh, ncl, nch);
-		sprintf(file,"hall_SD/ETFO_SD%d.pgm",i);
-		SavePGM_ui8matrix(tmp,nrl, nrh, ncl, nch,file);*/
-
-		Copy(It_1, It, nrl, nrh, ncl, nch);
-		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
-		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
-		//quand on bouclera et que les Images de viendront des Images_1 on fera:
-		//free_ui8matrix(Images_1, nrl, nrh, ncl, nch);
-		//Images_1=Images;
-		//Images = ui8matrix(nrl, nrh, ncl, nch); marche pas mais a creuser
-
-		//ou une copie faudra voir ce qui est le plus économe
+		Copy_simd(It_1, It, nrl, nrh, ncl, nch);
+		Copy_simd(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy_simd(Vt_1, Vt, nrl, nrh, ncl, nch);
 
 	}
 
@@ -125,6 +99,7 @@ void execution() {
 	free_ui8matrix(Vt, nrl, nrh, ncl, nch);
 	free_ui8matrix(Mt, nrl, nrh, ncl, nch);
 	free_ui8matrix(Mt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Ot, nrl, nrh, ncl, nch);
 }
 
 void chrono(int n){
@@ -186,13 +161,10 @@ void test_tot(){
 
 void cyprien()
 {
-	//test_tot();
-
-
-	//validation();
-	
+	test_tot();
+	validation();
 	chrono(10);
-	//execution();
+	execution();
 	
 	
 }

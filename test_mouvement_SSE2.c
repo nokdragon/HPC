@@ -257,6 +257,7 @@ void test_vuint8_fd_simd_matrix()
 	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
 	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
 	free_ui8matrix(Ets, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(Ets2, nrl-2, nrh+2, ncl-2, nch+2);
 }
 
 

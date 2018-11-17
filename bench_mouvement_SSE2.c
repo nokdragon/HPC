@@ -221,6 +221,7 @@ double chrono_SD_SSE2(int n){
 	free_ui8matrix(Vt, nrl, nrh, ncl, nch);
 	free_ui8matrix(Mt, nrl, nrh, ncl, nch);
 	free_ui8matrix(Mt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Ot, nrl, nrh, ncl, nch);
 
 	return (double)(total_sd/n);
 }

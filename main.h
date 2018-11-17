@@ -56,11 +56,13 @@
 #define NB_OCTET_M128 16
 
 //Paramètre de FD
-#define THETA 40
+#define THETA 15
 
 //Paramètres de SD
-#define VMIN 1
-#define VMAX 254
-#define N 3
+#define VMIN 20
+#define VMAX 21
+#define N 4
 
+
+//valgrind --leak-check=full -v ./exec
 

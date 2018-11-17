@@ -297,7 +297,7 @@ void validation(){
 	printf("ROC de fd\n");
 	print_ROC(ROC_FD);
 
-	printf("\nROC de sd avec post traitement\n");
+	printf("\nROC de fd avec post traitement\n");
 	print_ROC(ROC_FD_P);
 
 	printf("\n\nROC de sd\n");
@@ -307,6 +307,9 @@ void validation(){
 	print_ROC(ROC_SD_P);
 
 	free(ROC_FD);
+	free(ROC_SD);
+	free(ROC_FD_P);
+	free(ROC_SD_P);
 	free_ui8matrix(It, nrl, nrh, ncl, nch);
 	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
 	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);

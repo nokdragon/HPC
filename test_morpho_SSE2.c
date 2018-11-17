@@ -3,7 +3,7 @@
 #include "SSE2util.h"
 #include "mouvement.h"
 
-#define B1 6 //bordure que l'on ne vérifie pas car le simd et le scalaire la traite différement : pas d'insidence sur les résultat car se que l'on détecte est relativement centré
+#define B1 11 //bordure que l'on ne vérifie pas car le simd et le scalaire la traite différement : pas d'insidence sur les résultat car se que l'on détecte est relativement centré
 #define B2 11 //bordure que l'on ne vérifie pas car le simd et le scalaire la traite différement : pas d'insidence sur les résultat car se que l'on détecte est relativement centré
 
 
