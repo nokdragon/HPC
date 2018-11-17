@@ -21,7 +21,8 @@
 
 //fonction de test unitaire de la fonction dilatation3. le test est exhaustif: il test toutes les entrées possible et vérifie que le résultat est bien celui escompté.
 uint8 test_dilatation3() {
-
+	PRINT_BEGIN();
+	printf("test exhaustif\n");
 	int i, j, k, l, m, n, o, p, q;
 	//9 boucle traitant tous les cas possible des entrée de la fonction dilatation3
 	for (i = 0;i < 2;i++) {
@@ -34,20 +35,24 @@ uint8 test_dilatation3() {
 								for (p = 0;p < 2;p++) {
 									for (q = 0;q < 2;q++) {
 										if (dilatation3(i * 255, j * 255, k * 255, l * 255, m * 255, n * 255, o * 255, p * 255, q * 255) == 255) {//si la sortie vaut 255(equivalent a 1)
-											if (i == 0 || j == 0 || k == 0 || l == 0 || m == 0 || n == 0 || o == 0 || p == 0 || q == 0) {// et si on a au moins un paramètre qui vaut 0 alors on a une erreur
-												printf("Erreur dilatation retourne 255 quand un point de la matice 3x3 vaut 0\n");
-												return 0;
+											if (i == 0 && j == 0 && k == 0 && l == 0 && m == 0 && n == 0 && o == 0 && p == 0 && q == 0) {//et si on a tous les paramètres qui valent 0 alors on a une erreur
+												printf("Erreur dilatation retourne 255 quand tous les points de la matice 3x3 valent 0\n");
+												PRINT_END();
+												return 1;
 											}
 
 										}
 										else if (dilatation3(i * 255, j * 255, k * 255, l * 255, m * 255, n * 255, o * 255, p * 255, q * 255) == 0) {//si la sortie vaut 0
-											if (i == 1 && j == 1 && k == 1 && l == 1 && m == 1 && n == 1 && o == 1 && p == 1 && q == 1) {//et si on a tous les paramètres qui valent 1 alors on a une erreur												printf("Erreur errosion3 retourne 0 quand tous les points de la matice 3x3 valent 1\n");
-												return 0;
+											if (i == 1 || j == 1 || k == 1 || l == 1 || m == 1 || n == 1 || o == 1 || p == 1 || q == 1) {// et si on a au moins un paramètre qui vaut 1 alors on a une erreur										printf("Erreur errosion3 retourne 0 quand tous les points de la matice 3x3 valent 1\n");
+												printf("Erreur dilatation retourne 0 quand un point de la matice 3x3 vaut 1\n");
+												PRINT_END();
+												return 1;
 											}
 										}
 										else {//si la valeur de retour est ni 0 ni 255 alors on a une erreur
 											printf("Erreur dilatation retourne autre chose que 0 ou 255\n");
-												return 0;
+											PRINT_END();
+											return 1;
 										}
 									}
 								}
@@ -58,14 +63,17 @@ uint8 test_dilatation3() {
 			}
 		}
 	}
-	return 1;
+	PRINT_OK();
+	PRINT_END();
+	return 0;
 }
 
 
 
 //fonction de test unitaire de la fonction erosion3. le test est exhaustif: il test toutes les entrées possible et vérifie que le résultat est bien celui escompté.
 uint8 test_erosion3() {
-
+	PRINT_BEGIN();
+	printf("test exhaustif\n");
 	int i, j, k, l, m, n, o, p, q;
 	//9 boucle traitant tous les cas possible des entrée de la fonction erosion3
 	for (i = 0;i < 2;i++) {
@@ -80,18 +88,22 @@ uint8 test_erosion3() {
 										if (erosion3(i * 255, j * 255, k * 255, l * 255, m * 255, n * 255, o * 255, p * 255, q * 255) == 255) {//si la sortie vaut 255(equivalent a 1)
 											if (i == 0 || j == 0 || k == 0 || l == 0 || m == 0 || n == 0 || o == 0 || p == 0 || q == 0) {// et si on a au moins un paramètre qui vaut 0 alors on a une erreur
 												printf("Erreur erosion3 retourne 255 quand un point de la matice 3x3 vaut 0\n");
-												return 0;
+												PRINT_END();
+												return 1;
 											}
 											
 										}
 										else if(erosion3(i * 255, j * 255, k * 255, l * 255, m * 255, n * 255, o * 255, p * 255, q * 255) == 0){//si la sortie vaut 0
 											if (i == 1 && j == 1 && k == 1 && l == 1 && m == 1 && n == 1 && o == 1 && p == 1 && q == 1) {//et si on a tous les paramètres qui valent 1 alors on a une erreur												printf("Erreur errosion3 retourne 0 quand tous les points de la matice 3x3 valent 1\n");
-												return 0;
+												printf("Erreur dilatation retourne 255 quand tous les points de la matice 3x3 valent 1\n");
+												PRINT_END();
+												return 1;
 											}
 										}
 										else {//si la valeur de retour est ni 0 ni 255 alors on a une erreur
 											printf("Erreur erosion3 retourne autre chose que 0 ou 255\n");
-											return 0;
+											PRINT_END();
+											return 1;
 										}
 									}
 								}
@@ -102,7 +114,9 @@ uint8 test_erosion3() {
 			}
 		}
 	}
-	return 1;
+	PRINT_OK();
+	PRINT_END();
+	return 0;
 }
 
 

@@ -23,6 +23,7 @@
 #include "bench_morpho.h"
 #include "bench_morpho_SSE2.h"
 #include "test_SSE2.h"
+#include "test_mouvement.h"
 
 
 
@@ -166,6 +167,11 @@ void test_tot(){
 	test_vuint8_if_elif_else();
 	test_dilatation_erosion_simd();
 	test_morpho_simd();
+	test_erosion3();
+	test_dilatation3();
+	test_vuint8_fd_simd();
+	test_vuint8_fd_simd_matrix();
+	test_sd_simd();
 }
 
 
