@@ -922,4 +922,40 @@ void chrono() {
 
 
 }
+
+void test_ext_8_16()
+{
+	vuint8 v = init_vuint8(5);
+	vuint16 v16 = ext_8_16(v);
+	display_vuint8(v, "%4.0x", " v"); puts("\n");
+	display_vuint16(v16, "%4.0x", " v16 "); puts("\n");
+}
+
+void test_vuint16_abs_simd()
+{	
+	PRINT_BEGIN();
+
+	vuint16 a, abs_a;
+	a = init_vuint16(-5);
+	abs_a = vuint16_abs_simd(a);
+	display_vsint16(a, " %d\t", "a\t"); puts("");
+	display_vsint16(abs_a, " %d\t", "abs_a\t"); puts("\n");
+
+	vuint16 b, abs_b;
+	b = init_vuint16(16);
+	abs_b = vuint16_abs_simd(b);
+	display_vuint16(b, " %d\t", "b\t"); puts("");
+	display_vuint16(abs_b, " %d\t", "abs_b\t"); puts("\n");
+
+	vuint16 c, abs_c;
+	c = init_vuint16(0);
+	abs_c = vuint16_abs_simd(c);
+	display_vuint16(c, " %d\t", "c\t"); puts("");
+	display_vuint16(abs_c, " %d\t", "abs_c\t"); puts("\n");
+
+	PRINT_END();
+
+}
+
+
 */

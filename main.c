@@ -22,6 +22,7 @@
 #include "bench_mouvement_SSE2.h"
 #include "bench_morpho.h"
 #include "bench_morpho_SSE2.h"
+#include "test_SSE2.h"
 
 
 
@@ -31,11 +32,6 @@ void execution() {
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
 	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
-
-	printf("nrl = %ld\n", nrl);
-	printf("nrh = %ld\n", nrh);
-	printf("ncl = %ld\n", ncl);
-	printf("nch = %ld\n", nch);
 
 
 	uint8** It;
@@ -132,35 +128,51 @@ void execution() {
 
 void chrono(int n){
 	double fd_vide,sd_vide,fd,sd,fd_SSE2,sd_SSE2,morpho_vide,morpho,morpho_SSE2;	
-	fd_vide=chrono_FD_vide(n*2);
-	sd_vide=chrono_SD_vide(n);
-	morpho_vide=chrono_morpho_vide(n);
+	fd_vide=chrono_FD_vide(n*n);
+	sd_vide=chrono_SD_vide(n*n);
+	morpho_vide=chrono_morpho_vide(n*n);
 
 	// FD
 	fd=chrono_FD(n);
-	printf("FD: %f secs\n", fd-fd_vide);
+	fd=fd-fd_vide;
+	printf("FD: %f secs\n", fd);
 
 	fd_SSE2=chrono_FD_SSE2(n);
-	printf("FD_SSE2: %f secs\n", fd_SSE2-fd_vide);
+	fd_SSE2=fd_SSE2-fd_vide;
+	printf("FD_SSE2: %f secs : reduction de %f%%\n", fd_SSE2, (1-fd_SSE2/fd)*100);
 
 	// SD
 	sd=chrono_SD(n);
-	printf("SD: %f secs\n", sd-sd_vide);	
+	sd=sd-sd_vide;
+	printf("SD: %f secs\n", sd);	
 
 	sd_SSE2=chrono_SD_SSE2(n);
-	printf("SD_SSE2: %f secs\n", sd_SSE2-sd_vide);
+	sd_SSE2=sd_SSE2-sd_vide;
+	printf("SD_SSE2: %f secs : reduction de %f%%\n", sd_SSE2, (1-sd_SSE2/sd)*100);
 	
 	// morpho
-	morpho=chrono_morpho(n);	
-	printf("morpho %f secs\n", morpho-morpho_vide);
+	morpho=chrono_morpho(n);
+	morpho=morpho-morpho_vide;
+	printf("morpho %f secs\n", morpho);
 
 	morpho_SSE2=chrono_morpho_SSE2(n);
-	printf("morpho_SSE2 %f secs\n", morpho_SSE2-morpho_vide);
+	morpho_SSE2=morpho_SSE2-morpho_vide;
+	printf("morpho_SSE2 %f secs : reduction de %f%%\n", morpho_SSE2, (1-morpho_SSE2/morpho)*100);
 }
+
+
+void test_tot(){
+	test_vuint8_if_else();
+	test_vuint8_if_elif_else();
+	test_dilatation_erosion_simd();
+	test_morpho_simd();
+}
+
 
 void cyprien()
 {
 	//validation();
+	test_tot();
 	//chrono(10);
 	//execution();
 	
@@ -188,8 +200,8 @@ void remi()
 
 int main()
 {
-	remi();
-	//cyprien();
+	//remi();
+	cyprien();
 }
 
 

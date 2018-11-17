@@ -5,61 +5,248 @@
 
 
 int test_dilatation_erosion_simd() {
+	PRINT_BEGIN();
+	printf("Test comparant toutes les erosions faites en SSE2 de celle faite en scalaire sur 300 images\n");
+	int i;
 	long nrl, nrh, ncl, nch;
+	int flag=0;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000024.pgm", &nrl, &nrh, &ncl, &nch);
+	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
 
 
 	uint8** It;
-	It = LoadPGM_ui8matrix("hall/hall000025.pgm", &nrl, &nrh, &ncl, &nch);
+	It = ui8matrix(nrl, nrh, ncl, nch);
 
 	uint8 **Et;
-	Et = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
+	Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 
-	Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+	uint8 **Vt;
+	Vt = ui8matrix(nrl, nrh, ncl, nch);
 
-	uint8 **D;
-	D = ui8matrix(nrl, nrh, ncl, nch);
+	uint8 **Vt_1;
+	Vt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_V(Vt_1, nrl, nrh, ncl, nch);
+
+	uint8 **Mt;
+	Mt = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Mt_1;
+	Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
 
 	uint8 **Dref;
-	Dref = ui8matrix(nrl, nrh, ncl, nch);
+	Dref = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
 
-	dilatation3_matrix(D, Et, nrl, nrh, ncl, nch);
-	dilatation3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+	uint8 **D;
+	D = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+
 
 	char file[255];
-	sprintf(file, "hall_SD/%d.pgm", 0);
-	SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
-	sprintf(file, "hall_SD/%d.pgm", 1);
-	SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
 
-	sprintf(file, "hall_SD/%d.pgm", 2);
-	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
 
-	compare_matrix(Dref, D, nrl, nrh, ncl, nch);
+	for (i = 1; i<300; i++) {
 
-	erosion3_matrix(D, Et, nrl, nrh, ncl, nch);
-	erosion3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+		sprintf(file, "hall/hall%06d.pgm", i);
 
-	sprintf(file, "hall_SD/%d.pgm", 3);
-	SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-	sprintf(file, "hall_SD/%d.pgm", 4);
-	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+
+		dilatation3_matrix(D, Et, nrl, nrh, ncl, nch);
+		dilatation3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+
+		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la dilatation3_matrix_simd en testant avec FD\n");
+			flag++;
+		}
+
+
+		erosion3_matrix(D, Et, nrl, nrh, ncl, nch);
+		erosion3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+
+		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la erosion3_matrix_simd en testant avec FD\n");
+			flag++;
+		}
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+		dilatation3_matrix(D, Et, nrl, nrh, ncl, nch);
+		dilatation3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+
+		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la dilatation3_matrix_simd en testant avec SD\n");
+			flag++;
+		}
+
+		erosion3_matrix(D, Et, nrl, nrh, ncl, nch);
+		erosion3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+
+		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la erosion3_matrix_simd en testant avec SD\n");
+			flag++;
+		}
+
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+
+	}
 
 
 	free_ui8matrix(It, nrl, nrh, ncl, nch);
 	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
 	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
-	free_ui8matrix(D, nrl, nrh, ncl, nch);
-	free_ui8matrix(Dref, nrl, nrh, ncl, nch);
+	free_ui8matrix(Vt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Vt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(D, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(Dref, nrl-2, nrh+2, ncl-2, nch+2);
+	
 
-	return compare_matrix(Dref, D, nrl, nrh, ncl, nch);
+	if(flag==0){
+		PRINT_OK();
+	}
+	PRINT_END();
+
+	return flag;
 
 }
 
 int test_morpho_simd() {
+
+	PRINT_BEGIN();
+	printf("Test comparant toutes les erosions faites en SSE2 de celle faite en scalaire sur 300 images\n");
+	int i;
+	long nrl, nrh, ncl, nch;
+	int flag=0;
+	uint8** It_1;
+	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+
+
+	uint8** It;
+	It = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Et;
+	Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+
+	uint8 **Vt;
+	Vt = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Vt_1;
+	Vt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_V(Vt_1, nrl, nrh, ncl, nch);
+
+	uint8 **Mt;
+	Mt = ui8matrix(nrl, nrh, ncl, nch);
+
+	uint8 **Mt_1;
+	Mt_1 = ui8matrix(nrl, nrh, ncl, nch);
+
+	Init_M(Mt_1, It_1, nrl, nrh, ncl, nch);
+
+	uint8 **Dref;
+	Dref = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+
+	uint8 **D;
+	D = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+
+
+	char file[255];
+
+
+
+	for (i = 1; i<300; i++) {
+
+		sprintf(file, "hall/hall%06d.pgm", i);
+
+		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
+
+		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+
+		Copy_simd(D, Et, nrl, nrh, ncl, nch);
+
+		posTraitementOF_simd(D, nrl, nrh, ncl, nch);
+
+		Copy_simd(Dref, Et, nrl, nrh, ncl, nch);
+
+		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
+
+		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la posTraitementOF_simd en testant avec FD sur l'image %d\n",i);
+			flag++;
+		}
+
+
+		/*
+
+		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la erosion3_matrix_simd en testant avec FD\n");
+			flag++;
+		}
+
+		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
+
+		
+
+		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la dilatation3_matrix_simd en testant avec SD\n");
+			flag++;
+		}
+
+		
+
+		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la erosion3_matrix_simd en testant avec SD\n");
+			flag++;
+		}
+*/
+		Copy(It_1, It, nrl, nrh, ncl, nch);
+		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
+
+	}
+
+
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(Vt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(Vt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt, nrl, nrh, ncl, nch);
+	free_ui8matrix(Mt_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(D, nrl-2, nrh+2, ncl-2, nch+2);
+	free_ui8matrix(Dref, nrl-2, nrh+2, ncl-2, nch+2);
+	
+
+	if(flag==0){
+		PRINT_OK();
+	}
+	PRINT_END();
+
+	return flag;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
 	PRINT_BEGIN();
 
 	long nrl, nrh, ncl, nch;
@@ -123,7 +310,7 @@ int test_morpho_simd() {
 	free_ui8matrix(D, nrl, nrh, ncl, nch);
 	free_ui8matrix(Dref, nrl, nrh, ncl, nch);
 	*/
-
+/*
 
 	if(compare_matrix(Dref, D, nrl, nrh, ncl, nch))
 		return 1;
@@ -131,7 +318,7 @@ int test_morpho_simd() {
 	PRINT_OK();
 	PRINT_END();
 	return 0;
-
+*/
 	
 
 }

@@ -138,9 +138,9 @@ void calculate_ROC(uint8 ** EtRef, uint8 ** Et, long nrl, long nrh, long ncl, lo
 //affichage de la matrice ROC
 void print_ROC(long * ROC){
 	printf("-----------------\n");
-	printf("| %ld\t| %ld\t|\n",ROC[0],ROC[1]);
+	printf("|%ld\t| %ld\t|\n",ROC[0],ROC[1]);
 	printf("-----------------\n");
-	printf("| %ld\t| %ld|\n",ROC[2],ROC[3]);
+	printf("|%ld\t| %ld|\n",ROC[2],ROC[3]);
 	printf("-----------------\n");
 }
 
@@ -240,7 +240,7 @@ void validation(){
 
 		//######################################### test sur fd post traitement #########################################
 
-		if((i % 20 == 4) && (i != 4) && (i<220)){//on teste uniquement quand la photo de vérité terrain existe
+		if(((i % 20 == 4) && (i != 4) && (i<220)) || ((i % 20 == 0) && (i > 200) && (i<300))){//on teste uniquement quand la photo de vérité terrain existe
 			calculate_ROC(EtRef, Et, nrl, nrh, ncl, nch, ROC_FD_P);
 		}
 
@@ -250,7 +250,7 @@ void validation(){
 
 		//######################################### test sur sd #########################################
 
-		if((i % 20 == 4) && (i != 4) && (i<220)){//on teste uniquement quand la photo de vérité terrain existe
+		if(((i % 20 == 4) && (i != 4) && (i<220)) || ((i % 20 == 0) && (i > 200) && (i<300))){//on teste uniquement quand la photo de vérité terrain existe
 			calculate_ROC(EtRef, Et, nrl, nrh, ncl, nch, ROC_SD);
 		}
 
@@ -260,7 +260,7 @@ void validation(){
 
 		//######################################### test sur sd post traitement #########################################
 
-		if((i % 20 == 4) && (i != 4) && (i<220)){//on teste uniquement quand la photo de vérité terrain existe
+		if(((i % 20 == 4) && (i != 4) && (i<220)) || ((i % 20 == 0) && (i > 200) && (i<300))){//on teste uniquement quand la photo de vérité terrain existe
 			calculate_ROC(EtRef, Et, nrl, nrh, ncl, nch, ROC_SD_P);
 		}
 
