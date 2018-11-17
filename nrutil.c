@@ -1093,7 +1093,7 @@ rgb8** LoadPPM_rgb8matrix(char *filename, long *nrl, long *nrh, long *ncl, long 
 {
   /* cette version ne lit plus que le type P6 */
 
-  long height, width;//, gris;
+  long height, width, gris;
   rgb8 **m;
   FILE *file;
   /*int   format;*/
@@ -1118,7 +1118,9 @@ rgb8** LoadPPM_rgb8matrix(char *filename, long *nrl, long *nrh, long *ncl, long 
 
   width  = atoi(readitem(file, buffer));
   height = atoi(readitem(file, buffer));
-  //gris   = atoi(readitem(file, buffer));
+  gris   = atoi(readitem(file, buffer));
+
+  delete_warning(gris);
 
   *nrl = 0;
   *nrh = height - 1;
