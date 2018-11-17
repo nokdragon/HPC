@@ -25,7 +25,7 @@
 #define MAX_PIXEL_VALUE 255
 #define MIN_PIXEL_VALUE 0
 
-#define THETA 40
+
 #define BUFFSIZE 255
 #define NB_IMAGE 300
 
@@ -56,7 +56,7 @@
 #define NB_OCTET_M128 16
 
 //Paramètre de FD
-#define THETA 40 
+#define THETA 40
 
 //Paramètres de SD
 #define VMIN 1

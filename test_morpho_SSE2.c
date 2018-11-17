@@ -183,7 +183,7 @@ int test_morpho_simd() {
 
 		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
 
-		if(compare_matrix(D, Dref, nrl, nrh, ncl, nch)){
+		if(compare_matrix(D, Dref, nrl+6, nrh-6, ncl+6, nch-6)){
 			printf("Erreur sur la posTraitementOF_simd en testant avec FD sur l'image %d\n",i);
 			flag++;
 		}
@@ -198,7 +198,7 @@ int test_morpho_simd() {
 
 		posTraitementFO_simd(Dref, nrl, nrh, ncl, nch);
 
-		if(compare_matrix(D, Dref, nrl, nrh, ncl, nch)){
+		if(compare_matrix(D, Dref, nrl+11, nrh-11, ncl+11, nch-11)){
 			printf("Erreur sur la posTraitementFO_simd en testant avec FD sur l'image %d\n",i);
 			flag++;
 		}

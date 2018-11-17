@@ -186,3 +186,91 @@ double chrono_morpho_vide(int n){
 
 	return (double)(total_morpho_vide/n);
 }
+
+
+
+
+double chrono_copy(int n){
+
+	int i;
+	long nrl, nrh, ncl, nch;
+	uint8** It_1;
+	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+
+	uint8** It;
+	It = ui8matrix(nrl, nrh, ncl, nch);
+
+
+	int it;
+
+	double total_morpho_vide;
+
+	total_morpho_vide = 0;
+
+	struct timespec start, end;
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+
+	for(it=0;it<n;it++){
+		
+
+		//######################################### parcours de toutes les photos #########################################
+
+		
+		for (i = 1; i < 300; i++) {
+
+			Copy(It_1, It, nrl, nrh, ncl, nch);
+		}
+	}
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_morpho_vide = (end.tv_sec - start.tv_sec);
+	total_morpho_vide += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	
+	return (double)(total_morpho_vide/n);
+}
+
+
+double chrono_copy_simd(int n){
+
+	int i;
+	long nrl, nrh, ncl, nch;
+	uint8** It_1;
+	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+
+	uint8** It;
+	It = ui8matrix(nrl, nrh, ncl, nch);
+
+
+	int it;
+
+	double total_morpho_vide;
+
+	total_morpho_vide = 0;
+
+	struct timespec start, end;
+
+	clock_gettime(CLOCK_MONOTONIC, &start);
+
+	for(it=0;it<n;it++){
+		
+
+		//######################################### parcours de toutes les photos #########################################
+
+		
+		for (i = 1; i < 300; i++) {
+
+			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
+		}
+	}
+	clock_gettime(CLOCK_MONOTONIC, &end);
+	total_morpho_vide = (end.tv_sec - start.tv_sec);
+	total_morpho_vide += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+	free_ui8matrix(It, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	
+	return (double)(total_morpho_vide/n);
+}

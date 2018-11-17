@@ -128,6 +128,15 @@ void execution() {
 }
 
 void chrono(int n){
+
+
+	printf("copy%f\n",chrono_copy(100));
+	printf("copy_simd%f\n",chrono_copy_simd(100));
+
+
+
+
+
 	double fd_vide,sd_vide,fd,sd,fd_SSE2,sd_SSE2,morpho_vide,morpho,morpho_SSE2;	
 	fd_vide=chrono_FD_vide(n*n);
 	sd_vide=chrono_SD_vide(n*n);
@@ -177,9 +186,12 @@ void test_tot(){
 
 void cyprien()
 {
+	//test_tot();
+
+
 	//validation();
-	test_tot();
-	//chrono(10);
+	
+	chrono(10);
 	//execution();
 	
 	
