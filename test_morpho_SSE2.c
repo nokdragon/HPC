@@ -1,6 +1,7 @@
 
 #include "test_morpho_SSE2.h"
 #include "SSE2util.h"
+#include "mouvement.h"
 
 
 
@@ -133,6 +134,7 @@ int test_morpho_simd() {
 
 	uint8 **Et;
 	Et = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+	Init_mat(Et, nrl-2, nrh+2, ncl-2, nch+2);
 
 	uint8 **Vt;
 	Vt = ui8matrix(nrl, nrh, ncl, nch);
@@ -152,9 +154,11 @@ int test_morpho_simd() {
 
 	uint8 **Dref;
 	Dref = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+	Init_mat(Dref, nrl-2, nrh+2, ncl-2, nch+2);
 
 	uint8 **D;
 	D = ui8matrix(nrl-2, nrh+2, ncl-2, nch+2);
+	Init_mat(D, nrl-2, nrh+2, ncl-2, nch+2);
 
 
 	char file[255];
@@ -169,43 +173,82 @@ int test_morpho_simd() {
 
 		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 
-		Copy_simd(D, Et, nrl, nrh, ncl, nch);
 
-		posTraitementOF_simd(D, nrl, nrh, ncl, nch);
+		Copy_simd(D, Et, nrl, nrh, ncl, nch);
 
 		Copy_simd(Dref, Et, nrl, nrh, ncl, nch);
 
+		posTraitementOF(D, nrl, nrh, ncl, nch);
+
+
 		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
 
-		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
+		if(compare_matrix(D, Dref, nrl, nrh, ncl, nch)){
 			printf("Erreur sur la posTraitementOF_simd en testant avec FD sur l'image %d\n",i);
 			flag++;
 		}
 
 
-		/*
+		Copy(D, Et, nrl-2, nrh+2, ncl-2, nch+2);
 
-		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
-			printf("Erreur sur la erosion3_matrix_simd en testant avec FD\n");
+		Copy(Dref, Et, nrl-2, nrh+2, ncl-2, nch+2);
+
+		posTraitementFO(D, nrl, nrh, ncl, nch);
+
+
+		posTraitementFO_simd(Dref, nrl, nrh, ncl, nch);
+
+		if(compare_matrix(D, Dref, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la posTraitementFO_simd en testant avec FD sur l'image %d\n",i);
 			flag++;
 		}
+
 
 		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
 
 		
 
-		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
-			printf("Erreur sur la dilatation3_matrix_simd en testant avec SD\n");
+		Copy(D, Et, nrl-2, nrh+2, ncl-2, nch+2);
+
+		Copy(Dref, Et, nrl-2, nrh+2, ncl-2, nch+2);
+
+		posTraitementOF(D, nrl, nrh, ncl, nch);
+
+
+		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3);
+		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
+
+
+		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+1);
+		SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
+
+		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
+
+		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+2);
+		SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
+
+		if(compare_matrix(D, Dref, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la posTraitementOF_simd en testant avec SD sur l'image %d\n",i);
 			flag++;
+			//return 1;
 		}
 
-		
+		/*
+		Copy(D, Et, nrl-2, nrh+2, ncl-2, nch+2);
 
-		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
-			printf("Erreur sur la erosion3_matrix_simd en testant avec SD\n");
+		Copy(Dref, Et, nrl-2, nrh+2, ncl-2, nch+2);
+
+		posTraitementFO(D, nrl, nrh, ncl, nch);
+
+
+		posTraitementFO_simd(Dref, nrl, nrh, ncl, nch);
+
+		if(compare_matrix(D, Dref, nrl, nrh, ncl, nch)){
+			printf("Erreur sur la posTraitementFO_simd en testant avec SD sur l'image %d\n",i);
 			flag++;
+			//return 1;
 		}
-*/
+		*/
 		Copy(It_1, It, nrl, nrh, ncl, nch);
 		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);

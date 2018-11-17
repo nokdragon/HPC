@@ -200,8 +200,8 @@ void remi()
 
 int main()
 {
-	remi();
-	//cyprien();
+	//remi();
+	cyprien();
 }
 
 

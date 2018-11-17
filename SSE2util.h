@@ -27,4 +27,3 @@ void vector_to_scalar(vuint8 *v, uint8 ** res);
 int comp_vuint8(vuint8 v1, vuint8 v2);
 
 int compare_matrix(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long nch);
-int compare_matrix(uint8 ** m1, uint8 ** m2, long nrl, long nrh, long ncl, long nch);

@@ -128,6 +128,16 @@ void Init_V(uint8 **Vt, long nrl, long nrh, long ncl, long nch)
   	}
 }
 
+//Initialise la matrice Vt à VMIN
+void Init_mat(uint8 **Vt, long nrl, long nrh, long ncl, long nch)
+{
+	int i, j;
+	for(i=nrl; i<=nrh; i++) {
+	    for(j=ncl; j<=nch; j++) {
+	    	Vt[i][j]=0;
+	    }
+  	}
+}
 
 //Copie It dans Mt
 void Copy(uint8 **Mt, uint8 **It, long nrl, long nrh, long ncl, long nch)
