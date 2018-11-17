@@ -70,7 +70,7 @@ uint8 erosion3(uint8 Et1, uint8 Et2, uint8 Et3, uint8 Et4, uint8 Et5, uint8 Et6,
 	tmp += Et7;
 	tmp += Et8;
 	tmp += Et9;
-	if (tmp == 9*255) {
+	if (tmp >= 9*255) {
 		return 255;
 	}
 	else {
@@ -167,8 +167,8 @@ void posTraitementOF(uint8 **Et, long nrl, long nrh, long ncl, long nch){
 	ouverture3(Et,nrl, nrh, ncl, nch);
 	fermeture3(Et,nrl, nrh, ncl, nch);
 
-	//ouverture5(Et,nrl, nrh, ncl, nch);
-	//fermeture5(Et,nrl, nrh, ncl, nch);
+	ouverture5(Et,nrl, nrh, ncl, nch);
+	fermeture5(Et,nrl, nrh, ncl, nch);
 }
 
 //post traitement fermeture puis ouverture

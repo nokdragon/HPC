@@ -212,28 +212,18 @@ int test_morpho_simd() {
 
 		Copy(Dref, Et, nrl-2, nrh+2, ncl-2, nch+2);
 
-		fermeture3(D, nrl, nrh, ncl, nch);
+		posTraitementOF(D, nrl, nrh, ncl, nch);
 
 
-		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3);
-		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
+		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
 
 
-		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+1);
-		SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
-
-		fermeture3_simd(Dref, nrl, nrh, ncl, nch);
-
-		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+2);
-		SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
-
-		if(compare_matrix(D, Dref, nrl, nrh, ncl, nch)){
+		if(compare_matrix(D, Dref, nrl+5, nrh-5, ncl+5, nch-5)){
 			printf("Erreur sur la posTraitementOF_simd en testant avec SD sur l'image %d\n",i);
 			flag++;
-			//return 1;
 		}
 
-		/*
+		
 		Copy(D, Et, nrl-2, nrh+2, ncl-2, nch+2);
 
 		Copy(Dref, Et, nrl-2, nrh+2, ncl-2, nch+2);
@@ -243,12 +233,25 @@ int test_morpho_simd() {
 
 		posTraitementFO_simd(Dref, nrl, nrh, ncl, nch);
 
-		if(compare_matrix(D, Dref, nrl, nrh, ncl, nch)){
+
+		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3);
+		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
+
+
+		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+1);
+		SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
+
+
+		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+2);
+		SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
+
+
+
+		if(compare_matrix(D, Dref, nrl+11, nrh-11, ncl+11, nch-11)){
 			printf("Erreur sur la posTraitementFO_simd en testant avec SD sur l'image %d\n",i);
 			flag++;
-			//return 1;
 		}
-		*/
+		
 		Copy(It_1, It, nrl, nrh, ncl, nch);
 		Copy(Mt_1, Mt, nrl, nrh, ncl, nch);
 		Copy(Vt_1, Vt, nrl, nrh, ncl, nch);
@@ -273,95 +276,4 @@ int test_morpho_simd() {
 	PRINT_END();
 
 	return flag;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-	PRINT_BEGIN();
-
-	long nrl, nrh, ncl, nch;
-
-	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000024.pgm", &nrl, &nrh, &ncl, &nch);
-
-
-	uint8** It;
-	It = LoadPGM_ui8matrix("hall/hall000025.pgm", &nrl, &nrh, &ncl, &nch);
-
-	uint8 **Et;
-	Et = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-
-	Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
-
-	uint8 **D;
-	D = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-
-	uint8 **Dref;
-	Dref = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-
-	Copy(D, Et, nrl, nrh, ncl, nch);
-
-	posTraitementOF_simd(D, nrl, nrh, ncl, nch);
-
-	Copy(Dref, Et, nrl, nrh, ncl, nch);
-
-	posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
-
-	char file[255];
-	sprintf(file, "hall_SD/%d.pgm", 0);
-	SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
-
-	sprintf(file, "hall_SD/%d.pgm", 1);
-	SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
-
-	sprintf(file, "hall_SD/%d.pgm", 2);
-	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
-
-	compare_matrix(Dref, D, nrl, nrh, ncl, nch);
-
-	Copy(D, Et, nrl, nrh, ncl, nch);
-
-	posTraitementFO_simd(D, nrl, nrh, ncl, nch);
-
-	Copy(Dref, Et, nrl, nrh, ncl, nch);
-
-	posTraitementFO_simd(Dref, nrl, nrh, ncl, nch);
-
-	sprintf(file, "hall_SD/%d.pgm", 3);
-	SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
-
-	sprintf(file, "hall_SD/%d.pgm", 4);
-	SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
-
-
-	free_ui8matrix(It, nrl, nrh, ncl, nch);
-	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
-	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
-	free_ui8matrix(D, nrl, nrh, ncl, nch);
-	free_ui8matrix(Dref, nrl, nrh, ncl, nch);
-
-
-
-	if(compare_matrix(Dref, D, nrl, nrh, ncl, nch))
-		return 1;
-
-	PRINT_OK();
-	PRINT_END();
-	return 0;
-*/
-	
-
 }

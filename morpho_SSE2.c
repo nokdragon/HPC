@@ -185,8 +185,8 @@ void posTraitementOF_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	ouverture3_simd(Et, nrl, nrh, ncl, nch);
 	fermeture3_simd(Et, nrl, nrh, ncl, nch);
 
-	//ouverture5_simd(Et, nrl, nrh, ncl, nch);
-	//fermeture5_simd(Et, nrl, nrh, ncl, nch);
+	ouverture5_simd(Et, nrl, nrh, ncl, nch);
+	fermeture5_simd(Et, nrl, nrh, ncl, nch);
 }
 
 //post traitement fermeture puis ouverture
