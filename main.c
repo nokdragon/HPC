@@ -212,9 +212,9 @@ void test_all(){
 
 void cyprien()
 {
-	test_all();
-	validation();
-	chrono(10);
+	//test_all();
+	//validation();
+	//chrono(10);
 	execution();	
 	
 }

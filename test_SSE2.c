@@ -20,8 +20,8 @@ int test_vuint8_if_else()
 	PRINT_BEGIN();
 	printf("Test exhaustif\n");
 
-	//uint8 * tmp;
-	vuint8 a, b, x, y, res;//,cmp;
+	
+	vuint8 a, b, x, y, res;
 	x = init_vuint8(7);
 	y = init_vuint8(8);
 

@@ -59,11 +59,11 @@ char image_directory[255];
 #define NB_OCTET_M128 16
 
 //Paramètre de FD
-#define THETA 15
+#define THETA 20
 
 //Paramètres de SD
-#define VMIN 20
-#define VMAX 21
+#define VMIN 1
+#define VMAX 254
 #define N 4
 
 

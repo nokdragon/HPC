@@ -157,6 +157,14 @@ void print_ROC(long * ROC){
 	printf("|%ld\t| %ld|\n",ROC[2],ROC[3]);
 	printf("-----------------\n");
 }
+/*
+//affichage de la matrice ROC
+void print_ROC(long * ROC){
+	printf("-----------------\n");
+	printf("|%ld\t %ld\t",ROC[0],ROC[1]);
+	printf(" %ld\t %ld\n",ROC[2],ROC[3]);
+	printf("-----------------\n");
+}*/
 
 /*
 Cette fonction execute le traitement et post traitement sur toutes les photos
@@ -241,8 +249,8 @@ void validation(){
 
 		//######################################### test sur fd #########################################
 
-		if((i % 20 == 4) && (i != 4) && (i<220)){//on teste uniquement quand la photo de vérité terrain existe
-			nbP+=(nrh - nrl) * (nch - ncl);
+		if(((i % 20 == 4) && (i != 4) && (i<220)) || ((i % 20 == 0) && (i > 200) && (i<300))){//on teste uniquement quand la photo de vérité terrain existe
+			nbP+=(nrh - nrl+1) * (nch - ncl+1);
 			sprintf(file,"verite_terrain/hall%06d.pgm",i);//lecture de la vérité terrain
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, EtRef);
@@ -252,7 +260,7 @@ void validation(){
 
 		//######################################### post traitement #########################################
 
-		posTraitementFO(Et, nrl, nrh, ncl, nch);
+		posTraitementOF(Et, nrl, nrh, ncl, nch);
 
 		//######################################### test sur fd post traitement #########################################
 
@@ -272,7 +280,7 @@ void validation(){
 
 		//######################################### post traitement #########################################
 
-		posTraitementOF(Et, nrl, nrh, ncl, nch);
+		posTraitementFO(Et, nrl, nrh, ncl, nch);
 
 		//######################################### test sur sd post traitement #########################################
 
