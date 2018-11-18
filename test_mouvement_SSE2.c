@@ -95,12 +95,6 @@ void test_vuint8_fd_SSE2_matrix()
 		vuint8_fd_SSE2_matrixv2(It, It_1, Ets2, nrl,  nrh,  ncl, nch);
 		//vuint8_sd_SSE2_vnul(It, It_1, Ets, nrl,  nrh,  ncl, nch);
 
-		sprintf(file,"hall_FD/FD%d.pgm",i);
-		SavePGM_ui8matrix(Et,nrl, nrh, ncl, nch,file);
-
-		sprintf(file,"hall_FD/FD_SSE2%d.pgm",i);
-		SavePGM_ui8matrix(Ets,nrl, nrh, ncl, nch,file);
-
 		if(compare_matrix(Ets,Et, nrl,  nrh,  ncl, nch))
 			return;
 

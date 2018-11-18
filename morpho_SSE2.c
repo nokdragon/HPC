@@ -56,10 +56,8 @@ void dilatation5_matrix_SSE2(uint8 **EtD, uint8 **Et, long nrl, long nrh, long n
 {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	//Copy_SSE2(tmp, Et, nrl, nrh, ncl, nch);
 	dilatation3_matrix_SSE2(tmp, Et, nrl, nrh, ncl, nch);
 
-	//Copy_SSE2(Et, tmp, nrl, nrh, ncl, nch);
 	dilatation3_matrix_SSE2(EtD, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);

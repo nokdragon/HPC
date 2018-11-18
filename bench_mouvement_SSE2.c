@@ -244,35 +244,32 @@ void bench_fd(int n, int nb_iterations)
 		// FD
 		fd=chrono_FD(n);
 		res_fd = fd-fd_vide;	
-		//printf("FD: %f secs\n", res_fd);
-
 
 		fd_SSE2=chrono_FD_SSE2(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
-		//printf("FD_SSE2: %f secs\n", res_fd_sse2);
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
-		printf("v1 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
+		//printf("FD SSE2 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
 
 		fd_SSE2=chrono_FD_SSE2v2(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
-		printf("v2 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
+		printf("Opérateur ligne : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
 
 		fd_vide=chrono_FD_AoSoA_vide(n);
 		fd_SSE2=chrono_fd_AoSoA(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
-		printf("v3 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
+		printf("Entrelacement mémoire : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
 
 		fd_vide=chrono_FD_AoSoA_vide(n);
 		fd_SSE2=chrono_fd_AoSoA_OpenMP(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
-		printf("v4 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
+		printf("Entrelacement mémoire et OpenMP : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
 
 		puts("\n");
 
@@ -320,7 +317,6 @@ double chrono_fd_AoSoA(int n)
 
 		//######################################### parcours de toutes les photos avec traitement FD #########################################
 
-		//#pragma omp parallel for
 		for (i = 1; i < NB_IMAGE - 1 ; i+=2) {
 
 			sprintf(file, image_directory, i);
@@ -329,7 +325,6 @@ double chrono_fd_AoSoA(int n)
 			sprintf(file, image_directory, i+1);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It_plus_1);
 
-			//#pragma omp parallel for
 			for(lig = 0;lig <= nrh; lig++){
 			
 
@@ -353,11 +348,12 @@ double chrono_fd_AoSoA(int n)
 	total_fd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
 
-	/*
+	
 	free_ui8matrix(It, nrl, nrh, ncl, nch);
-	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_moins_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_plus_1, nrl, nrh, ncl, nch);
 	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
-	*/
+	free_ui8matrix(Et_plus_1, nrl-2, nrh+2, ncl-2, nch+2);
 
 	return (double)(total_fd/n);
 	
@@ -424,10 +420,10 @@ double chrono_FD_AoSoA_vide(int n)
 	total_fd_vide = (end.tv_sec - start.tv_sec);
 	total_fd_vide += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
-	/*
 	free_ui8matrix(It, nrl, nrh, ncl, nch);
-	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
-	*/
+	free_ui8matrix(It_moins_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_plus_1, nrl, nrh, ncl, nch);
+
 	return (double)(total_fd_vide/n);
 }
 
@@ -473,7 +469,7 @@ double chrono_fd_AoSoA_OpenMP(int n)
 	for(it=0;it<n;it++){		
 
 		//######################################### parcours de toutes les photos avec traitement FD #########################################
-#pragma omp parallel for
+#pragma omp parallel for schedule(guided)
 
 		for (i = 1; i < NB_IMAGE - 1 ; i+=2) {
 
@@ -483,9 +479,8 @@ double chrono_fd_AoSoA_OpenMP(int n)
 			sprintf(file, image_directory, i+1);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It_plus_1); 
 
-			#pragma omp parallel for //change pas trop la vitesse du programme
+			#pragma omp parallel for  schedule(guided)
 			for(lig = 0;lig <= nrh; lig++){
-				//#pragma omp parallel for // ralentit le programme
 				for(col = 0; col <= nch; col+=16){
 
 					vIt = _mm_loadu_si128((__m128i *)&It[lig][col]);
@@ -497,9 +492,6 @@ double chrono_fd_AoSoA_OpenMP(int n)
 
 					_mm_storeu_si128((__m128i *)&Et[lig][col], vEt);
 					_mm_storeu_si128((__m128i *)&Et_plus_1[lig][col], vEt_plus_1);
-					//vuint8_fd_SSE2_row(It[lig], It_moins_1[lig], Et[lig], ncl, nch);
-					//vuint8_fd_SSE2_row(It_plus_1[lig], It[lig], Et_plus_1[lig], ncl, nch);
-
 				}
 
 			}
@@ -513,11 +505,11 @@ double chrono_fd_AoSoA_OpenMP(int n)
 	total_fd += (end.tv_nsec - start.tv_nsec) / 1000000000.0;
 
 
-	/*
 	free_ui8matrix(It, nrl, nrh, ncl, nch);
-	free_ui8matrix(It_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_moins_1, nrl, nrh, ncl, nch);
+	free_ui8matrix(It_plus_1, nrl, nrh, ncl, nch);
 	free_ui8matrix(Et, nrl-2, nrh+2, ncl-2, nch+2);
-	*/
+	free_ui8matrix(Et_plus_1, nrl-2, nrh+2, ncl-2, nch+2);
 
 	return (double)(total_fd/n);
 	

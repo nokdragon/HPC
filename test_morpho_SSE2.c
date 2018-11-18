@@ -241,19 +241,6 @@ int test_morpho_SSE2() {
 		posTraitementFO_SSE2(Dref, nrl, nrh, ncl, nch);
 
 
-		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3);
-		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
-
-
-		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+1);
-		SavePGM_ui8matrix(D, nrl, nrh, ncl, nch, file);
-
-
-		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3+2);
-		SavePGM_ui8matrix(Dref, nrl, nrh, ncl, nch, file);
-
-
-
 		if(compare_matrix(D, Dref, nrl+B2, nrh-B2, ncl+B2, nch-B2)){
 			printf("Erreur sur la posTraitementFO_SSE2 en testant avec SD sur l'image %d\n",i);
 			flag++;

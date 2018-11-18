@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -O0 -O3 -fstrict-aliasing -msse4.2 -fopenmp -std=gnu99 -g
+CFLAGS = -Wall -O0 -O3 -fstrict-aliasing -msse4.2 -fopenmp -std=gnu99
 LDFLAGS=-lgomp
 EXEC_NAME = exec
 INCLUDES =
