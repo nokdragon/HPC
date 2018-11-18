@@ -10,8 +10,8 @@ double chrono_FD_SSE2v2(int n);
 
 void bench_fd(int n, int nb_iterations);
 
-double chrono_fd_AoSoS(int n);
+double chrono_fd_AoSoA(int n);
 
-double chrono_FD_AoSoS_vide(int n);
+double chrono_FD_AoSoA_vide(int n);
 
-double chrono_fd_AoSoSv2(int n);
+double chrono_fd_AoSoA_OpenMP(int n);

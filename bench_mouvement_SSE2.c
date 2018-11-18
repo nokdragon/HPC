@@ -254,15 +254,15 @@ void bench_fd(int n, int nb_iterations)
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
 		printf("v2 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
 
-		fd_vide=chrono_FD_AoSoS_vide(n);
-		fd_SSE2=chrono_fd_AoSoS(n);
+		fd_vide=chrono_FD_AoSoA_vide(n);
+		fd_SSE2=chrono_fd_AoSoA(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
 		printf("v3 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
 
-		fd_vide=chrono_FD_AoSoS_vide(n);
-		fd_SSE2=chrono_fd_AoSoSv2(n);
+		fd_vide=chrono_FD_AoSoA_vide(n);
+		fd_SSE2=chrono_fd_AoSoA_OpenMP(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
@@ -274,7 +274,7 @@ void bench_fd(int n, int nb_iterations)
 	}
 }
 
-double chrono_fd_AoSoS(int n)
+double chrono_fd_AoSoA(int n)
 {
 
 	int it;
@@ -321,7 +321,7 @@ double chrono_fd_AoSoS(int n)
 			sprintf(file, "hall/hall%06d.pgm", i+1);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It_plus_1);
 
-			#pragma omp parallel for
+			//#pragma omp parallel for
 			for(lig = 0;lig <= nrh; lig++){
 			
 
@@ -357,7 +357,7 @@ double chrono_fd_AoSoS(int n)
 
 
 
-double chrono_FD_AoSoS_vide(int n)
+double chrono_FD_AoSoA_vide(int n)
 {
 	int it;
 
@@ -421,7 +421,7 @@ double chrono_FD_AoSoS_vide(int n)
 	return (double)(total_fd_vide/n);
 }
 
-double chrono_fd_AoSoSv2(int n)
+double chrono_fd_AoSoA_OpenMP(int n)
 {
 
 	int it;
@@ -461,6 +461,7 @@ double chrono_fd_AoSoSv2(int n)
 	for(it=0;it<n;it++){		
 
 		//######################################### parcours de toutes les photos avec traitement FD #########################################
+#pragma omp parallel for
 
 		for (i = 1; i < NB_IMAGE - 1 ; i+=2) {
 
