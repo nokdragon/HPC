@@ -9,6 +9,9 @@
 #include "nrdef.h"
 #include "nrutil.h"
 
+char image_directory[255];
+
+
 #define NB_IMAGE 300 
 #define STR_SIZE 255
 

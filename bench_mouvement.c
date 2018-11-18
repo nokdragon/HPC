@@ -18,7 +18,9 @@ double chrono_FD_vide(int n){
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -35,7 +37,7 @@ double chrono_FD_vide(int n){
 		
 		for (i = 1; i < 300; i++) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -68,7 +70,9 @@ double chrono_FD(int n){
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -88,7 +92,7 @@ double chrono_FD(int n){
 		
 		for (i = 1; i < 300; i++) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -129,7 +133,9 @@ double chrono_SD_vide(int n){
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -164,7 +170,7 @@ double chrono_SD_vide(int n){
 		
 		for (i = 1; i < 300; i++) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -206,7 +212,9 @@ double chrono_SD(int n){
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -243,7 +251,7 @@ double chrono_SD(int n){
 		
 		for (i = 1; i < 300; i++) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 

@@ -143,7 +143,9 @@ void test_part1_sd()
 	long nrl, nrh, ncl, nch;
 
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 	uint8** It = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Vt = ui8matrix(nrl, nrh, ncl, nch);
@@ -164,7 +166,7 @@ void test_part1_sd()
 
 		
 		It = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
 	}	
@@ -190,7 +192,9 @@ void test_part2_sd()
 	long nrl, nrh, ncl, nch;
 
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 	uint8** It = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **Et = ui8matrix(nrl, nrh, ncl, nch);
 	uint8 **sEt = ui8matrix(nrl, nrh, ncl, nch);
@@ -220,7 +224,7 @@ void test_part2_sd()
 	
 	for (i = 1; i<300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
 		part1_sd_SSE2(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
@@ -600,7 +604,9 @@ void chrono() {
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -636,7 +642,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -659,7 +665,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -687,7 +693,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -722,7 +728,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -751,7 +757,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -798,7 +804,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -829,7 +835,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -864,7 +870,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -893,7 +899,7 @@ void chrono() {
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (i = 1; i < 300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 

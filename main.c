@@ -28,7 +28,7 @@
 
 
 
-char * get_image_directory()
+void get_image_directory()
 {	
 
   FILE *file;
@@ -42,9 +42,9 @@ char * get_image_directory()
   }
   //nrerror("ouverture du fichier %s impossible\n", filename);
   buffer = fgets( buffer, 256, file );
-  printf("%s\n", buffer);
   fclose(file);
-  return buffer;
+  strcpy(image_directory,buffer);
+  printf("%s\n", image_directory);
 }
 
 
@@ -53,7 +53,9 @@ void execution() {
 	int i;
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 
 	uint8** It;
@@ -87,7 +89,7 @@ void execution() {
 
 	for (i = 1; i<300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -208,8 +210,9 @@ void remi()
 int main()
 {
 	//remi();
-	//cyprien();
 	get_image_directory();
+	cyprien();
+	
 }
 
 

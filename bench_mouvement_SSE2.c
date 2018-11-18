@@ -29,7 +29,9 @@ double chrono_FD_SSE2(int n){
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -49,7 +51,7 @@ double chrono_FD_SSE2(int n){
 		
 		for (i = 1; i < 300; i++) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -90,7 +92,9 @@ double chrono_FD_SSE2v2(int n){
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -110,7 +114,7 @@ double chrono_FD_SSE2v2(int n){
 		
 		for (i = 1; i < 300; i++) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -153,7 +157,9 @@ double chrono_SD_SSE2(int n){
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -193,7 +199,7 @@ double chrono_SD_SSE2(int n){
 		
 		for (i = 1; i < 300; i++) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -289,7 +295,9 @@ double chrono_fd_AoSoA(int n)
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_moins_1;
-	It_moins_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_moins_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -315,10 +323,10 @@ double chrono_fd_AoSoA(int n)
 		//#pragma omp parallel for
 		for (i = 1; i < NB_IMAGE - 1 ; i+=2) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-			sprintf(file, "hall/hall%06d.pgm", i+1);
+			sprintf(file, image_directory, i+1);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It_plus_1);
 
 			//#pragma omp parallel for
@@ -371,7 +379,9 @@ double chrono_FD_AoSoA_vide(int n)
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_moins_1;
-	It_moins_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_moins_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -392,10 +402,10 @@ double chrono_FD_AoSoA_vide(int n)
 		
 		for (i = 1; i < NB_IMAGE - 1 ; i+=2) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-			sprintf(file, "hall/hall%06d.pgm", i+1);
+			sprintf(file, image_directory, i+1);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It_plus_1);
 
 			for(lig = 0;lig <= nrh; lig++){
@@ -436,7 +446,9 @@ double chrono_fd_AoSoA_OpenMP(int n)
 
 	long nrl, nrh, ncl, nch;
 	uint8** It_moins_1;
-	It_moins_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_moins_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 	uint8** It;
 	It = ui8matrix(nrl, nrh, ncl, nch);
@@ -465,10 +477,10 @@ double chrono_fd_AoSoA_OpenMP(int n)
 
 		for (i = 1; i < NB_IMAGE - 1 ; i+=2) {
 
-			sprintf(file, "hall/hall%06d.pgm", i);
+			sprintf(file, image_directory, i);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-			sprintf(file, "hall/hall%06d.pgm", i+1);
+			sprintf(file, image_directory, i+1);
 			MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It_plus_1); 
 
 			#pragma omp parallel for //change pas trop la vitesse du programme

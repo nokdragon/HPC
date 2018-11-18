@@ -15,7 +15,9 @@ int test_dilatation_erosion_SSE2() {
 	long nrl, nrh, ncl, nch;
 	int flag=0;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+	char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 
 	uint8** It;
@@ -53,7 +55,7 @@ int test_dilatation_erosion_SSE2() {
 
 	for (i = 1; i<300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
@@ -129,7 +131,9 @@ int test_morpho_SSE2() {
 	long nrl, nrh, ncl, nch;
 	int flag=0;
 	uint8** It_1;
-	It_1 = LoadPGM_ui8matrix("hall/hall000000.pgm", &nrl, &nrh, &ncl, &nch);
+		char dir[255];
+	sprintf(dir, image_directory, 0);
+	It_1 = LoadPGM_ui8matrix(dir, &nrl, &nrh, &ncl, &nch);
 
 
 	uint8** It;
@@ -170,7 +174,7 @@ int test_morpho_SSE2() {
 
 	for (i = 1; i<300; i++) {
 
-		sprintf(file, "hall/hall%06d.pgm", i);
+		sprintf(file, image_directory, i);
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 

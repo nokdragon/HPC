@@ -1,1 +1,1 @@
-./hall/
+/home/remi/Desktop/hall/hall%06d.pgm
