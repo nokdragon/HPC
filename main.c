@@ -26,6 +26,29 @@
 #include "test_mouvement.h"
 
 
+
+
+char * get_image_directory()
+{	
+
+  FILE *file;
+  char * buffer;
+  char filename[255] = "images_directory_path.txt";
+  buffer = (char*) calloc(256, sizeof(char));
+  /* ouverture du fichier */
+  file = fopen(filename,"rb");
+  if (file==NULL){
+    printf("ouverture du fichier impossible\n");
+  }
+  //nrerror("ouverture du fichier %s impossible\n", filename);
+  buffer = fgets( buffer, 256, file );
+  printf("%s\n", buffer);
+  fclose(file);
+  return buffer;
+}
+
+
+
 void execution() {
 	int i;
 	long nrl, nrh, ncl, nch;
@@ -185,7 +208,8 @@ void remi()
 int main()
 {
 	//remi();
-	cyprien();
+	//cyprien();
+	get_image_directory();
 }
 
 
