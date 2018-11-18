@@ -252,27 +252,27 @@ void bench_fd(int n, int nb_iterations)
 		//printf("FD_SSE2: %f secs\n", res_fd_sse2);
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
-		printf("v1 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
+		printf("v1 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
 
 		fd_SSE2=chrono_FD_SSE2v2(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
-		printf("v2 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
+		printf("v2 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
 
 		fd_vide=chrono_FD_AoSoA_vide(n);
 		fd_SSE2=chrono_fd_AoSoA(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
-		printf("v3 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
+		printf("v3 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
 
 		fd_vide=chrono_FD_AoSoA_vide(n);
 		fd_SSE2=chrono_fd_AoSoA_OpenMP(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
-		printf("v4 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
+		printf("v4 : Tps = %f , Gain = %f, réduction du temps d'execution = %f\n", res_fd_sse2,fd_gain, fd_percent);
 
 		puts("\n");
 

@@ -222,27 +222,28 @@ void cyprien()
 
 void remi()
 {	
-	test_vuint8_if_else();
+	//test_vuint8_if_else();
 	//test_vuint8_abs_SSE2();
 	//test_vuint16_abs_SSE2();
-	test_vuint8_fd_SSE2();
-	test_vuint8_fd_SSE2_matrix();
-	test_vuint8_if_elif_else();
+	//test_vuint8_fd_SSE2();
+	//test_vuint8_fd_SSE2_matrix();
+	//test_vuint8_if_elif_else();
 	//test_ext_8_16();
 	//test_part1_sd();
 	//test_part2_sd();
-	test_sd_SSE2();
+	//test_sd_SSE2();
 	//test_dilatation_erosion_SSE2(); // bug 
 	//test_morpho_SSE2(); //bug
-	//bench_fd(100, 30);
+	chrono(10);
+	bench_fd(10, 30);
 }
 
 
 int main()
 {
-	//remi();
 	get_image_directory();
-	cyprien();
+	remi();	
+	//cyprien();
 	
 }
 

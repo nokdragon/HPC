@@ -63,7 +63,7 @@ char image_directory[255];
 
 //Paramètres de SD
 #define VMIN 1
-#define VMAX 254
+#define VMAX 21
 #define N 4
 
 
