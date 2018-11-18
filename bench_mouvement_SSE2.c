@@ -254,15 +254,15 @@ void bench_fd(int n, int nb_iterations)
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
 		printf("v2 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
 
-		fd_vide=chrono_FD_SoAoS_vide(n);
-		fd_SSE2=chrono_fd_SoAoS(n);
+		fd_vide=chrono_FD_AoSoS_vide(n);
+		fd_SSE2=chrono_fd_AoSoS(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
 		printf("v3 : Gain = %f, réduction du temps d'execution = %f %%\n", fd_gain, fd_percent);
 
-		fd_vide=chrono_FD_SoAoS_vide(n);
-		fd_SSE2=chrono_fd_SoAoSv2(n);
+		fd_vide=chrono_FD_AoSoS_vide(n);
+		fd_SSE2=chrono_fd_AoSoSv2(n);
 		res_fd_sse2 = fd_SSE2-fd_vide;
 		fd_gain = res_fd / res_fd_sse2;
 		fd_percent = (res_fd - res_fd_sse2) * 100 / res_fd;
@@ -274,7 +274,7 @@ void bench_fd(int n, int nb_iterations)
 	}
 }
 
-double chrono_fd_SoAoS(int n)
+double chrono_fd_AoSoS(int n)
 {
 
 	int it;
@@ -357,7 +357,7 @@ double chrono_fd_SoAoS(int n)
 
 
 
-double chrono_FD_SoAoS_vide(int n)
+double chrono_FD_AoSoS_vide(int n)
 {
 	int it;
 
@@ -421,7 +421,7 @@ double chrono_FD_SoAoS_vide(int n)
 	return (double)(total_fd_vide/n);
 }
 
-double chrono_fd_SoAoSv2(int n)
+double chrono_fd_AoSoSv2(int n)
 {
 
 	int it;
