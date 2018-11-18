@@ -25,7 +25,7 @@ Attention, il n'est pas garantit qu'elles soient fonctionnelles !
 
 
 //aide possible at : https://stackoverflow.com/questions/32408665/fastest-way-to-compute-absolute-value-using-sse
-vuint8 vuint8_abs_simd(vuint8 a)
+vuint8 vuint8_abs_SSE2(vuint8 a)
 {   
     //si a > 0, return a, else return son complément à deux
     PRINT_BUG();
@@ -33,25 +33,25 @@ vuint8 vuint8_abs_simd(vuint8 a)
 }
 
 
-void test_vuint8_abs_simd()
+void test_vuint8_abs_SSE2()
 {	
 	PRINT_BEGIN();
 
 	vuint8 a, abs_a;
 	a = init_vuint8(-5);
-	abs_a = vuint8_abs_simd(a);
+	abs_a = vuint8_abs_SSE2(a);
 	display_vsint8(a, " %d\t", "a\t"); puts("");
 	display_vuint8(abs_a, " %d\t", "abs_a\t"); puts("\n");
 
 	vuint8 b, abs_b;
 	b = init_vuint8(8);
-	abs_b = vuint8_abs_simd(b);
+	abs_b = vuint8_abs_SSE2(b);
 	display_vuint8(b, " %d\t", "b\t"); puts("");
 	display_vuint8(abs_b, " %d\t", "abs_b\t"); puts("\n");
 
 	vuint8 c, abs_c;
 	c = init_vuint8(0);
-	abs_c = vuint8_abs_simd(c);
+	abs_c = vuint8_abs_SSE2(c);
 	display_vuint8(c, " %d\t", "c\t"); puts("");
 	display_vuint8(abs_c, " %d\t", "abs_c\t"); puts("\n");
 
@@ -59,7 +59,7 @@ void test_vuint8_abs_simd()
 
 }
 
-void part1_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+void part1_sd_SSE2(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {
 	//vuint8 *pOt = (vuint8*) Ot[0];
@@ -169,7 +169,7 @@ void test_part1_sd()
 
 	}	
 
-	part1_sd_simd(It, It_1, Et, Vt, Vt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);
+	part1_sd_SSE2(It, It_1, Et, Vt, Vt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);
 	part1_sd_scalar(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
 	//part1mix(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);	
 	if(compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch)) return;
@@ -223,7 +223,7 @@ void test_part2_sd()
 		sprintf(file, "hall/hall%06d.pgm", i);
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-		part1_sd_simd(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+		part1_sd_SSE2(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 		part1_sd_scalar(It, It_1, sEt, Vt, Vt_1,Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
 		//part1mix(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, sMt, sMt_1, Ot, nrl,  nrh,  ncl,  nch);	
 		if(compare_matrix(Mt, sMt, nrl,  nrh,  ncl,  nch)) {
@@ -231,7 +231,7 @@ void test_part2_sd()
 			return;
 		}
 
-		part2_sd_simd(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+		part2_sd_SSE2(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 		part2_sd_scalar(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
 		
 		if(compare_matrix(sVt, Vt, nrl,  nrh,  ncl,  nch)) {
@@ -248,7 +248,7 @@ void test_part2_sd()
 			return;
 		}
 
-		part3_sd_simd(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+		part3_sd_SSE2(It, It_1, sEt, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 		part3_sd_scalar(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
 
 		if(compare_matrix(sVt, Vt, nrl,  nrh,  ncl,  nch)) {
@@ -275,14 +275,14 @@ void test_part2_sd()
 	}	
 
 	
-	part1_sd_simd(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+	part1_sd_SSE2(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 	part1_sd_scalar(It, It_1, Et, Vt, Vt_1,Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
 	
-	part2_sd_simd(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+	part2_sd_SSE2(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 	part2_sd_scalar(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
 	if(compare_matrix(sVt, Vt, nrl,  nrh,  ncl,  nch)) return;
 	if(compare_matrix(Ot, sOt, nrl,  nrh,  ncl,  nch)) return;
-	part3_sd_simd(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
+	part3_sd_SSE2(It, It_1, Et, sVt, sVt_1, sMt, sMt_1, sOt, nrl,  nrh,  ncl,  nch);
 	part3_sd_scalar(It, It_1, sEt, Vt, Vt_1, Mt, Mt_1, Ot, nrl,  nrh,  ncl,  nch);
 	if(compare_matrix(Ot, sOt, nrl,  nrh,  ncl,  nch)) return;
 	if(compare_matrix(Vt, sVt, nrl,  nrh,  ncl,  nch)) return;
@@ -407,7 +407,7 @@ void part1mix(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 
 
 
-void part2_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+void part2_sd_SSE2(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {
 	vuint8 * pOt = (vuint8 *) Ot[0];
@@ -440,7 +440,7 @@ void part2_sd_scalar(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **V
 	}	
 }
 
-void part3_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
+void part3_sd_SSE2(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1,
 					 uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {
 	vuint8 * pOt = (vuint8 *) Ot[0];
@@ -806,7 +806,7 @@ void chrono() {
 
 		//Et = ui8matrix(nrl,nrh,ncl,nch);
 		//Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
-		vuint8_fd_simd_matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+		vuint8_fd_SSE2_matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 		//Et = ui8matrix(nrl-2,nrh+2,ncl-2,nch+2);
 
 
@@ -841,7 +841,7 @@ void chrono() {
 
 		//######################################### post traitement #########################################
 
-		posTraitementFO_simd(Et, nrl, nrh, ncl, nch);
+		posTraitementFO_SSE2(Et, nrl, nrh, ncl, nch);
 
 
 		//######################################### Itération #########################################
@@ -871,7 +871,7 @@ void chrono() {
 		//######################################### traitement sd #########################################
 
 
-		vuint8_sd_simd(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
+		vuint8_sd_SSE2(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
 
 
 		//######################################### Itération #########################################
@@ -905,7 +905,7 @@ void chrono() {
 
 		//######################################### post traitement #########################################
 
-		posTraitementOF_simd(Et, nrl, nrh, ncl, nch);
+		posTraitementOF_SSE2(Et, nrl, nrh, ncl, nch);
 
 
 		//######################################### Itération #########################################
@@ -933,25 +933,25 @@ void test_ext_8_16()
 	display_vuint16(v16, "%4.0x", " v16 "); puts("\n");
 }
 
-void test_vuint16_abs_simd()
+void test_vuint16_abs_SSE2()
 {	
 	PRINT_BEGIN();
 
 	vuint16 a, abs_a;
 	a = init_vuint16(-5);
-	abs_a = vuint16_abs_simd(a);
+	abs_a = vuint16_abs_SSE2(a);
 	display_vsint16(a, " %d\t", "a\t"); puts("");
 	display_vsint16(abs_a, " %d\t", "abs_a\t"); puts("\n");
 
 	vuint16 b, abs_b;
 	b = init_vuint16(16);
-	abs_b = vuint16_abs_simd(b);
+	abs_b = vuint16_abs_SSE2(b);
 	display_vuint16(b, " %d\t", "b\t"); puts("");
 	display_vuint16(abs_b, " %d\t", "abs_b\t"); puts("\n");
 
 	vuint16 c, abs_c;
 	c = init_vuint16(0);
-	abs_c = vuint16_abs_simd(c);
+	abs_c = vuint16_abs_SSE2(c);
 	display_vuint16(c, " %d\t", "c\t"); puts("");
 	display_vuint16(abs_c, " %d\t", "abs_c\t"); puts("\n");
 
@@ -988,7 +988,7 @@ vsint16 vuint16_ca2(vuint16 a)
 }
 
 //aide possible at : https://stackoverflow.com/questions/32408665/fastest-way-to-compute-absolute-value-using-sse
-vuint16 vuint16_abs_simd(vsint16 a)
+vuint16 vuint16_abs_SSE2(vsint16 a)
 {   
     //si a > 0, return a, else return son complément à deux
     return vsint16_if_else(a, _mm_setzero_si128(), a, vuint16_ca2(a));
@@ -1069,7 +1069,7 @@ void vector_to_scalar(vuint8 *v, uint8 ** res)
 }
 
 
-void vuint8_sd_simd_vnul(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+void vuint8_sd_SSE2_vnul(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {
 	vuint8 *pOt = (vuint8*) Ot[0];
 	vuint8 *pIt = (vuint8*) It[0];

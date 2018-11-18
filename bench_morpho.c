@@ -2,6 +2,7 @@
 #include "morpho.h"
 #include "morpho_SSE2.h"
 #include "bench_morpho.h"
+#include "SSE2util.h"
 
 double chrono_morpho(int n){
 
@@ -48,9 +49,9 @@ double chrono_morpho(int n){
 		sprintf(file, "hall_SD/ET_SD%d.pgm", i);
 		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
-		Copy_simd(It_1, It, nrl, nrh, ncl, nch);
-		Copy_simd(Mt_1, Mt, nrl, nrh, ncl, nch);
-		Copy_simd(Vt_1, Vt, nrl, nrh, ncl, nch);
+		Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
+		Copy_SSE2(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy_SSE2(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
 
@@ -143,9 +144,9 @@ double chrono_morpho_vide(int n){
 		sprintf(file, "hall_SD/ET_SD%d.pgm", i);
 		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
-		Copy_simd(It_1, It, nrl, nrh, ncl, nch);
-		Copy_simd(Mt_1, Mt, nrl, nrh, ncl, nch);
-		Copy_simd(Vt_1, Vt, nrl, nrh, ncl, nch);
+		Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
+		Copy_SSE2(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy_SSE2(Vt_1, Vt, nrl, nrh, ncl, nch);
 	}
 
 
@@ -233,7 +234,7 @@ double chrono_copy(int n){
 }
 
 
-double chrono_copy_simd(int n){
+double chrono_copy_SSE2(int n){
 
 	int i;
 	long nrl, nrh, ncl, nch;
@@ -262,7 +263,7 @@ double chrono_copy_simd(int n){
 		
 		for (i = 1; i < 300; i++) {
 
-			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);

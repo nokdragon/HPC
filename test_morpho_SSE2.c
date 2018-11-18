@@ -8,7 +8,7 @@
 
 
 
-int test_dilatation_erosion_simd() {
+int test_dilatation_erosion_SSE2() {
 	PRINT_BEGIN();
 	printf("Test comparant toutes les erosions faites en SSE2 de celle faite en scalaire sur 300 images\n");
 	int i;
@@ -60,37 +60,37 @@ int test_dilatation_erosion_simd() {
 		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 
 		dilatation3_matrix(D, Et, nrl, nrh, ncl, nch);
-		dilatation3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+		dilatation3_matrix_SSE2(Dref, Et, nrl, nrh, ncl, nch);
 
 		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
-			printf("Erreur sur la dilatation3_matrix_simd en testant avec FD\n");
+			printf("Erreur sur la dilatation3_matrix_SSE2 en testant avec FD\n");
 			flag++;
 		}
 
 
 		erosion3_matrix(D, Et, nrl, nrh, ncl, nch);
-		erosion3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+		erosion3_matrix_SSE2(Dref, Et, nrl, nrh, ncl, nch);
 
 		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
-			printf("Erreur sur la erosion3_matrix_simd en testant avec FD\n");
+			printf("Erreur sur la erosion3_matrix_SSE2 en testant avec FD\n");
 			flag++;
 		}
 
 		SD(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, nrl, nrh, ncl, nch);
 
 		dilatation3_matrix(D, Et, nrl, nrh, ncl, nch);
-		dilatation3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+		dilatation3_matrix_SSE2(Dref, Et, nrl, nrh, ncl, nch);
 
 		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
-			printf("Erreur sur la dilatation3_matrix_simd en testant avec SD\n");
+			printf("Erreur sur la dilatation3_matrix_SSE2 en testant avec SD\n");
 			flag++;
 		}
 
 		erosion3_matrix(D, Et, nrl, nrh, ncl, nch);
-		erosion3_matrix_simd(Dref, Et, nrl, nrh, ncl, nch);
+		erosion3_matrix_SSE2(Dref, Et, nrl, nrh, ncl, nch);
 
 		if(compare_matrix(Dref, D, nrl, nrh, ncl, nch)){
-			printf("Erreur sur la erosion3_matrix_simd en testant avec SD\n");
+			printf("Erreur sur la erosion3_matrix_SSE2 en testant avec SD\n");
 			flag++;
 		}
 
@@ -121,7 +121,7 @@ int test_dilatation_erosion_simd() {
 
 }
 
-int test_morpho_simd() {
+int test_morpho_SSE2() {
 
 	PRINT_BEGIN();
 	printf("Test comparant toutes les erosions faites en SSE2 de celle faite en scalaire sur 300 images\n");
@@ -177,17 +177,17 @@ int test_morpho_simd() {
 		Frame_Difference_Matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 
 
-		Copy_simd(D, Et, nrl, nrh, ncl, nch);
+		Copy_SSE2(D, Et, nrl, nrh, ncl, nch);
 
-		Copy_simd(Dref, Et, nrl, nrh, ncl, nch);
+		Copy_SSE2(Dref, Et, nrl, nrh, ncl, nch);
 
 		posTraitementOF(D, nrl, nrh, ncl, nch);
 
 
-		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
+		posTraitementOF_SSE2(Dref, nrl, nrh, ncl, nch);
 
 		if(compare_matrix(D, Dref, nrl+B1, nrh-B1, ncl+B1, nch-B1)){
-			printf("Erreur sur la posTraitementOF_simd en testant avec FD sur l'image %d\n",i);
+			printf("Erreur sur la posTraitementOF_SSE2 en testant avec FD sur l'image %d\n",i);
 			flag++;
 		}
 
@@ -199,10 +199,10 @@ int test_morpho_simd() {
 		posTraitementFO(D, nrl, nrh, ncl, nch);
 
 
-		posTraitementFO_simd(Dref, nrl, nrh, ncl, nch);
+		posTraitementFO_SSE2(Dref, nrl, nrh, ncl, nch);
 
 		if(compare_matrix(D, Dref, nrl+B2, nrh-B2, ncl+B2, nch-B2)){
-			printf("Erreur sur la posTraitementFO_simd en testant avec FD sur l'image %d\n",i);
+			printf("Erreur sur la posTraitementFO_SSE2 en testant avec FD sur l'image %d\n",i);
 			flag++;
 		}
 
@@ -218,11 +218,11 @@ int test_morpho_simd() {
 		posTraitementOF(D, nrl, nrh, ncl, nch);
 
 
-		posTraitementOF_simd(Dref, nrl, nrh, ncl, nch);
+		posTraitementOF_SSE2(Dref, nrl, nrh, ncl, nch);
 
 
 		if(compare_matrix(D, Dref, nrl+B1, nrh-B1, ncl+B1, nch-B1)){
-			printf("Erreur sur la posTraitementOF_simd en testant avec SD sur l'image %d\n",i);
+			printf("Erreur sur la posTraitementOF_SSE2 en testant avec SD sur l'image %d\n",i);
 			flag++;
 		}
 
@@ -234,7 +234,7 @@ int test_morpho_simd() {
 		posTraitementFO(D, nrl, nrh, ncl, nch);
 
 
-		posTraitementFO_simd(Dref, nrl, nrh, ncl, nch);
+		posTraitementFO_SSE2(Dref, nrl, nrh, ncl, nch);
 
 
 		sprintf(file, "hall_SD/ETC_SD%d.pgm", i*3);
@@ -251,7 +251,7 @@ int test_morpho_simd() {
 
 
 		if(compare_matrix(D, Dref, nrl+B2, nrh-B2, ncl+B2, nch-B2)){
-			printf("Erreur sur la posTraitementFO_simd en testant avec SD sur l'image %d\n",i);
+			printf("Erreur sur la posTraitementFO_SSE2 en testant avec SD sur l'image %d\n",i);
 			flag++;
 		}
 		

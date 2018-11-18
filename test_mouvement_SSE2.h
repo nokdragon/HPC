@@ -2,13 +2,10 @@
 
 
 
+void test_sd_SSE2();
 
-//vuint16
-void test_vuint16_abs_simd();
-void test_vuint16_fd_simd();
-void test_sd_simd();
+int test_vuint8_fd_SSE2();
 
-int test_vuint8_fd_simd();
-void test_vuint8_fd_simd_matrix();
+void test_vuint8_fd_SSE2_matrix();
 
 

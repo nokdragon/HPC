@@ -18,26 +18,24 @@
 #include "mouvement_SSE2.h"
 
 
-vuint8 vuint8_fd_simd(vuint8 It, vuint8 It_1)
+vuint8 vuint8_fd_SSE2(vuint8 It, vuint8 It_1)
 {	
 
 	vuint8 Ot = vuint8_sub_abs(It, It_1);
 	return vuint8_if_else(Ot, init_vuint8(THETA), init_vuint8(MAX_PIXEL_VALUE), _mm_setzero_si128());
 }
 
-void vuint8_fd_simd_matrixv2(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long nrh, long ncl, long nch)
+void vuint8_fd_SSE2_matrixv2(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long nrh, long ncl, long nch)
 {	
 
 	long i;
 	for(i=nrl; i<=nrh; i++) {
 	    	
-	    	vuint8_fd_simd_row(It[i], It_1[i], Et[i],  ncl,  nch);
-			//display_vuint8(pIt, "%d ", "pIt\t"); puts("\n");
-	    	
+	    	vuint8_fd_SSE2_row(It[i], It_1[i], Et[i],  ncl,  nch);	    	
 	}	
 }
 
-void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long nrh, long ncl, long nch)
+void vuint8_fd_SSE2_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long nrh, long ncl, long nch)
 {	
 
 	vuint8 vIt, vIt_1;
@@ -47,7 +45,7 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long 
 	    	
 			vIt = _mm_loadu_si128((__m128i *)&It[i][j]);
 			vIt_1 = _mm_loadu_si128((__m128i *)&It_1[i][j]);
-			_mm_storeu_si128((__m128i *)&Et[i][j], vuint8_fd_simd(vIt, vIt_1));
+			_mm_storeu_si128((__m128i *)&Et[i][j], vuint8_fd_SSE2(vIt, vIt_1));
 	    	
 	    }
 	}	
@@ -55,7 +53,7 @@ void vuint8_fd_simd_matrix(uint8 **It, uint8 **It_1, uint8 **Et, long nrl, long 
 }
 
 
-void vuint8_fd_simd_row(uint8 *It, uint8 *It_1, uint8 *Et, long ncl, long nch)
+void vuint8_fd_SSE2_row(uint8 *It, uint8 *It_1, uint8 *Et, long ncl, long nch)
 {	
 
 	vuint8 vIt, vIt_1;
@@ -64,20 +62,20 @@ void vuint8_fd_simd_row(uint8 *It, uint8 *It_1, uint8 *Et, long ncl, long nch)
 	    	
 			vIt = _mm_loadu_si128((__m128i *)&It[j]);
 			vIt_1 = _mm_loadu_si128((__m128i *)&It_1[j]);
-			_mm_storeu_si128((__m128i *)&Et[j], vuint8_fd_simd(vIt, vIt_1));
+			_mm_storeu_si128((__m128i *)&Et[j], vuint8_fd_SSE2(vIt, vIt_1));
 	    	
 	}		
 
 }
 
 
-void vuint8_fd_simd_iteration(vuint8 vIt, vuint8 vIt_1, vuint8 Et)
+void vuint8_fd_SSE2_iteration(vuint8 vIt, vuint8 vIt_1, vuint8 Et)
 {	
-	_mm_storeu_si128( &Et, vuint8_fd_simd(vIt, vIt_1)); 	
+	_mm_storeu_si128( &Et, vuint8_fd_SSE2(vIt, vIt_1)); 	
 }		
 
 
-void vuint8_sd_simd(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
+void vuint8_sd_SSE2(uint8 **It, uint8 **It_1, uint8 **Et, uint8 **Vt, uint8 **Vt_1, uint8 **Mt, uint8 **Mt_1, uint8 **Ot,long nrl, long nrh, long ncl, long nch)
 {
 	vuint8 a,b,x,y, one;
 	long i,j,k;

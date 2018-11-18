@@ -26,8 +26,6 @@
 #include "test_mouvement.h"
 
 
-
-
 void execution() {
 	int i;
 	long nrl, nrh, ncl, nch;
@@ -70,25 +68,24 @@ void execution() {
 
 		MLoadPGM_ui8matrix(file, nrl, nrh, ncl, nch, It);
 
-		vuint8_fd_simd_matrix(It, It_1, Et, nrl,  nrh,  ncl, nch);
-
-
+		vuint8_fd_SSE2_matrix(It, It_1, Et, nrl,  nrh,  ncl, nch);
+		
 
 		posTraitementFO(Et, nrl, nrh, ncl, nch);
 		sprintf(file, "hall_FD/ETFO_FD%d.pgm", i);
 		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
 
-		vuint8_sd_simd(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
+		vuint8_sd_SSE2(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
 
 		posTraitementOF(Et, nrl, nrh, ncl, nch);
 		sprintf(file, "hall_SD/ETC_SD%d.pgm", i);
 		SavePGM_ui8matrix(Et, nrl, nrh, ncl, nch, file);
 
 
-		Copy_simd(It_1, It, nrl, nrh, ncl, nch);
-		Copy_simd(Mt_1, Mt, nrl, nrh, ncl, nch);
-		Copy_simd(Vt_1, Vt, nrl, nrh, ncl, nch);
+		Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
+		Copy_SSE2(Mt_1, Mt, nrl, nrh, ncl, nch);
+		Copy_SSE2(Vt_1, Vt, nrl, nrh, ncl, nch);
 
 	}
 
@@ -102,14 +99,12 @@ void execution() {
 	free_ui8matrix(Ot, nrl, nrh, ncl, nch);
 }
 
+
 void chrono(int n){
 
 
 	printf("copy :%f\n",chrono_copy(100));
-	printf("copy_simd :%f reduction de  %f%%\n",chrono_copy_simd(100),(1-chrono_copy_simd(100)/chrono_copy(100))*100);
-
-
-
+	printf("copy_SSE2 :%f reduction de  %f%%\n",chrono_copy_SSE2(100),(1-chrono_copy_SSE2(100)/chrono_copy(100))*100);
 
 
 	double fd_vide,sd_vide,fd,sd,fd_SSE2,sd_SSE2,morpho_vide,morpho,morpho_SSE2;	
@@ -146,26 +141,25 @@ void chrono(int n){
 }
 
 
-void test_tot(){
+void test_all(){
 	test_vuint8_if_else();
 	test_vuint8_if_elif_else();
-	test_dilatation_erosion_simd();
-	test_morpho_simd();
+	test_dilatation_erosion_SSE2();
+	test_morpho_SSE2();
 	test_erosion3();
 	test_dilatation3();
-	test_vuint8_fd_simd();
-	test_vuint8_fd_simd_matrix();
-	test_sd_simd();
+	test_vuint8_fd_SSE2();
+	test_vuint8_fd_SSE2_matrix();
+	test_sd_SSE2();
 }
 
 
 void cyprien()
 {
-	test_tot();
+	test_all();
 	validation();
 	chrono(10);
-	execution();
-	
+	execution();	
 	
 }
 
@@ -173,17 +167,17 @@ void cyprien()
 void remi()
 {	
 	test_vuint8_if_else();
-	//test_vuint8_abs_simd();
-	//test_vuint16_abs_simd();
-	test_vuint8_fd_simd();
-	test_vuint8_fd_simd_matrix();
+	//test_vuint8_abs_SSE2();
+	//test_vuint16_abs_SSE2();
+	test_vuint8_fd_SSE2();
+	test_vuint8_fd_SSE2_matrix();
 	test_vuint8_if_elif_else();
 	//test_ext_8_16();
 	//test_part1_sd();
 	//test_part2_sd();
-	test_sd_simd();
-	//test_dilatation_erosion_simd(); // bug 
-	//test_morpho_simd(); //bug
+	test_sd_SSE2();
+	//test_dilatation_erosion_SSE2(); // bug 
+	//test_morpho_SSE2(); //bug
 	//bench_fd(100, 30);
 }
 

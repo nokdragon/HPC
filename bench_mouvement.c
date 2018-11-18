@@ -2,6 +2,7 @@
 #include "mouvement.h"
 #include "morpho_SSE2.h"
 #include "bench_mouvement.h"
+#include "SSE2util.h"
 
 
 double chrono_FD_vide(int n){
@@ -40,7 +41,7 @@ double chrono_FD_vide(int n){
 
 			//######################################### Itération #########################################
 
-			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -99,7 +100,7 @@ double chrono_FD(int n){
 
 			//######################################### Itération #########################################
 
-			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -170,9 +171,9 @@ double chrono_SD_vide(int n){
 
 			//######################################### Itération #########################################
 
-			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
-			Copy_simd(Mt_1, Mt, nrl, nrh, ncl, nch);
-			Copy_simd(Vt_1, Vt, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(Mt_1, Mt, nrl, nrh, ncl, nch);
+			Copy_SSE2(Vt_1, Vt, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -254,9 +255,9 @@ double chrono_SD(int n){
 
 			//######################################### Itération #########################################
 
-			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
-			Copy_simd(Mt_1, Mt, nrl, nrh, ncl, nch);
-			Copy_simd(Vt_1, Vt, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(Mt_1, Mt, nrl, nrh, ncl, nch);
+			Copy_SSE2(Vt_1, Vt, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);

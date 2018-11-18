@@ -13,6 +13,6 @@
 #include "main.h"
 
 
-int test_dilatation_erosion_simd();
+int test_dilatation_erosion_SSE2();
 
-int test_morpho_simd();
+int test_morpho_SSE2();

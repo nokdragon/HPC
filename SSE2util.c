@@ -1,6 +1,3 @@
-/* --------------- */
-/* --- simd1.c --- */
-/* --------------- */
 //https://software.intel.com/sites/landingpage/IntrinsicsGuide/
 
 #include <stdio.h>
@@ -47,13 +44,25 @@ vuint8 vuint8_if_elif_else(vuint8 a, vuint8 b, vuint8 x, vuint8 y, vuint8 z)
     return d;    
 }
 
-
+//soustraction absolue
 vuint8 vuint8_sub_abs(vuint8 a, vuint b)
 {   
     vuint8 max, min;
     max = _mm_max_epu8(a, b);
     min = _mm_min_epu8(a, b); //Solution alternative, utiliser un if_else
     return _mm_sub_epi8(max , min);    
+}
+
+
+//Copie It dans Mt
+void Copy_SSE2(uint8 **Mt, uint8 **It, long nrl, long nrh, long ncl, long nch)
+{
+    int i, j;
+    for(i=nrl; i<=nrh; i++) {
+        for(j=ncl; j<=nch; j+=16) {
+            _mm_storeu_si128 ((__m128i *)(&Mt[i][j]), _mm_loadu_si128((__m128i *)(&It[i][j])));
+        }
+    }
 }
 
 

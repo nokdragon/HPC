@@ -90,7 +90,7 @@ double chrono_morpho_SSE2(int n){
 			//######################################### morpho #########################################
 
 
-			posTraitementOF_simd(Et, nrl, nrh, ncl, nch);
+			posTraitementOF_SSE2(Et, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);

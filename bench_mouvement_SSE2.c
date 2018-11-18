@@ -56,13 +56,13 @@ double chrono_FD_SSE2(int n){
 			//######################################### traitement fd #########################################
 
 
-			vuint8_fd_simd_matrix(It, It_1, Et, nrl, nrh, ncl, nch);
+			vuint8_fd_SSE2_matrix(It, It_1, Et, nrl, nrh, ncl, nch);
 
 
 
 			//######################################### Itération #########################################
 
-			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -117,13 +117,13 @@ double chrono_FD_SSE2v2(int n){
 			//######################################### traitement fd #########################################
 
 
-			vuint8_fd_simd_matrixv2(It, It_1, Et, nrl, nrh, ncl, nch);
+			vuint8_fd_SSE2_matrixv2(It, It_1, Et, nrl, nrh, ncl, nch);
 
 
 
 			//######################################### Itération #########################################
 
-			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -200,14 +200,14 @@ double chrono_SD_SSE2(int n){
 			//######################################### traitement sd #########################################
 
 
-			vuint8_sd_simd(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
+			vuint8_sd_SSE2(It, It_1, Et, Vt, Vt_1, Mt, Mt_1, Ot, nrl, nrh, ncl, nch);
 
 
 			//######################################### Itération #########################################
 
-			Copy_simd(It_1, It, nrl, nrh, ncl, nch);
-			Copy_simd(Mt_1, Mt, nrl, nrh, ncl, nch);
-			Copy_simd(Vt_1, Vt, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(Mt_1, Mt, nrl, nrh, ncl, nch);
+			Copy_SSE2(Vt_1, Vt, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -328,16 +328,16 @@ double chrono_fd_SoAoS(int n)
 			//######################################### traitement fd #########################################
 
 
-			vuint8_fd_simd_row(It[lig], It_moins_1[lig], Et[lig], ncl, nch);
-			vuint8_fd_simd_row(It_plus_1[lig], It[lig], Et_plus_1[lig], ncl, nch);
+			vuint8_fd_SSE2_row(It[lig], It_moins_1[lig], Et[lig], ncl, nch);
+			vuint8_fd_SSE2_row(It_plus_1[lig], It[lig], Et_plus_1[lig], ncl, nch);
 
 
 			//######################################### Itération #########################################
 
 			}
 
-			Copy_simd(It_moins_1, It, nrl, nrh, ncl, nch);
-			Copy_simd(It, It_plus_1, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_moins_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(It, It_plus_1, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -406,8 +406,8 @@ double chrono_FD_SoAoS_vide(int n)
 
 			}
 
-			Copy_simd(It_moins_1, It, nrl, nrh, ncl, nch);
-			Copy_simd(It, It_plus_1, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_moins_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(It, It_plus_1, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
@@ -479,20 +479,20 @@ double chrono_fd_SoAoSv2(int n)
 					vIt_plus_1 = _mm_loadu_si128((__m128i *)&It_plus_1[lig][col]);
 					vIt_moins_1 = _mm_loadu_si128((__m128i *)&It_plus_1[lig][col]);
 
-					vuint8_fd_simd_iteration(vIt, vIt_moins_1, vEt);
-					vuint8_fd_simd_iteration(vIt_plus_1, vIt, vEt_plus_1);
+					vuint8_fd_SSE2_iteration(vIt, vIt_moins_1, vEt);
+					vuint8_fd_SSE2_iteration(vIt_plus_1, vIt, vEt_plus_1);
 
 					_mm_storeu_si128((__m128i *)&Et[lig][col], vEt);
 					_mm_storeu_si128((__m128i *)&Et_plus_1[lig][col], vEt_plus_1);
-					//vuint8_fd_simd_row(It[lig], It_moins_1[lig], Et[lig], ncl, nch);
-					//vuint8_fd_simd_row(It_plus_1[lig], It[lig], Et_plus_1[lig], ncl, nch);
+					//vuint8_fd_SSE2_row(It[lig], It_moins_1[lig], Et[lig], ncl, nch);
+					//vuint8_fd_SSE2_row(It_plus_1[lig], It[lig], Et_plus_1[lig], ncl, nch);
 
 				}
 
 			}
 
-			Copy_simd(It_moins_1, It, nrl, nrh, ncl, nch);
-			Copy_simd(It, It_plus_1, nrl, nrh, ncl, nch);
+			Copy_SSE2(It_moins_1, It, nrl, nrh, ncl, nch);
+			Copy_SSE2(It, It_plus_1, nrl, nrh, ncl, nch);
 		}
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);

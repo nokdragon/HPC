@@ -16,18 +16,7 @@
 #include "SSE2util.h"
 
 
-//Copie It dans Mt
-void Copy_simd(uint8 **Mt, uint8 **It, long nrl, long nrh, long ncl, long nch)
-{
-	int i, j;
-	for(i=nrl; i<=nrh; i++) {
-	    for(j=ncl; j<=nch; j+=16) {
-	    	_mm_storeu_si128 ((__m128i *)(&Mt[i][j]), _mm_loadu_si128((__m128i *)(&It[i][j])));
-	    }
-  	}
-}
-
-void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void dilatation3_matrix_SSE2(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	int i, j;
 
 	vuint8 ligne1;
@@ -63,14 +52,15 @@ void dilatation3_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long n
   	}
 }
 
-void dilatation5_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void dilatation5_matrix_SSE2(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) 
+{
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	//Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
-	dilatation3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
+	//Copy_SSE2(tmp, Et, nrl, nrh, ncl, nch);
+	dilatation3_matrix_SSE2(tmp, Et, nrl, nrh, ncl, nch);
 
-	//Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
-	dilatation3_matrix_simd(EtD, tmp, nrl, nrh, ncl, nch);
+	//Copy_SSE2(Et, tmp, nrl, nrh, ncl, nch);
+	dilatation3_matrix_SSE2(EtD, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 
@@ -78,7 +68,7 @@ void dilatation5_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long n
 }
 
 
-void erosion3_matrix_simd(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void erosion3_matrix_SSE2(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	int i, j;
 
 	vuint8 ligne1;
@@ -115,86 +105,87 @@ void erosion3_matrix_simd(uint8 **EtE, uint8 **Et, long nrl, long nrh, long ncl,
 	}
 }
 
-void erosion5_matrix_simd(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void erosion5_matrix_SSE2(uint8 **EtD, uint8 **Et, long nrl, long nrh, long ncl, long nch) 
+{
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
-	erosion3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_SSE2(tmp, Et, nrl, nrh, ncl, nch);
+	erosion3_matrix_SSE2(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
-	erosion3_matrix_simd(EtD, tmp, nrl, nrh, ncl, nch);
+	Copy_SSE2(Et, tmp, nrl, nrh, ncl, nch);
+	erosion3_matrix_SSE2(EtD, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 }
 
 //ouverture de carré 3x3
-void ouverture3_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void ouverture3_SSE2(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 
 
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
 	Init_mat(tmp, nrl-2, nrh+2, ncl-2, nch+2);
-	erosion3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
+	erosion3_matrix_SSE2(tmp, Et, nrl, nrh, ncl, nch);
 
-	dilatation3_matrix_simd(Et, tmp, nrl, nrh, ncl, nch);
+	dilatation3_matrix_SSE2(Et, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 }
 
 //ouverture de carré 5x5
-void ouverture5_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void ouverture5_SSE2(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
-	erosion5_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_SSE2(tmp, Et, nrl, nrh, ncl, nch);
+	erosion5_matrix_SSE2(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
-	dilatation5_matrix_simd(Et, tmp, nrl, nrh, ncl, nch);
+	Copy_SSE2(Et, tmp, nrl, nrh, ncl, nch);
+	dilatation5_matrix_SSE2(Et, tmp, nrl, nrh, ncl, nch);
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 }
 
 //fermeture de carré 3x3
-void fermeture3_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void fermeture3_SSE2(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
 	Init_mat(tmp, nrl-2, nrh+2, ncl-2, nch+2);
-	dilatation3_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
+	dilatation3_matrix_SSE2(tmp, Et, nrl, nrh, ncl, nch);
 
 
-	erosion3_matrix_simd(Et, tmp, nrl, nrh, ncl, nch);
+	erosion3_matrix_SSE2(Et, tmp, nrl, nrh, ncl, nch);
 
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 }
 
 //fermeture de carré 5x5
-void fermeture5_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void fermeture5_SSE2(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 	uint8 **tmp;
 	tmp = ui8matrix(nrl - 2, nrh + 2, ncl - 2, nch + 2);
-	Copy_simd(tmp, Et, nrl, nrh, ncl, nch);
-	dilatation5_matrix_simd(tmp, Et, nrl, nrh, ncl, nch);
+	Copy_SSE2(tmp, Et, nrl, nrh, ncl, nch);
+	dilatation5_matrix_SSE2(tmp, Et, nrl, nrh, ncl, nch);
 
-	Copy_simd(Et, tmp, nrl, nrh, ncl, nch);
-	erosion5_matrix_simd(Et, tmp, nrl, nrh, ncl, nch);
+	Copy_SSE2(Et, tmp, nrl, nrh, ncl, nch);
+	erosion5_matrix_SSE2(Et, tmp, nrl, nrh, ncl, nch);
 	free_ui8matrix(tmp, nrl - 2, nrh + 2, ncl - 2, nch + 2);
 }
 
 
 //post traitement ouverture puis fermeture
-void posTraitementOF_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void posTraitementOF_SSE2(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 
-	ouverture3_simd(Et, nrl, nrh, ncl, nch);
-	fermeture3_simd(Et, nrl, nrh, ncl, nch);
+	ouverture3_SSE2(Et, nrl, nrh, ncl, nch);
+	fermeture3_SSE2(Et, nrl, nrh, ncl, nch);
 
-	ouverture5_simd(Et, nrl, nrh, ncl, nch);
-	fermeture5_simd(Et, nrl, nrh, ncl, nch);
+	ouverture5_SSE2(Et, nrl, nrh, ncl, nch);
+	fermeture5_SSE2(Et, nrl, nrh, ncl, nch);
 }
 
 //post traitement fermeture puis ouverture
-void posTraitementFO_simd(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
+void posTraitementFO_SSE2(uint8 **Et, long nrl, long nrh, long ncl, long nch) {
 
-	fermeture3_simd(Et, nrl, nrh, ncl, nch);
-	ouverture3_simd(Et, nrl, nrh, ncl, nch);
+	fermeture3_SSE2(Et, nrl, nrh, ncl, nch);
+	ouverture3_SSE2(Et, nrl, nrh, ncl, nch);
 
-	fermeture5_simd(Et, nrl, nrh, ncl, nch);
-	ouverture5_simd(Et, nrl, nrh, ncl, nch);
+	fermeture5_SSE2(Et, nrl, nrh, ncl, nch);
+	ouverture5_SSE2(Et, nrl, nrh, ncl, nch);
 }
