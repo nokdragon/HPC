@@ -43,6 +43,16 @@ void get_image_directory()
   //nrerror("ouverture du fichier %s impossible\n", filename);
   buffer = fgets( buffer, 256, file );
   fclose(file);
+
+  //delete \n or \t  or space at the end
+  char * pos;
+  if ((pos=strchr(buffer, ' ')) != NULL)
+    *pos = '\0';
+  if ((pos=strchr(buffer, '\n')) != NULL)
+    *pos = '\0';
+  if ((pos=strchr(buffer, '\t')) != NULL)
+    *pos = '\0';
+
   strcpy(image_directory,buffer);
   printf("%s\n", image_directory);
 }
