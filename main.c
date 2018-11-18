@@ -32,19 +32,26 @@ void get_image_directory()
 {	
 
   FILE *file;
-  char * buffer;
+  char * buffer = NULL;
   char filename[255] = "images_directory_path.txt";
   buffer = (char*) calloc(256, sizeof(char));
   /* ouverture du fichier */
   file = fopen(filename,"rb");
   if (file==NULL){
-    printf("ouverture du fichier impossible\n");
+    printf("\nPas de fichier %s à lire. Sortie de fonction\n", filename);
+    exit(1);
   }
   //nrerror("ouverture du fichier %s impossible\n", filename);
   buffer = fgets( buffer, 256, file );
   fclose(file);
 
-  //delete \n or \t  or space at the end
+  //on teste que le fichier est bien remplit
+  if(buffer == NULL){
+  	printf("\nLe fichier %s ne contient rien ! Indiquez votre path personnalisé, ou celui par défaut:\nhall/hall%%06d.pgm\n\n",filename);
+  	exit(1);
+  }
+
+  //on supprime les  \n et \t  et espace à la fin de la chaine
   char * pos;
   if ((pos=strchr(buffer, ' ')) != NULL)
     *pos = '\0';
@@ -52,9 +59,23 @@ void get_image_directory()
     *pos = '\0';
   if ((pos=strchr(buffer, '\t')) != NULL)
     *pos = '\0';
+  free(pos);
 
+  //on copie dans la variable globale le path indiqué 
   strcpy(image_directory,buffer);
-  printf("%s\n", image_directory);
+
+
+   //on teste que le path renseigné est correct
+  sprintf(buffer, image_directory, 0); 
+  file = fopen(buffer,"rb");
+  if (file==NULL){
+  	printf("\nImpossible d'ouvrir le fichier %s\n",buffer);
+  	printf("Le fichier %s contient un path invalide\n",filename);
+  	printf("Lisez le readme.txt pour plus d'infos, ou utilisez le path par défaut:\nhall/hall%%06d.pgm\n\n");
+  	exit(1);
+  }
+  fclose(file); 
+  //printf("%s\n", image_directory);
 }
 
 
